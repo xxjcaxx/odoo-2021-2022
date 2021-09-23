@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-# from odoo import models, fields, api
+from odoo import models, fields, api
 
 
-# class proves(models.Model):
-#     _name = 'proves.proves'
-#     _description = 'proves.proves'
+class proves(models.Model):
+     _name = 'proves.proves'
+     _description = 'proves.proves'
 
 #     name = fields.Char()
 #     value = fields.Integer()
