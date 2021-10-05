@@ -1,7 +1,7 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-<!--
+    <!--
     <record model="ir.ui.view" id="negocity.list">
       <field name="name">negocity list</field>
       <field name="model">negocity.negocity</field>
@@ -18,14 +18,39 @@
     <!-- actions opening views on models -->
 
     <record model="ir.actions.act_window" id="negocity.cities_action_window">
-      <field name="name">negocity window</field>
+      <field name="name">Negocity Cities</field>
       <field name="res_model">negocity.city</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="negocity.b_types_action_window">
+      <field name="name">Negocity Building types</field>
+      <field name="res_model">negocity.building_type</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="negocity.buildings_action_window">
+      <field name="name">Negocity Buildings</field>
+      <field name="res_model">negocity.building</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="negocity.survivors_action_window">
+      <field name="name">Negocity Survivors</field>
+      <field name="res_model">negocity.survivor</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="negocity.vehicles_action_window">
+      <field name="name">Negocity Vehicles</field>
+      <field name="res_model">negocity.vehicle</field>
       <field name="view_mode">tree,form</field>
     </record>
 
 
+    <record model="ir.actions.act_window" id="negocity.players_action_window">
+      <field name="name">Negocity Players</field>
+      <field name="res_model">negocity.player</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- server action to the one above -->
-<!--
+    <!--
     <record model="ir.actions.server" id="negocity.action_server">
       <field name="name">negocity server</field>
       <field name="model_id" ref="model_negocity_negocity"/>
@@ -42,17 +67,24 @@
 
     <!-- Top menu item -->
 
-    <menuitem name="Negocity" id="negocity.menu_root"/>
+    <menuitem name="Negocity" id="negocity.menu_root" />
 
     <!-- menu categories -->
 
-    <menuitem name="Cities" id="negocity.cities" parent="negocity.menu_root"/>
+    <menuitem name="Game" id="negocity.cities" parent="negocity.menu_root" />
+    <menuitem name="Clients" id="negocity.clients" parent="negocity.menu_root" />
 
 
     <!-- actions -->
 
-    <menuitem name="Cities" id="negocity.cities_list" parent="negocity.cities"
-              action="negocity.cities_action_window"/>
+    <menuitem name="Cities" id="negocity.cities_list" parent="negocity.cities" action="negocity.cities_action_window" />
+    <menuitem name="Building Types" id="negocity.building_types_list" parent="negocity.cities" action="negocity.b_types_action_window" />
+    <menuitem name="Buildings" id="negocity.buildings_list" parent="negocity.cities" action="negocity.buildings_action_window" />
+    <menuitem name="Survivors" id="negocity.survivors_list" parent="negocity.cities" action="negocity.survivors_action_window" />
+    <menuitem name="Vehicles" id="negocity.vehicles_list" parent="negocity.cities" action="negocity.vehicles_action_window" />
+
+    <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
+
 
   </data>
 </odoo>

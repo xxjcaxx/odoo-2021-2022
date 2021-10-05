@@ -1,0 +1,29 @@
+<odoo>
+    <data>
+      <!-- explicit list view definition -->
+      
+      <record model="ir.ui.view" id="negocity.city_tree">
+        <field name="name">Negocity Tree</field>
+        <field name="model">negocity.city</field>
+        <field name="arch" type="xml">
+          <tree banner_route="/negocity/city_banner" >
+            <field name="name"/>
+
+            <field name="energy"/>
+            <field name="oil"/>
+            <field name="food"/>
+            <field name="water"/>
+            <field name="despair"/>
+            <field name="radiation"/>
+          </tree>
+        </field>
+      </record>
+      
+       
+
+
+
+
+
+      </data>
+</odoo>

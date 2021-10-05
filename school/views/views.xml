@@ -23,6 +23,17 @@
       <field name="view_mode">tree,form</field>
     </record>
 
+   <record model="ir.actions.act_window" id="school.action_student_window">
+      <field name="name">Students window</field>
+      <field name="res_model">school.student</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+      <record model="ir.actions.act_window" id="school.action_classroom_window">
+      <field name="name">Classroom window</field>
+      <field name="res_model">school.classroom</field>
+      <field name="view_mode">tree,form</field>
+    </record>
 
     <!-- server action to the one above -->
 <!--
@@ -42,16 +53,19 @@
 
     <!-- Top menu item -->
 
-    <menuitem name="school" id="school.menu_root"/>
+    <menuitem name="School" id="school.menu_root"/>
 
     <!-- menu categories -->
 
-    <menuitem name="Menu 1" id="school.menu_1" parent="school.menu_root"/>
+    <menuitem name="Management" id="school.menu_1" parent="school.menu_root"/>
 
     <!-- actions -->
 
-    <menuitem name="List" id="school.menu_1_list" parent="school.menu_1"
+    <menuitem name="Schools" id="school.menu_1_list" parent="school.menu_1"
               action="school.action_window"/>
-
+     <menuitem name="Students" id="school.menu_students_list" parent="school.menu_1"
+              action="school.action_student_window"/>
+       <menuitem name="Classrooms" id="school.menu_classrooms_list" parent="school.menu_1"
+              action="school.action_classroom_window"/>
   </data>
 </odoo>

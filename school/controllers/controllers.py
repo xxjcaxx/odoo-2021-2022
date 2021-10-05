@@ -1,19 +1,16 @@
 # -*- coding: utf-8 -*-
-# from odoo import http
+from odoo import http
 
 
-# class School(http.Controller):
-#     @http.route('/school/school/', auth='public')
-#     def index(self, **kw):
+class pedidos(http.Controller):
+ #    @http.route('/school/pedidos/', auth='public')
+ #    def pedidos(self, **kw):
 #         return "Hello, world"
-
-#     @http.route('/school/school/objects/', auth='public')
-#     def list(self, **kw):
-#         return http.request.render('school.listing', {
-#             'root': '/school/school',
-#             'objects': http.request.env['school.school'].search([]),
-#         })
-
+     @http.route('/school/pedidos', auth='public', cors='*', type='json')
+     def pedidos(self, name, **kw):
+        school = http.request.env['school.school'].sudo().create({'name':name})
+        print('rghghhhhhhhhhhhhhhhhhhhh')
+        return school.read()[0]
 #     @http.route('/school/school/objects/<model("school.school"):obj>/', auth='public')
 #     def object(self, obj, **kw):
 #         return http.request.render('school.object', {
