@@ -49,6 +49,11 @@
       <field name="res_model">negocity.player</field>
       <field name="view_mode">tree,form</field>
     </record>
+     <record model="ir.actions.act_window" id="negocity.roads_action_window">
+      <field name="name">Negocity Roads</field>
+      <field name="res_model">negocity.road</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- server action to the one above -->
     <!--
     <record model="ir.actions.server" id="negocity.action_server">
@@ -82,6 +87,7 @@
     <menuitem name="Buildings" id="negocity.buildings_list" parent="negocity.cities" action="negocity.buildings_action_window" />
     <menuitem name="Survivors" id="negocity.survivors_list" parent="negocity.cities" action="negocity.survivors_action_window" />
     <menuitem name="Vehicles" id="negocity.vehicles_list" parent="negocity.cities" action="negocity.vehicles_action_window" />
+<menuitem name="Roads" id="negocity.roads_list" parent="negocity.cities" action="negocity.roads_action_window" />
 
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
 

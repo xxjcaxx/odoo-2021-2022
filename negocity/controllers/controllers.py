@@ -2,6 +2,7 @@
 from odoo import http
 
 
+
 class banner_city_controller(http.Controller):
     @http.route('/negocity/city_banner', auth='user', type='json')
     def banner(self):
@@ -14,8 +15,10 @@ class banner_city_controller(http.Controller):
                 </div>
                 </div> """
         }
-
 # Podem resoldre el botó en un altre controller o amb una acció
+
+
+
 
 
 #class Negocity(http.Controller):

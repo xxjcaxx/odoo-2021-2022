@@ -47,7 +47,7 @@ class city(models.Model):
         print('**************Generate')
         existent_cities = self.search([])
         board = [[0 for x in range(50)] for y in range(50)]
-          
+        new_cities = self
      
         if len(existent_cities) == 0:
             positions = [x for x in range(2500)] 
@@ -58,7 +58,7 @@ class city(models.Model):
                 y = positions[i]%50
                 print(x,y)
                 board[x][y]=1
-                self.create({
+                new_city = self.create({
                     "energy": random.random()*100, 
                     "oil": random.random()*100, 
                     "food": random.random()*100, 
@@ -66,8 +66,15 @@ class city(models.Model):
                     "radiation": random.random()*100,
                     "position_x": x,
                     "position_y": y })
+                new_cities = new_cities | new_city
             for i in range(50):
                 print(board[i])
+            # Crear les carreteres
+            cities_done = self
+            for c in new_cities:
+                cities_done = cities_done | c
+                for c2 in new_cities - cities_done:
+                    self.env['negocity.road'].create({'city_1': c.id, 'city_2': c2.id})
 
 class building_type(models.Model):
     _name = 'negocity.building_type'
@@ -98,12 +105,13 @@ class survivor(models.Model):
     def _generate_name(self):
         first = ["Commander","Bullet","Imperator","Doof","Duff","Immortal","Big","Grease", "Junk", "Rusty"
                  "Gas","War","Feral","Blood","Lead","Max","Sprog","Smoke","Wagon","Baron", "Leather", "Rotten"
-                 "Salt","Slake","Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne",
-                 "Dead", "Deadly", "Mike", "Mad", "Jhonny"]
+                 "Salt","Slake","Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne", "Satanic"
+                 "Dead", "Deadly", "Mike", "Mad", "Jhonny","Unpredictable","Freakish","Snake","Praying"]
         second = ["Killer","Rider","Cutter","Guts","Eater","Warrior","Colossus","Blaster","Gunner", "Smith", "Doe"
                   "Farmer","Rock","Claw", "Boy", "Girl", "Driver","Ace","Quick","Blitzer", "Fury", "Roadster",
                   "Interceptor", "Bastich", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
-                  "Garcia", "Salamanca", "Goodman", "Sakura"]
+                  "Garcia", "Salamanca", "Goodman", "Sakura","Bleding Gums","Absent","Hybrid","Desire","Bubblegum"
+                  ,"Serpente","Petal","Dust","Mantis","Preacher"]
         return random.choice(first)+" "+random.choice(second)
 
     name = fields.Char(default=_generate_name)
@@ -125,3 +133,10 @@ class vehicle(models.Model):
     damage = fields.Float()
 
     survivor = fields.Many2one('negocity.survivor')
+
+class road(models.Model):
+    _name = 'negocity.road'
+    _description = 'Road beween cities'
+
+    city_1 = fields.Many2one('negocity.city')
+    city_2 = fields.Many2one('negocity.city')
