@@ -54,6 +54,12 @@
       <field name="res_model">negocity.road</field>
       <field name="view_mode">tree,form</field>
     </record>
+
+        <record model="ir.actions.act_window" id="negocity.character_template_action_window">
+      <field name="name">Negocity Character Templates</field>
+      <field name="res_model">character_template</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- server action to the one above -->
     <!--
     <record model="ir.actions.server" id="negocity.action_server">
@@ -77,6 +83,7 @@
     <!-- menu categories -->
 
     <menuitem name="Game" id="negocity.cities" parent="negocity.menu_root" />
+    <menuitem name="Game aux" id="negocity.aux" parent="negocity.menu_root" />
     <menuitem name="Clients" id="negocity.clients" parent="negocity.menu_root" />
 
 
@@ -91,6 +98,6 @@
 
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
 
-
+<menuitem name="Charater Templates" id="negocity.character_template" parent="negocity.aux" action="negocity.character_template_action_window" />
   </data>
 </odoo>

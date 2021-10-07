@@ -6,3 +6,4 @@ access_negocity_building,negocity.building,model_negocity_building,base.group_us
 access_negocity_survivor,negocity.survivor,model_negocity_survivor,base.group_user,1,1,1,1
 access_negocity_vehicle,negocity.vehicle,model_negocity_vehicle,base.group_user,1,1,1,1
 access_negocity_road,negocity.road,model_negocity_road,base.group_user,1,1,1,1
+access_negocity_character_template,negocity.character_template,model_negocity_character_template,base.group_user,1,1,1,1

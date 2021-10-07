@@ -140,3 +140,11 @@ class road(models.Model):
 
     city_1 = fields.Many2one('negocity.city')
     city_2 = fields.Many2one('negocity.city')
+
+
+class character_template(models.Model):
+    _name = 'negocity.character_template'
+    _description = 'Templates to generate characters'
+
+    name = fields.Char()
+    image = fields.Image(width=200, height=400)
