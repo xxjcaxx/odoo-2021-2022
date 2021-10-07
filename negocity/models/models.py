@@ -46,10 +46,11 @@ class city(models.Model):
     def action_generate_cities(self):
         print('**************Generate')
         existent_cities = self.search([])
+        existent_cities.unlink()
         board = [[0 for x in range(50)] for y in range(50)]
         new_cities = self
      
-        if len(existent_cities) == 0:
+        if len(existent_cities) != -1:
             positions = [x for x in range(2500)] 
             random.shuffle(positions)
             #print(positions)
@@ -67,14 +68,47 @@ class city(models.Model):
                     "position_x": x,
                     "position_y": y })
                 new_cities = new_cities | new_city
-            for i in range(50):
-                print(board[i])
+            #for i in range(50):
+            #    print(board[i])
+
             # Crear les carreteres
-            cities_done = self
-            for c in new_cities:
-                cities_done = cities_done | c
-                for c2 in new_cities - cities_done:
-                    self.env['negocity.road'].create({'city_1': c.id, 'city_2': c2.id})
+            #cities_done = self
+            #for c in new_cities:
+            #    cities_done = cities_done | c
+            #    for c2 in new_cities - cities_done:
+            #        self.env['negocity.road'].create({'city_1': c.id, 'city_2': c2.id})
+
+            all_roads = False
+            i = 1
+            while all_roads == False:
+                all_roads = True
+                
+                for c in new_cities:
+                    distancias = new_cities.sorted(key=lambda r: math.sqrt(
+                        (r.position_x-c.position_x)**2
+                        +(r.position_y-c.position_y)**2) 
+                        )
+                    # Si no exiteix previament una igual
+                    if len(distancias) > i:
+                     # print('i:',i)
+                      if (len(self.env['negocity.road'].search([('city_1','=', distancias[i].id),('city_2','=', c.id)])) == 0):  
+                      # print(self.env['negocity.road'].search([('city_2','=', distancias[i].id),('city_1','=', c.id)]))
+                       if (len(self.env['negocity.road'].search([('city_2','=', distancias[i].id),('city_1','=', c.id)])) == 0 ):
+                       # print('Mateixa',c.id)
+                        # Si no té colisió
+                        # https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
+                        def ccw(A,B,C):
+                            return (C.position_y-A.position_y) * (B.position_x-A.position_x) > (B.position_y-A.position_y) * (C.position_x-A.position_x)
+                        # Return true if line segments AB and CD intersect
+                        def intersect(A,B,C,D):
+                            return ccw(A,C,D) != ccw(B,C,D) and ccw(A,B,C) != ccw(A,B,D)
+                        colisionen = self.env['negocity.road'].search([]).filtered(lambda r: intersect(r.city_1,r.city_2,c,distancias[i]))
+                        if len(colisionen) == 0:
+                            self.env['negocity.road'].create({'city_1': c.id, 'city_2': distancias[i].id})  # la primera és ella mateixa
+                            all_roads = False
+                i = i+1
+                print(all_roads,i)
+
 
 class building_type(models.Model):
     _name = 'negocity.building_type'
@@ -148,3 +182,4 @@ class character_template(models.Model):
 
     name = fields.Char()
     image = fields.Image(width=200, height=400)
+

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import http
-
-
+import json
+from odoo import tools
 
 class banner_city_controller(http.Controller):
     @http.route('/negocity/city_banner', auth='user', type='json')
@@ -18,8 +18,57 @@ class banner_city_controller(http.Controller):
 # Podem resoldre el botó en un altre controller o amb una acció
 
 
+    @http.route('/negocity/api/<model>', auth="none", cors='*', methods=["POST","PUT","OPTIONS"], csrf=False, type='json')
+    def api(self, **args):
+       print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+       print(args, http.request.httprequest.method)
+       model = args['model']
+       if( http.request.httprequest.method == 'POST'):   #  {"jsonrpc":"2.0","method":"call","params":{"planet":{"name":"Trantor","average_temperature":20},"password":"1234"}}
+           record = http.request.env['negocity.'+model].sudo().create(args[model])
+           return record.read()
+       if( http.request.httprequest.method == 'GET'):
+           if 'id' in args:
+               record = http.request.env['negocity.'+model].sudo().search([('id','=',args[model]['id'])])
+           else:
+               record = http.request.env['negocity.'+model].sudo().search([])
+           return record.read()
+       if( http.request.httprequest.method == 'PUT' or  http.request.httprequest.method == 'PATCH'):
+           record = http.request.env['negocity.'+model].sudo().search([('id','=',args[model]['id'])])[0]
+           record.write(args[model])
+           return record.read()
+       if(http.request.httprequest.method == 'DELETE'):
+           record = http.request.env['negocity.'+model].sudo().search([('id','=',args[model]['id'])])[0]
+           print(record)
+           record.unlink()
+           return record.read()
+
+       return http.request.env['ir.http'].session_info()
 
 
+    @http.route('/negocity/api/<model>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
+    def api(self, **args):
+        print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIGET')
+        print(args, http.request.httprequest.method)
+        model = args['model']
+        if (http.request.httprequest.method == 'GET'):
+            record = http.request.env['negocity.' + model].sudo().search([])
+            #print(record.read())
+            return http.Response(
+            json.dumps(record.read(), default=tools.date_utils.json_default),
+            status=200,
+            mimetype='application/json'
+           )
+        if (http.request.httprequest.method == 'DELETE'):
+            record = http.request.env['negocity.' + model].sudo().search([('id', '=', args[model]['id'])])[0]
+            print(record)
+            record.unlink()
+            return http.Response(
+                json.dumps(record.read()),
+                status=200,
+                mimetype='application/json'
+            )
+
+        return http.request.env['ir.http'].session_info()
 
 #class Negocity(http.Controller):
 #     @http.route('/negocity/negocity/', auth='public')
