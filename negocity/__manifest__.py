@@ -26,8 +26,9 @@
     'data': [
          'security/ir.model.access.csv',
         'views/views.xml',
-        'views/cities.xml',
+        'views/cities.xml','views/players.xml',
         'views/templates.xml',
+        'demo/character_templates.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

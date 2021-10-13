@@ -10,6 +10,8 @@ class player(models.Model):
     _description = 'Players'
 
     name = fields.Char()
+    avatar = fields.Image(max_width=200, max_height=200)
+    avatar_icon = fields.Image(related = 'avatar', max_width=50, max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html 
     survivors = fields.One2many('negocity.survivor','player')
 
 class city(models.Model):
@@ -138,14 +140,14 @@ class survivor(models.Model):
 
     def _generate_name(self):
         first = ["Commander","Bullet","Imperator","Doof","Duff","Immortal","Big","Grease", "Junk", "Rusty"
-                 "Gas","War","Feral","Blood","Lead","Max","Sprog","Smoke","Wagon","Baron", "Leather", "Rotten"
-                 "Salt","Slake","Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne", "Satanic"
-                 "Dead", "Deadly", "Mike", "Mad", "Jhonny","Unpredictable","Freakish","Snake","Praying"]
+                 "Gas","War","Feral","Blood","Lead","Max","Sprog","Allan","Smoke","Wagon","Baron", "Leather", "Rotten"
+                 "Salt","Slake", "Sick","Sickly", "Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne", "Satanic"
+                 "Dead","Wandering", "Suffering" , "Unfit", "Deadly", "Mike", "Nomad", "Mad", "Jhonny","Unpredictable","Freakish","Snake","Praying"]
         second = ["Killer","Rider","Cutter","Guts","Eater","Warrior","Colossus","Blaster","Gunner", "Smith", "Doe"
                   "Farmer","Rock","Claw", "Boy", "Girl", "Driver","Ace","Quick","Blitzer", "Fury", "Roadster",
-                  "Interceptor", "Bastich", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
+                  "Interceptor", "Bastich", "Dweller", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
                   "Garcia", "Salamanca", "Goodman", "Sakura","Bleding Gums","Absent","Hybrid","Desire","Bubblegum"
-                  ,"Serpente","Petal","Dust","Mantis","Preacher"]
+                  ,"Serpente","Petal","Dust","Mantis","Preacher","Harkonnen","Heisenberg","Vonn Newman"]
         return random.choice(first)+" "+random.choice(second)
 
     name = fields.Char(default=_generate_name)
@@ -155,6 +157,7 @@ class survivor(models.Model):
 
     city = fields.Many2one('negocity.city')
     player = fields.Many2one('negocity.player')
+    vehicles = fields.One2many('negocity.vehicle','survivor')
 
 class vehicle(models.Model):
     _name = 'negocity.vehicle'
@@ -181,5 +184,5 @@ class character_template(models.Model):
     _description = 'Templates to generate characters'
 
     name = fields.Char()
-    image = fields.Image(width=200, height=400)
+    image = fields.Image(max_width=200, max_height=400)
 

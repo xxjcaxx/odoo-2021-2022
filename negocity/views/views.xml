@@ -57,7 +57,7 @@
 
         <record model="ir.actions.act_window" id="negocity.character_template_action_window">
       <field name="name">Negocity Character Templates</field>
-      <field name="res_model">character_template</field>
+      <field name="res_model">negocity.character_template</field>
       <field name="view_mode">tree,form</field>
     </record>
     <!-- server action to the one above -->
