@@ -1,0 +1,48 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="negocity.survivor_tree">
+      <field name="name">Negocity survivor tree</field>
+      <field name="model">negocity.survivor</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+
+          <field name="desperation" />
+          <field name="mutations" />
+          <field name="illnes" />
+          <field name="city" />
+          <field name="player" />
+          <field name="vehicles" widget="many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="negocity.survivor_form">
+      <field name="name">Negocity survivor form</field>
+      <field name="model">negocity.survivor</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="avatar" widget="image" />
+
+              <field name="name" />
+
+              <field name="desperation" />
+              <field name="mutations" />
+              <field name="illnes" />
+              <field name="city" />
+              <field name="player" />
+              <field name="template" />
+              <field name="vehicles" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+  </data>
+</odoo>

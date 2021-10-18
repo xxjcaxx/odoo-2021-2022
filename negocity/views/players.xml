@@ -10,6 +10,7 @@
                     <field name="name" />
                     <field name="avatar_icon" widget="image" />
                     <field name="survivors" widget="many2many_tags" />
+                    <field name="quantity_survivors" />
                 </tree>
             </field>
         </record>
@@ -23,7 +24,20 @@
                         <group>
                             <field name="avatar" widget="image" />
                             <field name="name" />
-                            <field name="survivors" />
+                            <field name="quantity_survivors" />
+                            <field name="survivors">
+                                <tree>
+                                    <field name="name" />
+
+                                    <field name="desperation" />
+                                    <field name="mutations" />
+                                    <field name="illnes" />
+                                    <field name="city" />
+
+                                    <field name="vehicles" widget="many2many_tags" />
+                                </tree>
+                            </field>
+
                         </group>
                         <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
                     </sheet>

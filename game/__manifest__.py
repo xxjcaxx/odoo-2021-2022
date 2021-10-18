@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "negocity",
+    'name': "game",
 
     'summary': """
         Short (1 phrase/line) summary of the module's purpose, used as
@@ -20,16 +20,13 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail'],
+    'depends': ['base'],
 
     # always loaded
     'data': [
-         'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
-        'views/cities.xml','views/players.xml','views/survivors.xml','views/buildings.xml',
         'views/templates.xml',
-        'demo/character_templates.xml',
-        'demo/building_types.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

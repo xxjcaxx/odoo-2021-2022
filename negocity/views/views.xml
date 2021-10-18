@@ -1,19 +1,8 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-    <!--
-    <record model="ir.ui.view" id="negocity.list">
-      <field name="name">negocity list</field>
-      <field name="model">negocity.negocity</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
+
+
 
     <!-- actions opening views on models -->
 

@@ -13,6 +13,18 @@ class player(models.Model):
     avatar = fields.Image(max_width=200, max_height=200)
     avatar_icon = fields.Image(related = 'avatar', max_width=50, max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html 
     survivors = fields.One2many('negocity.survivor','player')
+    quantity_survivors = fields.Integer(compute='_get_q_survivors')
+
+    @api.depends('survivors')
+    def _get_q_survivors(self):
+        for p in self:
+            p.quantity_survivors = len(p.survivors)
+
+    def create_survivor(self):
+        for p in self:
+            template = random.choice( self.env['negocity.character_template'].search([]).mapped(lambda t: t.id) )
+            city = random.choice( self.env['negocity.city'].search([]).mapped(lambda t: t.id) )
+            self.env['negocity.survivor'].create({'player':p.id,'template':template,'city':city})
 
 class city(models.Model):
     _name = 'negocity.city'
@@ -37,6 +49,7 @@ class city(models.Model):
     water = fields.Float()
     despair = fields.Float(default=50) # % 
     radiation = fields.Float(default=50)  # %
+    junk = fields.Float(default=1000)  # junk és la "moneda" del joc
 
     buildings = fields.One2many('negocity.building','city')
     survivors = fields.One2many('negocity.survivor','city')
@@ -70,16 +83,7 @@ class city(models.Model):
                     "position_x": x,
                     "position_y": y })
                 new_cities = new_cities | new_city
-            #for i in range(50):
-            #    print(board[i])
-
-            # Crear les carreteres
-            #cities_done = self
-            #for c in new_cities:
-            #    cities_done = cities_done | c
-            #    for c2 in new_cities - cities_done:
-            #        self.env['negocity.road'].create({'city_1': c.id, 'city_2': c2.id})
-
+            # Les carreteres
             all_roads = False
             i = 1
             while all_roads == False:
@@ -110,6 +114,8 @@ class city(models.Model):
                             all_roads = False
                 i = i+1
                 print(all_roads,i)
+            # Els edificis que té la ciutat (tots en ruines inicialment)
+            
 
 
 class building_type(models.Model):
@@ -122,16 +128,20 @@ class building_type(models.Model):
     food = fields.Float()
     water = fields.Float()
     despair = fields.Float(default=0)
+    junk = fields.Float() # Quantitat de junk que necessita i que proporciona
 
+    image = fields.Image(max_width=200, max_height=200)
+    image_small = fields.Image(related = 'image', max_width=40, max_height=40,string="image")  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html 
+ 
 class building(models.Model):
     _name = 'negocity.building'
     _description = 'Buildings'
 
     name = fields.Char()
-    type = fields.Many2one('negocity.building_type')
+    type = fields.Many2one('negocity.building_type', ondelete='restrict')
     level = fields.Float(default=1) # Possible widget
     ruined = fields.Float(default=50) # 100% és ruina total i 0 està perfecte
-    city = fields.Many2one('negocity.city')
+    city = fields.Many2one('negocity.city', ondelete='cascade')
 
 
 class survivor(models.Model):
@@ -154,9 +164,11 @@ class survivor(models.Model):
     desperation = fields.Float(default=50)
     mutations = fields.Float(default=1)
     illnes = fields.Float(default=1)
+    template = fields.Many2one('negocity.character_template',ondelete='restrict')
+    avatar = fields.Image(max_width=200, max_height=400, related='template.image')
 
-    city = fields.Many2one('negocity.city')
-    player = fields.Many2one('negocity.player')
+    city = fields.Many2one('negocity.city',ondelete='restrict')
+    player = fields.Many2one('negocity.player', ondelete='set null')
     vehicles = fields.One2many('negocity.vehicle','survivor')
 
 class vehicle(models.Model):
@@ -175,8 +187,8 @@ class road(models.Model):
     _name = 'negocity.road'
     _description = 'Road beween cities'
 
-    city_1 = fields.Many2one('negocity.city')
-    city_2 = fields.Many2one('negocity.city')
+    city_1 = fields.Many2one('negocity.city', ondelete='cascade')
+    city_2 = fields.Many2one('negocity.city', ondelete='cascade')
 
 
 class character_template(models.Model):
