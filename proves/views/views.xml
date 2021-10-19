@@ -1,28 +1,27 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-<!--
+
     <record model="ir.ui.view" id="proves.list">
       <field name="name">proves list</field>
       <field name="model">proves.proves</field>
       <field name="arch" type="xml">
-        <tree>
+        <form>
           <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
+          <button name="create_pos_line" string="Create pos line" type="object"/>
+        </form>
       </field>
     </record>
--->
+
 
     <!-- actions opening views on models -->
-<!--
+
     <record model="ir.actions.act_window" id="proves.action_window">
       <field name="name">proves window</field>
       <field name="res_model">proves.proves</field>
       <field name="view_mode">tree,form</field>
     </record>
--->
+
 
     <!-- server action to the one above -->
 <!--
@@ -41,20 +40,17 @@
 -->
 
     <!-- Top menu item -->
-<!--
+
     <menuitem name="proves" id="proves.menu_root"/>
--->
+
     <!-- menu categories -->
-<!--
+
     <menuitem name="Menu 1" id="proves.menu_1" parent="proves.menu_root"/>
-    <menuitem name="Menu 2" id="proves.menu_2" parent="proves.menu_root"/>
--->
+ 
     <!-- actions -->
-<!--
+
     <menuitem name="List" id="proves.menu_1_list" parent="proves.menu_1"
               action="proves.action_window"/>
-    <menuitem name="Server to list" id="proves" parent="proves.menu_2"
-              action="proves.action_server"/>
--->
+
   </data>
 </odoo>
