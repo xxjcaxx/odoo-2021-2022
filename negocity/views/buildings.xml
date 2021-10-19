@@ -15,7 +15,7 @@
     <field name="food"/>
     <field name="water"/>
     <field name="despair"/>
-          
+    <field name="junk"/>
                 </tree>
 
             </field>

@@ -83,6 +83,15 @@ class city(models.Model):
                     "position_x": x,
                     "position_y": y })
                 new_cities = new_cities | new_city
+             # Els edificis de la ciutat
+                for i in range(0,random.randint(1,10)): # Pot crear fins a 10 edificis en ruines
+                    tipus = random.choice(self.env['negocity.building_type'].search([]).ids)
+                    self.env['negocity.building'].create({
+                        'type': tipus,
+                        'city': new_city.id,
+                        'ruined': 100
+                    })
+
             # Les carreteres
             all_roads = False
             i = 1
@@ -114,9 +123,11 @@ class city(models.Model):
                             all_roads = False
                 i = i+1
                 print(all_roads,i)
-            # Els edificis que té la ciutat (tots en ruines inicialment)
-            
-
+         
+    def create_npc(self):
+        for c in self:
+           template = random.choice( self.env['negocity.character_template'].search([]).mapped(lambda t: t.id) )
+           self.env['negocity.survivor'].create({'template':template,'city':c.id})
 
 class building_type(models.Model):
     _name = 'negocity.building_type'
@@ -137,7 +148,7 @@ class building(models.Model):
     _name = 'negocity.building'
     _description = 'Buildings'
 
-    name = fields.Char()
+    name = fields.Char(related='type.name')
     type = fields.Many2one('negocity.building_type', ondelete='restrict')
     level = fields.Float(default=1) # Possible widget
     ruined = fields.Float(default=50) # 100% és ruina total i 0 està perfecte
@@ -197,4 +208,22 @@ class character_template(models.Model):
 
     name = fields.Char()
     image = fields.Image(max_width=200, max_height=400)
+
+
+class travel(models.Model):
+    _name = 'negocity.travel'
+    _description = 'Travels'
+
+    name = fields.Char()
+    origin = fields.Many2one('negocity.city', ondelete='cascade')
+    destiny = fields.Many2one('negocity.city', ondelete='cascade') # filtrat
+    road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
+    date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
+    date_end = fields.Datetime() # sera computat en funció de la distància
+
+    player = fields.Many2one('negocity.player')
+    passengers = fields.Many2many('negocity.survivor') # filtrats sols els que són de la ciutat origin i del player
+
+
+
 

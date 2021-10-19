@@ -19,6 +19,29 @@
         </field>
       </record>
       
+
+      <record model="ir.ui.view" id="negocity.city_form">
+        <field name="name">Negocity Tree</field>
+        <field name="model">negocity.city</field>
+        <field name="arch" type="xml">
+          <form >
+            <sheet><group>
+            <field name="name"/>
+
+            <field name="energy"/>
+            <field name="oil"/>
+            <field name="food"/>
+            <field name="water"/>
+            <field name="despair"/>
+            <field name="radiation"/>
+            <button name="create_npc" type="object" string="Create NPC" class="oe_highlight" />
+            <field name="survivors"/>
+            <field name="buildings"/>
+          </group></sheet>
+          </form>
+        </field>
+      </record>
+      
        
 
 
