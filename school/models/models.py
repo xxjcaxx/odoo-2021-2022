@@ -32,7 +32,33 @@ class student(models.Model):
                             relation='students_passed', # (opcional) el nom del la taula en mig
                             column1='student_id', # (opcional) el nom en la taula en mig de la columna d'aquest model
                             column2='topic_id')  # (opcional) el nom de la columna de l'altre model.
+     smart = fields.Float(default= lambda r: random.randint(90,150))
+     nota = fields.Float(compute='_get_nota')
 
+     @api.depends('smart')
+     def _get_nota(self):
+         for s in self:
+             s.nota = s.smart/15
+
+     def _get_drugs(self):
+         all_drugs = self.env['school.drug'].search([]).ids
+
+         random.shuffle(all_drugs)
+         drugs = []
+         for i in range(0,random.randint(0,len(all_drugs))):
+             drugs.append(all_drugs[i])
+         return drugs
+
+     drugs = fields.Many2many('school.drug',default=_get_drugs)
+
+
+
+class drug(models.Model):
+    _name = 'school.drug'
+    _description = 'Students drugs'
+
+    name = fields.Char()
+    students = fields.Many2many('school.student')
 
 
 class topic(models.Model):

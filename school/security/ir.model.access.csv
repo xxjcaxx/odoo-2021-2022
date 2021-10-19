@@ -3,3 +3,4 @@ access_school_school,school.school,model_school_school,base.group_user,1,1,1,1
 access_school_student,school.student,model_school_student,base.group_user,1,1,1,1
 access_school_classroom,school.classroom,model_school_classroom,base.group_user,1,1,1,1
 access_school_topic,school.topic,model_school_topic,base.group_user,1,1,1,1
+access_school_drug,school.drug,model_school_drug,base.group_user,1,1,1,1

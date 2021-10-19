@@ -51,6 +51,12 @@
       <field name="res_model">school.topic</field>
       <field name="view_mode">tree,form</field>
     </record>
+
+          <record model="ir.actions.act_window" id="school.action_drugs_window">
+      <field name="name">topics window</field>
+      <field name="res_model">school.drug</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- server action to the one above -->
 <!--
     <record model="ir.actions.server" id="school.action_server">
@@ -85,5 +91,7 @@
               action="school.action_classroom_window"/>
         <menuitem name="Topics" id="school.menu_topics_list" parent="school.menu_1"
               action="school.action_topics_window"/>
+       <menuitem name="Drugs" id="school.menu_drugs_list" parent="school.menu_1"
+              action="school.action_drugs_window"/>
   </data>
 </odoo>
