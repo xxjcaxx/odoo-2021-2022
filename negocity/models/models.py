@@ -4,6 +4,7 @@ from operator import pos
 from odoo import models, fields, api
 import random
 import math
+from datetime import datetime, timedelta
 
 class player(models.Model):
     _name = 'negocity.player'
@@ -53,6 +54,17 @@ class city(models.Model):
 
     buildings = fields.One2many('negocity.building','city')
     survivors = fields.One2many('negocity.survivor','city')
+    players = fields.Many2many('negocity.player',compute='_get_players',string='Players with survivors')
+
+    @api.depends('survivors')
+    def _get_players(self):
+        for c in self:
+            players = []
+            for s in c.survivors:
+                if s.player:
+                   players.append(s.player.id)
+            print(players)
+            c.players = players
 
     position_x = fields.Integer()
     position_y = fields.Integer()
@@ -219,7 +231,15 @@ class travel(models.Model):
     destiny = fields.Many2one('negocity.city', ondelete='cascade') # filtrat
     road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
     date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
-    date_end = fields.Datetime() # sera computat en funció de la distància
+    date_end = fields.Datetime(compute='_get_date_end') # sera computat en funció de la distància
+
+    @api.depends('date_departure','road')
+    def _get_date_end(self):
+        for t in self:
+            d_dep = t.date_departure
+            data = fields.Datetime.from_string(d_dep)
+            data = data + timedelta(hours=3)
+            t.date_end = fields.Datetime.to_string(data)
 
     player = fields.Many2one('negocity.player')
     passengers = fields.Many2many('negocity.survivor') # filtrats sols els que són de la ciutat origin i del player
