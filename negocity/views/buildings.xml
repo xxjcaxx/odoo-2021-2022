@@ -1,0 +1,50 @@
+<odoo>
+    <data>
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="negocity.building_type_tree">
+            <field name="name">Negocity Tree</field>
+            <field name="model">negocity.building_type</field>
+            <field name="arch" type="xml">
+                <tree>
+                  
+                    <field name="image_small" widget="image"></field>
+                    <field name="name"/>
+    <field name="energy"/>
+    <field name="oil"/>
+    <field name="food"/>
+    <field name="water"/>
+    <field name="despair"/>
+    <field name="junk"/>
+                </tree>
+
+            </field>
+        </record>
+
+
+
+        <record model="ir.ui.view" id="negocity.building_type_form">
+            <field name="name">Negocity form</field>
+            <field name="model">negocity.building_type</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <field name="image" widget="image"></field>
+                            <field name="name"/>
+            <field name="energy"/>
+            <field name="oil"/>
+            <field name="food"/>
+            <field name="water"/>
+            <field name="despair"/>
+          
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

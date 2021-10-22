@@ -1,19 +1,8 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-    <!--
-    <record model="ir.ui.view" id="negocity.list">
-      <field name="name">negocity list</field>
-      <field name="model">negocity.negocity</field>
-      <field name="arch" type="xml">
-        <tree>
-          <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
-        </tree>
-      </field>
-    </record>
--->
+
+
 
     <!-- actions opening views on models -->
 
@@ -58,6 +47,15 @@
         <record model="ir.actions.act_window" id="negocity.character_template_action_window">
       <field name="name">Negocity Character Templates</field>
       <field name="res_model">negocity.character_template</field>
+<<<<<<< HEAD
+=======
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="negocity.travel_action_window">
+      <field name="name">Negocity travel</field>
+      <field name="res_model">negocity.travel</field>
+>>>>>>> 6da9da0e34b066a41332587df5422d859ead2f23
       <field name="view_mode">tree,form</field>
     </record>
     <!-- server action to the one above -->
@@ -95,6 +93,7 @@
     <menuitem name="Survivors" id="negocity.survivors_list" parent="negocity.cities" action="negocity.survivors_action_window" />
     <menuitem name="Vehicles" id="negocity.vehicles_list" parent="negocity.cities" action="negocity.vehicles_action_window" />
 <menuitem name="Roads" id="negocity.roads_list" parent="negocity.cities" action="negocity.roads_action_window" />
+<menuitem name="Travels" id="negocity.travels_list" parent="negocity.cities" action="negocity.travel_action_window" />
 
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
 

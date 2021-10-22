@@ -4,13 +4,28 @@ from operator import pos
 from odoo import models, fields, api
 import random
 import math
+from datetime import datetime, timedelta
 
 class player(models.Model):
     _name = 'negocity.player'
     _description = 'Players'
 
     name = fields.Char()
+    avatar = fields.Image(max_width=200, max_height=200)
+    avatar_icon = fields.Image(related = 'avatar', max_width=50, max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html 
     survivors = fields.One2many('negocity.survivor','player')
+    quantity_survivors = fields.Integer(compute='_get_q_survivors')
+
+    @api.depends('survivors')
+    def _get_q_survivors(self):
+        for p in self:
+            p.quantity_survivors = len(p.survivors)
+
+    def create_survivor(self):
+        for p in self:
+            template = random.choice( self.env['negocity.character_template'].search([]).mapped(lambda t: t.id) )
+            city = random.choice( self.env['negocity.city'].search([]).mapped(lambda t: t.id) )
+            self.env['negocity.survivor'].create({'player':p.id,'template':template,'city':city})
 
 class city(models.Model):
     _name = 'negocity.city'
@@ -35,9 +50,21 @@ class city(models.Model):
     water = fields.Float()
     despair = fields.Float(default=50) # % 
     radiation = fields.Float(default=50)  # %
+    junk = fields.Float(default=1000)  # junk és la "moneda" del joc
 
     buildings = fields.One2many('negocity.building','city')
     survivors = fields.One2many('negocity.survivor','city')
+    players = fields.Many2many('negocity.player',compute='_get_players',string='Players with survivors')
+
+    @api.depends('survivors')
+    def _get_players(self):
+        for c in self:
+            players = []
+            for s in c.survivors:
+                if s.player:
+                   players.append(s.player.id)
+            print(players)
+            c.players = players
 
     position_x = fields.Integer()
     position_y = fields.Integer()
@@ -68,16 +95,16 @@ class city(models.Model):
                     "position_x": x,
                     "position_y": y })
                 new_cities = new_cities | new_city
-            #for i in range(50):
-            #    print(board[i])
+             # Els edificis de la ciutat
+                for i in range(0,random.randint(1,10)): # Pot crear fins a 10 edificis en ruines
+                    tipus = random.choice(self.env['negocity.building_type'].search([]).ids)
+                    self.env['negocity.building'].create({
+                        'type': tipus,
+                        'city': new_city.id,
+                        'ruined': 100
+                    })
 
-            # Crear les carreteres
-            #cities_done = self
-            #for c in new_cities:
-            #    cities_done = cities_done | c
-            #    for c2 in new_cities - cities_done:
-            #        self.env['negocity.road'].create({'city_1': c.id, 'city_2': c2.id})
-
+            # Les carreteres
             all_roads = False
             i = 1
             while all_roads == False:
@@ -108,7 +135,11 @@ class city(models.Model):
                             all_roads = False
                 i = i+1
                 print(all_roads,i)
-
+         
+    def create_npc(self):
+        for c in self:
+           template = random.choice( self.env['negocity.character_template'].search([]).mapped(lambda t: t.id) )
+           self.env['negocity.survivor'].create({'template':template,'city':c.id})
 
 class building_type(models.Model):
     _name = 'negocity.building_type'
@@ -120,16 +151,20 @@ class building_type(models.Model):
     food = fields.Float()
     water = fields.Float()
     despair = fields.Float(default=0)
+    junk = fields.Float() # Quantitat de junk que necessita i que proporciona
 
+    image = fields.Image(max_width=200, max_height=200)
+    image_small = fields.Image(related = 'image', max_width=40, max_height=40,string="image")  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html 
+ 
 class building(models.Model):
     _name = 'negocity.building'
     _description = 'Buildings'
 
-    name = fields.Char()
-    type = fields.Many2one('negocity.building_type')
+    name = fields.Char(related='type.name')
+    type = fields.Many2one('negocity.building_type', ondelete='restrict')
     level = fields.Float(default=1) # Possible widget
     ruined = fields.Float(default=50) # 100% és ruina total i 0 està perfecte
-    city = fields.Many2one('negocity.city')
+    city = fields.Many2one('negocity.city', ondelete='cascade')
 
 
 class survivor(models.Model):
@@ -138,23 +173,26 @@ class survivor(models.Model):
 
     def _generate_name(self):
         first = ["Commander","Bullet","Imperator","Doof","Duff","Immortal","Big","Grease", "Junk", "Rusty"
-                 "Gas","War","Feral","Blood","Lead","Max","Sprog","Smoke","Wagon","Baron", "Leather", "Rotten"
-                 "Salt","Slake","Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne", "Satanic"
-                 "Dead", "Deadly", "Mike", "Mad", "Jhonny","Unpredictable","Freakish","Snake","Praying"]
+                 "Gas","War","Feral","Blood","Lead","Max","Sprog","Allan","Smoke","Wagon","Baron", "Leather", "Rotten"
+                 "Salt","Slake", "Sick","Sickly", "Nuke","Oil","Night","Water","Tank","Rig","People","Nocturne", "Satanic"
+                 "Dead","Wandering", "Suffering" , "Unfit", "Deadly", "Mike", "Nomad", "Mad", "Jhonny","Unpredictable","Freakish","Snake","Praying"]
         second = ["Killer","Rider","Cutter","Guts","Eater","Warrior","Colossus","Blaster","Gunner", "Smith", "Doe"
                   "Farmer","Rock","Claw", "Boy", "Girl", "Driver","Ace","Quick","Blitzer", "Fury", "Roadster",
-                  "Interceptor", "Bastich", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
+                  "Interceptor", "Bastich", "Dweller", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
                   "Garcia", "Salamanca", "Goodman", "Sakura","Bleding Gums","Absent","Hybrid","Desire","Bubblegum"
-                  ,"Serpente","Petal","Dust","Mantis","Preacher"]
+                  ,"Serpente","Petal","Dust","Mantis","Preacher","Harkonnen","Heisenberg","Vonn Newman"]
         return random.choice(first)+" "+random.choice(second)
 
     name = fields.Char(default=_generate_name)
     desperation = fields.Float(default=50)
     mutations = fields.Float(default=1)
     illnes = fields.Float(default=1)
+    template = fields.Many2one('negocity.character_template',ondelete='restrict')
+    avatar = fields.Image(max_width=200, max_height=400, related='template.image')
 
-    city = fields.Many2one('negocity.city')
-    player = fields.Many2one('negocity.player')
+    city = fields.Many2one('negocity.city',ondelete='restrict')
+    player = fields.Many2one('negocity.player', ondelete='set null')
+    vehicles = fields.One2many('negocity.vehicle','survivor')
 
 class vehicle(models.Model):
     _name = 'negocity.vehicle'
@@ -172,8 +210,8 @@ class road(models.Model):
     _name = 'negocity.road'
     _description = 'Road beween cities'
 
-    city_1 = fields.Many2one('negocity.city')
-    city_2 = fields.Many2one('negocity.city')
+    city_1 = fields.Many2one('negocity.city', ondelete='cascade')
+    city_2 = fields.Many2one('negocity.city', ondelete='cascade')
 
 
 class character_template(models.Model):
@@ -181,5 +219,31 @@ class character_template(models.Model):
     _description = 'Templates to generate characters'
 
     name = fields.Char()
-    image = fields.Image(width=200, height=400)
+    image = fields.Image(max_width=200, max_height=400)
+
+
+class travel(models.Model):
+    _name = 'negocity.travel'
+    _description = 'Travels'
+
+    name = fields.Char()
+    origin = fields.Many2one('negocity.city', ondelete='cascade')
+    destiny = fields.Many2one('negocity.city', ondelete='cascade') # filtrat
+    road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
+    date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
+    date_end = fields.Datetime(compute='_get_date_end') # sera computat en funció de la distància
+
+    @api.depends('date_departure','road')
+    def _get_date_end(self):
+        for t in self:
+            d_dep = t.date_departure
+            data = fields.Datetime.from_string(d_dep)
+            data = data + timedelta(hours=3)
+            t.date_end = fields.Datetime.to_string(data)
+
+    player = fields.Many2one('negocity.player')
+    passengers = fields.Many2many('negocity.survivor') # filtrats sols els que són de la ciutat origin i del player
+
+
+
 
