@@ -47,15 +47,12 @@
         <record model="ir.actions.act_window" id="negocity.character_template_action_window">
       <field name="name">Negocity Character Templates</field>
       <field name="res_model">negocity.character_template</field>
-<<<<<<< HEAD
-=======
       <field name="view_mode">tree,form</field>
     </record>
 
     <record model="ir.actions.act_window" id="negocity.travel_action_window">
       <field name="name">Negocity travel</field>
       <field name="res_model">negocity.travel</field>
->>>>>>> 6da9da0e34b066a41332587df5422d859ead2f23
       <field name="view_mode">tree,form</field>
     </record>
     <!-- server action to the one above -->

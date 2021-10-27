@@ -1,0 +1,132 @@
+{
+    "jsonrpc": "2.0",
+    "method": "call",
+    "params": {
+        "args": [
+            [
+                {
+                    "id": "00001-003-0003",
+                    "data": {
+                        "name": "Orden 00001-003-0003",
+                        "amount_paid": 0,
+                        "amount_total": 13.31,
+                        "amount_tax": 2.31,
+                        "amount_return": 0,
+                        "lines": [
+                            [
+                                0,
+                                0,
+                                {
+                                    "qty": 4,
+                                    "price_unit": 2.2,
+                                    "price_subtotal": 8.8,
+                                    "price_subtotal_incl": 10.65,
+                                    "discount": 0,
+                                    "product_id": 68,
+                                    "tax_ids": [
+                                        [
+                                            6,
+                                            false,
+                                            [
+                                                187
+                                            ]
+                                        ]
+                                    ],
+                                    "id": 40,
+                                    "pack_lot_ids": [],
+                                    "description": "",
+                                    "full_product_name": "Coca-Cola",
+                                    "price_extra": 0,
+                                    "mp_dirty": false,
+                                    "mp_skip": false,
+                                    "note": ""
+                                }
+                            ],
+                            [
+                                0,
+                                0,
+                                {
+                                    "qty": 1,
+                                    "price_unit": 2.2,
+                                    "price_subtotal": 2.2,
+                                    "price_subtotal_incl": 2.66,
+                                    "discount": 0,
+                                    "product_id": 69,
+                                    "tax_ids": [
+                                        [
+                                            6,
+                                            false,
+                                            [
+                                                187
+                                            ]
+                                        ]
+                                    ],
+                                    "id": 41,
+                                    "pack_lot_ids": [],
+                                    "description": "",
+                                    "full_product_name": "Agua",
+                                    "price_extra": 0,
+                                    "mp_dirty": false,
+                                    "mp_skip": false,
+                                    "note": ""
+                                }
+                            ]
+                        ],
+                        "statement_ids": [],
+                        "pos_session_id": 1,
+                        "pricelist_id": 1,
+                        "partner_id": false,
+                        "user_id": 2,
+                        "uid": "00001-003-0003",
+                        "sequence_number": 3,
+                        "creation_date": "2021-10-22 15:58:53",
+                        "fiscal_position_id": false,
+                        "server_id": 7,
+                        "to_invoice": false,
+                        "is_tipped": false,
+                        "tip_amount": 0,
+                        "multiprint_resume": "false",
+                        "table": "T2",
+                        "table_id": 2,
+                        "floor": "Main Floor",
+                        "floor_id": 1,
+                        "customer_count": 1
+                    },
+                    "to_invoice": false
+                }
+            ],
+            true
+        ],
+        "model": "pos.order",
+        "method": "create_from_ui",
+        "kwargs": {
+            "context": {
+                "lang": "es_ES",
+                "tz": "Europe/Madrid",
+                "uid": 2,
+                "allowed_company_ids": [
+                    1
+                ]
+            }
+        }
+    },
+    "id": 779132394
+}
+
+
+.create({
+    "name":"Orden 00001-001-0067",
+         "amount_paid":0,"amount_total":7.98,
+         "amount_tax":1.3800000000000001,
+         "amount_return":0,
+         "pricelist_id":1,
+         "session_id":1,
+         "table_id": 2,
+         "user_id": 2,
+                           
+    
+                            "table_id": 2,
+                            
+                            
+                            "customer_count": 1
+              })
