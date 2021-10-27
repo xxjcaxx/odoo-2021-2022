@@ -93,7 +93,7 @@
 <menuitem name="Travels" id="negocity.travels_list" parent="negocity.cities" action="negocity.travel_action_window" />
 
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
-
+  
 <menuitem name="Charater Templates" id="negocity.character_template" parent="negocity.aux" action="negocity.character_template_action_window" />
   </data>
 </odoo>
