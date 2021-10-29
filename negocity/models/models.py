@@ -194,7 +194,7 @@ class building(models.Model):
     progress = fields.Float(compute='_get_time')
 
     @api.depends('type', 'workers','date_start')
-    def _get_time(self):
+    def _get_time(self):  
         for b in self:
             n_workers = len(b.workers)
             if n_workers > 0:
