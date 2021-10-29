@@ -1,30 +1,37 @@
 <odoo>
     <data>
-<!--
-          <record id="object0" model="school.school">
-            <field name="name">Object 0</field>
-            <field name="value">0</field>
-          </record>
 
-          <record id="object1" model="school.school">
-            <field name="name">Object 1</field>
-            <field name="value">10</field>
-          </record>
+        <record id="school.school_demo_1" model="school.school">
+            <field name="name">IES Simarro</field>
 
-          <record id="object2" model="school.school">
-            <field name="name">Object 2</field>
-            <field name="value">20</field>
-          </record>
+        </record>
 
-          <record id="object3" model="school.school">
-            <field name="name">Object 3</field>
-            <field name="value">30</field>
-          </record>
 
-          <record id="object4" model="school.school">
-            <field name="name">Object 4</field>
-            <field name="value">40</field>
-          </record>
--->
+        <record id="school.student_demo_1" model="school.student">
+            <field name="name">David</field>
+            <field name="smart">1000</field>
+            <field name="school_id" ref="school.school_demo_1"/>
+        </record>
+
+        <record id="school.student_demo_2" model="school.student">
+            <field name="name">Jit</field>
+            <field name="smart">100</field>
+            <field name="registration_date" eval="datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <delete model="school.topic" id="school.topic_demo_sge"></delete>
+        <record id="school.topic_demo_sge" model="school.topic">
+            <field name="name">Sistemes de Gestio Empresarial</field>
+            <field name="students"
+                   eval="[(6,0,[ref('school.student_demo_1'),ref('school.student_demo_2')])]"/>
+
+        </record>
+
+
+        <record id="school.topic_demo_di" model="school.topic">
+            <field name="name">Disseny d'interficies</field>
+
+        </record>
+
     </data>
 </odoo>
