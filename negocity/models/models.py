@@ -17,6 +17,7 @@ class player(models.Model):
                                max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html
     survivors = fields.One2many('negocity.survivor', 'player')
     quantity_survivors = fields.Integer(compute='_get_q_survivors')
+    registration_date = fields.Datetime()
 
     @api.depends('survivors')
     def _get_q_survivors(self):
@@ -257,7 +258,7 @@ class vehicle(models.Model):
     _name = 'negocity.vehicle'
     _description = 'vehicles'
     name = fields.Char()
-    # type = fields.Selection([('truck','Truck'),('car','Car'),('bus','Bus')])
+   # type = fields.Selection([('truck','Truck'),('car','Car'),('bus','Bus')])
     oil_consumption = fields.Float()
     gas_tank = fields.Float()
     passengers = fields.Integer()

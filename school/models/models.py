@@ -34,6 +34,7 @@ class student(models.Model):
                             column2='topic_id')  # (opcional) el nom de la columna de l'altre model.
      smart = fields.Float(default= lambda r: random.randint(90,150))
      nota = fields.Float(compute='_get_nota')
+     registration_date=fields.Datetime()
 
      @api.depends('smart')
      def _get_nota(self):
