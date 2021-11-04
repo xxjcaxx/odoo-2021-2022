@@ -33,7 +33,7 @@
               <field name="desperation" />
               <field name="mutations" />
               <field name="illnes" />
-              <field name="city" />
+              <field name="city" domain="[('radiation', '&lt;', 50)]"/>
               <field name="player" />
               <field name="template" />
               <field name="vehicles" />

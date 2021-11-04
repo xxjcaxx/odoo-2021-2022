@@ -1,53 +1,72 @@
 <odoo>
     <data>
-      <!-- explicit list view definition -->
-      
-      <record model="ir.ui.view" id="negocity.city_tree">
-        <field name="name">Negocity Tree</field>
-        <field name="model">negocity.city</field>
-        <field name="arch" type="xml">
-          <tree banner_route="/negocity/city_banner" >
-            <field name="name"/>
+        <!-- explicit list view definition -->
 
-            <field name="energy"/>
-            <field name="oil"/>
-            <field name="food"/>
-            <field name="water"/>
-            <field name="despair"/>
-            <field name="radiation"/>
-          </tree>
-        </field>
-      </record>
-      
-
-      <record model="ir.ui.view" id="negocity.city_form">
-        <field name="name">Negocity Tree</field>
-        <field name="model">negocity.city</field>
-        <field name="arch" type="xml">
-          <form >
-            <sheet><group>
-            <field name="name"/>
-
-            <field name="energy"/>
-            <field name="oil"/>
-            <field name="food"/>
-            <field name="water"/>
-            <field name="despair"/>
-            <field name="radiation"/>
-            <button name="create_npc" type="object" string="Create NPC" class="oe_highlight" />
-            <field name="survivors"/>
-              <field name="players"/>
-            <field name="buildings"/>
-          </group></sheet>
-          </form>
-        </field>
-      </record>
-      
-       
+        <record model="ir.ui.view" id="negocity.city_tree">
+            <field name="name">Negocity Tree</field>
+            <field name="model">negocity.city</field>
+            <field name="arch" type="xml">
+                <tree banner_route="/negocity/city_banner" decoration-danger="oil&lt;10">
+                    <field name="name"/>
+                    <field name="energy"/>
+                    <field name="oil"/>
+                    <field name="food"/>
+                    <field name="water"/>
+                    <field name="despair"/>
+                    <field name="radiation"/>
+                </tree>
+            </field>
+        </record>
 
 
+        <record model="ir.ui.view" id="negocity.city_form">
+            <field name="name">Negocity Tree</field>
+            <field name="model">negocity.city</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet><group>
+                        <group string="Global">
+                            <field name="name"/>
+                            <field name="despair"/>
+                            <field name="radiation"/>
+                        </group>
+                        <group string="Resources">
+                            <field name="energy"/>
+                            <field name="oil"/>
+                            <field name="food"/>
+                            <field name="water"/>
+                        </group>
+
+                    </group>
+                        <notebook>
+                            <page string="Survivors">
+                                <group>
+                                    <button name="create_npc" type="object" string="Create NPC" class="oe_highlight"/>
+                                    <field name="survivors">
+                                        <tree>
+                                            <field name="name"/>
+                                            <field name="player"/>
+                                            <field name="vehicles" widget="many2many_tags"/>
+                                        </tree>
+                                    </field>
+                                </group>
+                            </page>
+                            <page string="Players">
+                                <group>
+                                    <field name="players"/>
+                                </group>
+                            </page>
+                            <page string="Buildings">
+                                <group>
+                                    <field name="buildings"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
 
-
-      </data>
+    </data>
 </odoo>

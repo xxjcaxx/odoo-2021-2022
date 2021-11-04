@@ -213,10 +213,10 @@ class building(models.Model):
                 time_remaining = fields.Datetime.from_string(b.date_end) - fields.Datetime.from_string(fields.datetime.now())
                 print(time_remaining.total_seconds()/60/60,fields.datetime.now(),'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
                 time_remaining = time_remaining.total_seconds()/60/60
-                b.progress = time_remaining / b.time  ####no funciona el time remaining !!!!
+                b.progress = 50 #  time_remaining / b.time  ####no funciona el time remaining !!!!
             else:
                 b.date_end = ''
-                b.progress = 0
+                b.progress = 25
 
 
 class survivor(models.Model):
