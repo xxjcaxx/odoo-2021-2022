@@ -8,13 +8,13 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="image_small" widget="image"></field>
-                    <field name="name"/>
-                    <field name="energy"/>
-                    <field name="oil"/>
-                    <field name="food"/>
-                    <field name="water"/>
-                    <field name="despair"/>
-                    <field name="junk"/>
+                    <field name="name" />
+                    <field name="energy" />
+                    <field name="oil" />
+                    <field name="food" />
+                    <field name="water" />
+                    <field name="despair" />
+                    <field name="junk" />
                 </tree>
             </field>
         </record>
@@ -28,12 +28,12 @@
                     <sheet>
                         <group>
                             <field name="image" widget="image"></field>
-                            <field name="name"/>
-                            <field name="energy"/>
-                            <field name="oil"/>
-                            <field name="food"/>
-                            <field name="water"/>
-                            <field name="despair"/>
+                            <field name="name" />
+                            <field name="energy" />
+                            <field name="oil" />
+                            <field name="food" />
+                            <field name="water" />
+                            <field name="despair" />
                         </group>
                     </sheet>
                 </form>
@@ -41,22 +41,75 @@
             </field>
         </record>
 
- <record model="ir.ui.view" id="negocity.building_tree">
+        <record model="ir.ui.view" id="negocity.building_tree">
             <field name="name">Negocity building tree</field>
             <field name="model">negocity.building</field>
             <field name="arch" type="xml">
                 <tree>
-                     <field name="name"/>
-                    <field name="type"/>
-                    <field name="level"/>
-                    <field name="ruined"/>
-                    <field name="city"/>
-                    <field name="progress" widget="progressbar"/>
+                    <field name="name" />
+                    <field name="type" />
+                    <field name="level" />
+                    <field name="ruined" />
+                    <field name="city" />
 
+                    <field name="junk_progress" widget="progressbar" />
+                    <field name="workers" widget="many2many_tags" />
+                    <field name="time" />
+                    <field name="progress" widget="progressbar" />
                 </tree>
             </field>
         </record>
 
+        <record model="ir.ui.view" id="negocity.building_form">
+            <field name="name">Negocity building</field>
+            <field name="model">negocity.building</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <h1> <field name="name" /></h1> 
+                        <group>
+                         
+                            <field name="type" />
+                            <field name="level" />
+                            <field name="ruined" />
+                            <field name="city" />
+                        </group>
+                        </div>
+                        <notebook>
+                            <page name="construction" string="Construction">
+                                <group>
+                                    <field name="junk_contributed" />
+                                    <field name="junk_progress" widget="progressbar" />
+                                    <field name="workers" />
+                                    <field name="workers_available" />
+                                    <field name="date_start" />
+                                    <field name="date_end" />
+                                    <field name="time" />
+                                    <field name="progress" widget="progressbar" />
+                                </group>
+                            </page>
+                            <page name="type" string="Type">
+                                
+                                    <group>
+                                        
+                                        <field name="name" />
+                                        <field name="energy" />
+                                        <field name="oil" />
+                                        <field name="food" />
+                                        <field name="water" />
+                                        <field name="despair" />
+                                    </group>
+                                
+                            </page>
+                        </notebook>
+
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
 
 
     </data>

@@ -5,7 +5,8 @@ from odoo import models, fields, api
 import random
 import math
 from datetime import datetime, timedelta
-
+from odoo.exceptions import ValidationError
+import pytz
 
 class player(models.Model):
     _name = 'negocity.player'
@@ -187,11 +188,46 @@ class building(models.Model):
     city = fields.Many2one('negocity.city', ondelete='cascade')
 
     junk_contributed = fields.Integer(default=0)
-    workers = fields.Many2many('negocity.survivor')
+    junk_progress = fields.Float(compute='_get_junk_progress')
+    workers = fields.Many2many('negocity.survivor', domain="[('id','in',workers_available)]")
+    #workers = fields.Many2many('negocity.survivor', domain="[('city','=',city)]")
+    workers_available = fields.Many2many('negocity.survivor',compute='_get_workers_available')
     time = fields.Float(compute='_get_time')
     date_start = fields.Datetime()
     date_end = fields.Datetime(compute='_get_time')
     progress = fields.Float(compute='_get_time')
+
+    # Coses del tipus
+    image = fields.Image(related='type.image')
+    energy = fields.Float(related='type.energy')  # Pot ser positiu o negatiu i aumenta en el nivell
+    oil = fields.Float(related='type.oil')
+    food = fields.Float(related='type.food')
+    water = fields.Float(related='type.water')
+    despair = fields.Float(related='type.despair')
+    junk = fields.Float(related='type.junk')  # Quantitat de junk que necessita i que proporciona
+
+
+    @api.depends('workers','city')
+    def _get_workers_available(self):
+        for b in self:
+            b.workers_available = (b.city.survivors - b.workers).filtered(
+                lambda w: len(w.city.buildings.workers.filtered(
+                    lambda ww: ww.id == w.id))
+                    ==0)
+
+    @api.constrains('workers')
+    def _check_workers(self):
+        for b in self:
+            for w in b.workers:
+                if b.city.id != w.city.id:
+                    raise ValidationError('The workers are not from the same city')
+
+    @api.depends('junk_contributed')
+    def _get_junk_progress(self):
+        for b in self:
+            contributed = b.junk_contributed
+            expected = b.type.junk
+            b.junk_progress = (contributed*100)/expected
 
     @api.depends('type', 'workers','date_start')
     def _get_time(self):  
@@ -210,14 +246,18 @@ class building(models.Model):
             if b.date_start:
                 b.date_end = fields.Datetime.to_string(
                     fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
-                time_remaining = fields.Datetime.from_string(b.date_end) - fields.Datetime.from_string(fields.datetime.now())
-                print(time_remaining.total_seconds()/60/60,fields.datetime.now(),'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+                time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
+               # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
+              #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+              #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
+              #  print( fields.Datetime.context_timestamp(self, datetime.now()))
+              #  print( fields.Datetime.from_string(b.date_start))
                 time_remaining = time_remaining.total_seconds()/60/60
-                b.progress = 50 #  time_remaining / b.time  ####no funciona el time remaining !!!!
+                b.progress =  (1 - time_remaining / b.time)*100 
             else:
                 b.date_end = ''
-                b.progress = 25
-
+                b.progress = 0
+#fields.Datetime.context_timestamp(self, datetime.now()
 
 class survivor(models.Model):
     _name = 'negocity.survivor'
