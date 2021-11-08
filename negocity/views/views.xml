@@ -19,7 +19,7 @@
     <record model="ir.actions.act_window" id="negocity.buildings_action_window">
       <field name="name">Negocity Buildings</field>
       <field name="res_model">negocity.building</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,pivot</field>
     </record>
     <record model="ir.actions.act_window" id="negocity.survivors_action_window">
       <field name="name">Negocity Survivors</field>

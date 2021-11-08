@@ -24,22 +24,75 @@
                         <group>
                             <field name="avatar" widget="image" />
                             <field name="name" />
-                            <field name="quantity_survivors" />
-                            <field name="survivors">
-                                <tree>
-                                    <field name="name" />
-
-                                    <field name="desperation" />
-                                    <field name="mutations" />
-                                    <field name="illnes" />
-                                    <field name="city" />
-
-                                    <field name="vehicles" widget="many2many_tags" />
-                                </tree>
-                            </field>
 
                         </group>
-                        <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
+                        <notebook>
+                            <page name="survivors" string="Survivors">
+                                <group>
+                                    <field name="quantity_survivors" />
+                                </group>
+
+                                <field name="survivors">
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="desperation" />
+                                        <field name="mutations" />
+                                        <field name="illnes" />
+                                        <field name="city" />
+
+                                        <field name="vehicles" widget="many2many_tags" />
+                                    </tree>
+                                </field>
+
+
+                                <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
+
+                            </page>
+
+                            <page name="cities" string="Cities with survivors">
+
+
+                                <field name="cities" context="{'player':active_id}">
+                                    <form string="City building workers">
+                                        <group>
+                                            <field name="name" />
+                                            <field name="unfinished_buildings" />
+                                            <field name="survivors_player" />
+                                            <field name="unemployed_survivors" />
+                                        </group>
+                                    </form>
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="unfinished_buildings" widget="many2many_tags" />
+                                        <field name="survivors_player" widget="many2many_tags" />
+                                        <field name="unemployed_survivors" widget="many2many_tags" />
+                                    </tree>
+                                </field>
+
+                                <field name="buildings" mode="tree">
+
+                                    <tree>
+                                        <field name="name" />
+                                        <field name="type" />
+                                        <field name="level" />
+                                        <field name="ruined" />
+                                        <field name="city" />
+
+                                        <field name="junk_progress" widget="progressbar" />
+                                        <field name="workers" widget="many2many_tags" />
+                                        <field name="time" />
+                                        <field name="progress" widget="progressbar" />
+                                    </tree>
+
+                                </field>
+
+
+                            </page>
+
+
+                        </notebook>
+
+
                     </sheet>
                 </form>
             </field>

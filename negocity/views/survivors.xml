@@ -25,19 +25,24 @@
       <field name="arch" type="xml">
         <form>
           <sheet>
+            <h1><field name="name" /></h1>
+            <field name="avatar" widget="image"/>
             <group>
-              <field name="avatar" widget="image" />
-
-              <field name="name" />
-
               <field name="desperation" />
               <field name="mutations" />
               <field name="illnes" />
-              <field name="city" />
+              <field name="city" domain="[('radiation', '&lt;', 50)]"/>
               <field name="player" />
-              <field name="template" />
-              <field name="vehicles" />
+              <field name="template" />            
             </group>
+            <notebook>
+              <page name="vehicles" string="Vehicles">
+                <field name="vehicles" />
+              </page>
+              <page name="building" string="Building">
+                <field name="building"/> 
+              </page>
+            </notebook>
           </sheet>
         </form>
       </field>

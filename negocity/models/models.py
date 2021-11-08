@@ -5,7 +5,8 @@ from odoo import models, fields, api
 import random
 import math
 from datetime import datetime, timedelta
-
+from odoo.exceptions import ValidationError
+import pytz
 
 class player(models.Model):
     _name = 'negocity.player'
@@ -18,6 +19,9 @@ class player(models.Model):
     survivors = fields.One2many('negocity.survivor', 'player')
     quantity_survivors = fields.Integer(compute='_get_q_survivors')
     registration_date = fields.Datetime()
+    cities = fields.Many2many('negocity.city',compute='_get_cities')
+    buildings = fields.Many2many('negocity.building',compute='_get_cities')
+    
 
     @api.depends('survivors')
     def _get_q_survivors(self):
@@ -30,6 +34,11 @@ class player(models.Model):
             city = random.choice(self.env['negocity.city'].search([]).mapped(lambda t: t.id))
             self.env['negocity.survivor'].create({'player': p.id, 'template': template, 'city': city})
 
+    @api.depends('survivors')
+    def _get_cities(self):
+        for p in self:
+            p.cities = p.survivors.city.ids   # Funciona perque son recordsets
+            p.buildings = p.cities.buildings.filtered(lambda b: b.progress < 100)
 
 class city(models.Model):
     _name = 'negocity.city'
@@ -58,8 +67,19 @@ class city(models.Model):
     junk = fields.Float(default=1000)  # junk és la "moneda" del joc
 
     buildings = fields.One2many('negocity.building', 'city')
+    unfinished_buildings = fields.Many2many('negocity.building', compute='_get_unfinished_buildings')
     survivors = fields.One2many('negocity.survivor', 'city')
     players = fields.Many2many('negocity.player', compute='_get_players', string='Players with survivors')
+    unemployed_survivors = fields.Many2many('negocity.survivor', compute='_get_unemployed')
+    survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
+    position_x = fields.Integer()
+    position_y = fields.Integer()
+
+    @api.depends('buildings')
+    def _get_unfinished_buildings(self):
+        for c in self:
+            c.unfinished_buildings = c.buildings.filtered(lambda b: b.progress < 100)
+
 
     @api.depends('survivors')
     def _get_players(self):
@@ -71,8 +91,18 @@ class city(models.Model):
             print(players)
             c.players = players
 
-    position_x = fields.Integer()
-    position_y = fields.Integer()
+    
+    @api.depends('survivors')
+    def _get_unemployed(self):
+        for c in self:
+            unemployed_survivors = c.survivors - c.buildings.workers
+            survivors_player = c.survivors 
+            if 'player' in self.env.context:
+                unemployed_survivors = unemployed_survivors.filtered(lambda s: s.player.id == self.env.context['player'])
+                survivors_player = survivors_player.filtered(lambda s: s.player.id == self.env.context['player'])
+            c.unemployed_survivors = unemployed_survivors
+            c.survivors_player = survivors_player
+            
 
     @api.model
     def action_generate_cities(self):
@@ -187,11 +217,46 @@ class building(models.Model):
     city = fields.Many2one('negocity.city', ondelete='cascade')
 
     junk_contributed = fields.Integer(default=0)
-    workers = fields.Many2many('negocity.survivor')
+    junk_progress = fields.Float(compute='_get_junk_progress')
+    workers = fields.Many2many('negocity.survivor', domain="[('id','in',workers_available)]")
+    #workers = fields.Many2many('negocity.survivor', domain="[('city','=',city)]")
+    workers_available = fields.Many2many('negocity.survivor',compute='_get_workers_available')
     time = fields.Float(compute='_get_time')
     date_start = fields.Datetime()
     date_end = fields.Datetime(compute='_get_time')
     progress = fields.Float(compute='_get_time')
+
+    # Coses del tipus
+    image = fields.Image(related='type.image')
+    energy = fields.Float(related='type.energy')  # Pot ser positiu o negatiu i aumenta en el nivell
+    oil = fields.Float(related='type.oil')
+    food = fields.Float(related='type.food')
+    water = fields.Float(related='type.water')
+    despair = fields.Float(related='type.despair')
+    junk = fields.Float(related='type.junk')  # Quantitat de junk que necessita i que proporciona
+
+
+    @api.depends('workers','city')
+    def _get_workers_available(self):
+        for b in self:
+            b.workers_available = (b.city.survivors - b.workers).filtered(
+                lambda w: len(w.city.buildings.workers.filtered(
+                    lambda ww: ww.id == w.id))
+                    ==0)
+
+    @api.constrains('workers')
+    def _check_workers(self):
+        for b in self:
+            for w in b.workers:
+                if b.city.id != w.city.id:
+                    raise ValidationError('The workers are not from the same city')
+
+    @api.depends('junk_contributed')
+    def _get_junk_progress(self):
+        for b in self:
+            contributed = b.junk_contributed
+            expected = b.type.junk
+            b.junk_progress = (contributed*100)/expected
 
     @api.depends('type', 'workers','date_start')
     def _get_time(self):  
@@ -210,14 +275,18 @@ class building(models.Model):
             if b.date_start:
                 b.date_end = fields.Datetime.to_string(
                     fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
-                time_remaining = fields.Datetime.from_string(b.date_end) - fields.Datetime.from_string(fields.datetime.now())
-                print(time_remaining.total_seconds()/60/60,fields.datetime.now(),'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+                time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
+               # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
+              #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+              #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
+              #  print( fields.Datetime.context_timestamp(self, datetime.now()))
+              #  print( fields.Datetime.from_string(b.date_start))
                 time_remaining = time_remaining.total_seconds()/60/60
-                b.progress = time_remaining / b.time  ####no funciona el time remaining !!!!
+                b.progress =  (1 - time_remaining / b.time)*100 
             else:
                 b.date_end = ''
                 b.progress = 0
-
+#fields.Datetime.context_timestamp(self, datetime.now()
 
 class survivor(models.Model):
     _name = 'negocity.survivor'
@@ -252,6 +321,7 @@ class survivor(models.Model):
     vehicles = fields.One2many('negocity.vehicle', 'survivor')
 
     junk = fields.Integer(default=0)
+    building = fields.Many2many('negocity.building')
 
 
 class vehicle(models.Model):
@@ -274,7 +344,13 @@ class road(models.Model):
 
     city_1 = fields.Many2one('negocity.city', ondelete='cascade')
     city_2 = fields.Many2one('negocity.city', ondelete='cascade')
-    # distance = fields.Float(compute='_get_distance')
+    distance = fields.Float(compute='_get_distance')
+
+    @api.depends('city_1','city_2')
+    def _get_distance(self):
+        for r in self:
+            r.distance = math.sqrt((r.city_2.position_x - r.city_1.position_x)**2 + (r.city_2.position_y - r.city_1.position_y)**2)
+          #  print(r.distance)
 
 
 class character_template(models.Model):
@@ -295,14 +371,29 @@ class travel(models.Model):
     road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
     date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
     date_end = fields.Datetime(compute='_get_date_end')  # sera computat en funció de la distància
+    progress = fields.Float(compute='_get_progress')
 
     @api.depends('date_departure', 'road')
     def _get_date_end(self):
         for t in self:
             d_dep = t.date_departure
             data = fields.Datetime.from_string(d_dep)
-            data = data + timedelta(hours=3)
+            data = data + timedelta(hours=t.road.distance)
             t.date_end = fields.Datetime.to_string(data)
+
+    @api.depends('date_departure','road')
+    def _get_progress(self):
+        for t in self:
+            if t.road:
+                print(t.road.distance)
+                if t.date_departure:
+                        time_remaining =  fields.Datetime.context_timestamp(self,t.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
+                        time_remaining = time_remaining.total_seconds()/60/60
+                        t.progress =  (1 - time_remaining / t.road.distance)*100 
+                else:
+                    t.progress = 0
+            else:
+                t.progress = 0
 
     player = fields.Many2one('negocity.player')
     passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
