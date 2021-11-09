@@ -225,6 +225,7 @@ class building(models.Model):
     date_start = fields.Datetime()
     date_end = fields.Datetime(compute='_get_time')
     progress = fields.Float(compute='_get_time')
+    state = fields.Selection([('unfinished','Unfinished'),('inprogress','In Progress'),('finished','Finished')])
 
     # Coses del tipus
     image = fields.Image(related='type.image')
@@ -261,32 +262,63 @@ class building(models.Model):
     @api.depends('type', 'workers','date_start')
     def _get_time(self):  
         for b in self:
-            n_workers = len(b.workers)
-            if n_workers > 0:
-                mean_illness = 0
-                for w in b.workers:
-                    mean_illness = mean_illness + w.illnes
-                mean_illness = mean_illness / n_workers
-                b.time = b.type.time / math.log10(n_workers * (100 - mean_illness))
-            else:
-                b.time = b.type.time
+            if b.state != 'finished':
+                n_workers = len(b.workers)
+                if n_workers > 0:
+                    mean_illness = 0
+                    for w in b.workers:
+                        mean_illness = mean_illness + w.illnes
+                    mean_illness = mean_illness / n_workers
+                    b.time = b.type.time / math.log10(n_workers * (100 - mean_illness))
+                else:
+                    b.time = b.type.time
 
-            # treure data final
-            if b.date_start:
-                b.date_end = fields.Datetime.to_string(
-                    fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
-                time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
-               # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
-              #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-              #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
-              #  print( fields.Datetime.context_timestamp(self, datetime.now()))
-              #  print( fields.Datetime.from_string(b.date_start))
-                time_remaining = time_remaining.total_seconds()/60/60
-                b.progress =  (1 - time_remaining / b.time)*100 
+                # treure data final
+                if b.date_start:
+                    b.date_end = fields.Datetime.to_string(
+                        fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
+                    time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
+                   # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
+                  #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+                  #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
+                  #  print( fields.Datetime.context_timestamp(self, datetime.now()))
+                  #  print( fields.Datetime.from_string(b.date_start))
+                    time_remaining = time_remaining.total_seconds()/60/60
+                    b.progress =  (1 - time_remaining / b.time)*100
+                    if b.progress >= 100:
+                        b.progress = 100
+                        b.state = 'finished'
+                    else:
+                        b.state = 'inprogress'
+                else:
+                    b.date_end = ''
+                    b.progress = 0
+                    b.state = 'unfinished'
             else:
-                b.date_end = ''
-                b.progress = 0
+                b.progress = 100
+                b.date_end = False
+                b.time = 0
 #fields.Datetime.context_timestamp(self, datetime.now()
+
+    # @api.onchange('junk_contributed')
+    # def _check_junk(self):
+    #     for s in self:
+    #         if s.junk_contributed >= s.type.junk:
+    #             s.write({'date_start': fields.datetime.now()})
+
+    @api.model
+    def create(self,values):
+        record = super(building, self).create(values)
+        if record.junk_contributed >= record.type.junk and record.date_start == False:
+          record.write({'date_start': fields.datetime.now()})
+        return record
+
+
+    def write(self,values):
+         record = super(building, self).write(values)
+         if self.junk_contributed >= self.type.junk and not self.date_start:
+             self.write({'date_start': fields.datetime.now()})
+         return record
 
 class survivor(models.Model):
     _name = 'negocity.survivor'

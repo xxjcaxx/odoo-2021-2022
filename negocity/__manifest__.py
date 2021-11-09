@@ -30,6 +30,7 @@
         'views/templates.xml',
         'demo/character_templates.xml',
         'demo/building_types.xml',
+
     ],
     # only loaded in demonstration mode
     'demo': [
