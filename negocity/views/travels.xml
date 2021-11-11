@@ -1,0 +1,74 @@
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="negocity.travel_tree">
+            <field name="name">negocity travel Tree</field>
+            <field name="model">negocity.travel</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name" />
+                   <field name="origin" />
+                   <field name="destiny" />
+                   <field name="road" />
+                   <field name="date_departure" />
+                   <field name="date_end" />
+                   <field name="progress" widget="progressbar"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="negocity.travel_form">
+            <field name="name">negocity travel Form</field>
+            <field name="model">negocity.travel</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                        <group>
+                        <field name="name" />
+                      
+                        <field name="origin" />
+                        <field name="destiny" attrs="{'readonly': [('origin', '=', False)]}"/>
+                        <field name="road" />
+                        <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
+                        <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
+                        <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
+                    </group>
+                    <group>
+                        <field name="date_departure" />
+                        <field name="date_end" />
+                        <field name="progress" widget="progressbar"/>
+                    </group>
+                 
+                </group>
+
+                <notebook>
+                    <page name="passenger" string="Passengers">
+                        
+                        <field name="passengers" />
+                    </page>
+                </notebook>
+                    </sheet>
+                   
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="negocity.travel_calendar">
+            <field name="name">negocity travel calendar</field>
+            <field name="model">negocity.travel</field>
+            <field name="arch" type="xml">
+                <calendar date_start="date_departure" date_stop="date_end" color="road">
+                    <field name="name" />
+                   <field name="origin" />
+                   <field name="destiny" />
+                   <field name="road" />
+                   <field name="progress" widget="progressbar"/>
+                </calendar>
+            </field>
+        </record>
+
+
+        </data>
+        </odoo>

@@ -69,6 +69,9 @@
             <field name="model">negocity.building</field>
             <field name="arch" type="xml">
                 <form>
+                    <header>
+                         <field name="state" widget="statusbar"/>
+                    </header>
                     <sheet>
                         <field name="image" widget="image" class="oe_avatar" />
                         <div class="oe_title">
@@ -84,7 +87,7 @@
                             </group>
                         </div>
                         <notebook>
-                            <page name="construction" string="Construction">
+                            <page name="construction" string="Construction" states="unfinished,inprogress">
                                 <group>
                                     <group string="Junk">
                                         <field name="junk_contributed" />
@@ -113,6 +116,7 @@
                                     <field name="food" />
                                     <field name="water" />
                                     <field name="despair" />
+                                     <field name="junk" />
                                 </group>
 
                             </page>

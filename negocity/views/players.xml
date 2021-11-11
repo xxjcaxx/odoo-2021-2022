@@ -20,7 +20,12 @@
             <field name="model">negocity.player</field>
             <field name="arch" type="xml">
                 <form>
+                        <header>
+                             <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
+
+                        </header>
                     <sheet>
+
                         <group>
                             <field name="avatar" widget="image" />
                             <field name="name" />
@@ -45,7 +50,6 @@
                                 </field>
 
 
-                                <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
 
                             </page>
 

@@ -74,6 +74,7 @@ class city(models.Model):
     survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     position_x = fields.Integer()
     position_y = fields.Integer()
+    roads = fields.Many2many('negocity.road',compute='_get_roads')
 
     @api.depends('buildings')
     def _get_unfinished_buildings(self):
@@ -182,6 +183,10 @@ class city(models.Model):
         for c in self:
             template = random.choice(self.env['negocity.character_template'].search([]).mapped(lambda t: t.id))
             self.env['negocity.survivor'].create({'template': template, 'city': c.id})
+    
+    def _get_roads(self):
+        for c in self:
+            c.roads = self.env['negocity.road'].search(['|',('city_1','=', c.id),('city_2','=', c.id)]).ids
 
 
 class building_type(models.Model):
@@ -225,6 +230,7 @@ class building(models.Model):
     date_start = fields.Datetime()
     date_end = fields.Datetime(compute='_get_time')
     progress = fields.Float(compute='_get_time')
+    state = fields.Selection([('unfinished','Unfinished'),('inprogress','In Progress'),('finished','Finished')])
 
     # Coses del tipus
     image = fields.Image(related='type.image')
@@ -261,32 +267,63 @@ class building(models.Model):
     @api.depends('type', 'workers','date_start')
     def _get_time(self):  
         for b in self:
-            n_workers = len(b.workers)
-            if n_workers > 0:
-                mean_illness = 0
-                for w in b.workers:
-                    mean_illness = mean_illness + w.illnes
-                mean_illness = mean_illness / n_workers
-                b.time = b.type.time / math.log10(n_workers * (100 - mean_illness))
-            else:
-                b.time = b.type.time
+            if b.state != 'finished':
+                n_workers = len(b.workers)
+                if n_workers > 0:
+                    mean_illness = 0
+                    for w in b.workers:
+                        mean_illness = mean_illness + w.illnes
+                    mean_illness = mean_illness / n_workers
+                    b.time = b.type.time / math.log10(n_workers * (100 - mean_illness))
+                else:
+                    b.time = b.type.time
 
-            # treure data final
-            if b.date_start:
-                b.date_end = fields.Datetime.to_string(
-                    fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
-                time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
-               # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
-              #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-              #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
-              #  print( fields.Datetime.context_timestamp(self, datetime.now()))
-              #  print( fields.Datetime.from_string(b.date_start))
-                time_remaining = time_remaining.total_seconds()/60/60
-                b.progress =  (1 - time_remaining / b.time)*100 
+                # treure data final
+                if b.date_start:
+                    b.date_end = fields.Datetime.to_string(
+                        fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
+                    time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
+                   # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
+                  #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
+                  #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
+                  #  print( fields.Datetime.context_timestamp(self, datetime.now()))
+                  #  print( fields.Datetime.from_string(b.date_start))
+                    time_remaining = time_remaining.total_seconds()/60/60
+                    b.progress =  (1 - time_remaining / b.time)*100
+                    if b.progress >= 100:
+                        b.progress = 100
+                        b.state = 'finished'
+                    else:
+                        b.state = 'inprogress'
+                else:
+                    b.date_end = ''
+                    b.progress = 0
+                    b.state = 'unfinished'
             else:
-                b.date_end = ''
-                b.progress = 0
+                b.progress = 100
+                b.date_end = False
+                b.time = 0
 #fields.Datetime.context_timestamp(self, datetime.now()
+
+    # @api.onchange('junk_contributed')
+    # def _check_junk(self):
+    #     for s in self:
+    #         if s.junk_contributed >= s.type.junk:
+    #             s.write({'date_start': fields.datetime.now()})
+
+    @api.model
+    def create(self,values):
+        record = super(building, self).create(values)
+        if record.junk_contributed >= record.type.junk and record.date_start == False:
+          record.write({'date_start': fields.datetime.now()})
+        return record
+
+
+    def write(self,values):
+         record = super(building, self).write(values)
+         if self.junk_contributed >= self.type.junk and not self.date_start:
+             self.write({'date_start': fields.datetime.now()})
+         return record
 
 class survivor(models.Model):
     _name = 'negocity.survivor'
@@ -342,9 +379,15 @@ class road(models.Model):
     _name = 'negocity.road'
     _description = 'Road beween cities'
 
+    name = fields.Char(compute='_get_name')
     city_1 = fields.Many2one('negocity.city', ondelete='cascade')
     city_2 = fields.Many2one('negocity.city', ondelete='cascade')
     distance = fields.Float(compute='_get_distance')
+
+    @api.depends('city_1','city_2')
+    def _get_name(self):
+        for r in self:
+            r.name = r.city_1.name+" <--> "+r.city_2.name
 
     @api.depends('city_1','city_2')
     def _get_distance(self):
@@ -368,18 +411,56 @@ class travel(models.Model):
     name = fields.Char()
     origin = fields.Many2one('negocity.city', ondelete='cascade')
     destiny = fields.Many2one('negocity.city', ondelete='cascade')  # filtrat
-    road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
+    road = fields.Many2one('negocity.road', ondelete='cascade', readonly=True)  # computat
     date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
-    date_end = fields.Datetime(compute='_get_date_end')  # sera computat en funció de la distància
+    date_end = fields.Datetime(compute='_get_progress')  # sera computat en funció de la distància
     progress = fields.Float(compute='_get_progress')
+    
 
-    @api.depends('date_departure', 'road')
-    def _get_date_end(self):
-        for t in self:
-            d_dep = t.date_departure
-            data = fields.Datetime.from_string(d_dep)
-            data = data + timedelta(hours=t.road.distance)
-            t.date_end = fields.Datetime.to_string(data)
+    @api.onchange('origin')
+    def _onchange_origin(self):
+        if self.origin != False:
+            roads_available =  self.origin.roads   #  self.env['negocity.road'].search(['|',('city_1','=', self.origin.id),('city_2','=', self.origin.id)])
+            cities_available = roads_available.city_1 + roads_available.city_2 - self.origin
+            players_in_city = self.origin.players.ids
+            print(cities_available)
+            return {
+                'domain' : {
+                    'destiny': [('id', 'in', cities_available.ids)], 
+                    'player': [('id','in',players_in_city)]
+                }
+            }
+    
+    @api.onchange('destiny')
+    def _onchange_destiny(self):
+        if self.destiny != False:
+            road_available = self.origin.roads & self.destiny.roads
+            self.road = road_available.id
+            return {}
+
+    @api.onchange('player')
+    def _onchange_player(self):
+        if self.player != False:
+            drivers_available = self.player.survivors.filtered(lambda s: s.city.id == self.origin.id and len(s.building) == 0 )
+            return {
+                'domain' : {
+                    'driver': [('id', 'in', drivers_available.ids)]
+                    
+                }
+            }
+
+    @api.onchange('driver')
+    def _onchange_driver(self):
+        if self.driver != False:
+            vehicles = self.driver.vehicles
+            return {
+                'domain' : {
+                    'vehicle': [('id', 'in', vehicles.ids)]
+                    
+                }
+            }
+    
+    
 
     @api.depends('date_departure','road')
     def _get_progress(self):
@@ -387,13 +468,24 @@ class travel(models.Model):
             if t.road:
                 print(t.road.distance)
                 if t.date_departure:
+                        d_dep = t.date_departure
+                        data = fields.Datetime.from_string(d_dep)
+                        data = data + timedelta(hours=t.road.distance)
+                        t.date_end = fields.Datetime.to_string(data)
+
                         time_remaining =  fields.Datetime.context_timestamp(self,t.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
                         time_remaining = time_remaining.total_seconds()/60/60
                         t.progress =  (1 - time_remaining / t.road.distance)*100 
+                        if t.progress >= 100:
+                            t.progress = 100
                 else:
                     t.progress = 0
+                    t.date_end = False
             else:
                 t.progress = 0
+                t.date_end = False
 
     player = fields.Many2one('negocity.player')
     passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
+    driver = fields.Many2one('negocity.survivor')
+    vehicle = fields.Many2one('negocity.vehicle')

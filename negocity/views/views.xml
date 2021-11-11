@@ -24,7 +24,7 @@
     <record model="ir.actions.act_window" id="negocity.survivors_action_window">
       <field name="name">Negocity Survivors</field>
       <field name="res_model">negocity.survivor</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">kanban,tree,form</field>
     </record>
     <record model="ir.actions.act_window" id="negocity.vehicles_action_window">
       <field name="name">Negocity Vehicles</field>
@@ -53,7 +53,7 @@
     <record model="ir.actions.act_window" id="negocity.travel_action_window">
       <field name="name">Negocity travel</field>
       <field name="res_model">negocity.travel</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,calendar</field>
     </record>
     <!-- server action to the one above -->
     <!--
