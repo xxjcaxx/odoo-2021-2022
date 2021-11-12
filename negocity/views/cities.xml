@@ -86,6 +86,16 @@
                                 </field>
 
                             </page>
+                            <page string="Connections">
+                                <group>
+                                    <field name="position_x" />
+                                    <field name="position_y" />
+                                    <field name="roads">
+                                    </field>
+                                </group>
+                               
+
+                            </page>
                         </notebook>
                     </sheet>
                 </form>

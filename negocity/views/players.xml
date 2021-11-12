@@ -29,6 +29,8 @@
                         <group>
                             <field name="avatar" widget="image" />
                             <field name="name" />
+                            <field name="login" />
+                            <field name="password" password="True" />
 
                         </group>
                         <notebook>

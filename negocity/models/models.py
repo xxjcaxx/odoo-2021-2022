@@ -21,7 +21,8 @@ class player(models.Model):
     registration_date = fields.Datetime()
     cities = fields.Many2many('negocity.city',compute='_get_cities')
     buildings = fields.Many2many('negocity.building',compute='_get_cities')
-    
+    login = fields.Char()
+    password = fields.Char()
 
     @api.depends('survivors')
     def _get_q_survivors(self):
@@ -32,7 +33,18 @@ class player(models.Model):
         for p in self:
             template = random.choice(self.env['negocity.character_template'].search([]).mapped(lambda t: t.id))
             city = random.choice(self.env['negocity.city'].search([]).mapped(lambda t: t.id))
-            self.env['negocity.survivor'].create({'player': p.id, 'template': template, 'city': city})
+            survivor = self.env['negocity.survivor'].create({'player': p.id, 'template': template, 'city': city})
+            for i in range(0,random.randint(1,5)):
+                oil_factor =  random.random()*20
+                self.env['negocity.vehicle'].create({
+                    'oil_consumption': oil_factor,
+                    'gas_tank': oil_factor*5000 * random.random(),
+                    'passengers': random.randint(1,oil_factor),
+                    'junk_level': random.random()*100,
+                    'damage': oil_factor*random(),
+                    'survivor': survivor.id,
+                    'city': city.id,
+                })
 
     @api.depends('survivors')
     def _get_cities(self):
@@ -371,8 +383,8 @@ class vehicle(models.Model):
     passengers = fields.Integer()
     junk_level = fields.Float()
     damage = fields.Float()
-
     survivor = fields.Many2one('negocity.survivor')
+    city = fields.Many2one('negocity.city')
 
 
 class road(models.Model):
@@ -399,10 +411,14 @@ class road(models.Model):
 class character_template(models.Model):
     _name = 'negocity.character_template'
     _description = 'Templates to generate characters'
-
     name = fields.Char()
     image = fields.Image(max_width=200, max_height=400)
 
+class vehicle_template(models.Model):
+    _name = 'negocity.vehicle_template'
+    _description = 'Templates to generate vehicles'
+    name = fields.Char()
+    image = fields.Image(max_width=200, max_height=400)
 
 class travel(models.Model):
     _name = 'negocity.travel'
@@ -411,7 +427,7 @@ class travel(models.Model):
     name = fields.Char()
     origin = fields.Many2one('negocity.city', ondelete='cascade')
     destiny = fields.Many2one('negocity.city', ondelete='cascade')  # filtrat
-    road = fields.Many2one('negocity.road', ondelete='cascade', readonly=True)  # computat
+    road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
     date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
     date_end = fields.Datetime(compute='_get_progress')  # sera computat en funció de la distància
     progress = fields.Float(compute='_get_progress')
@@ -444,8 +460,8 @@ class travel(models.Model):
             drivers_available = self.player.survivors.filtered(lambda s: s.city.id == self.origin.id and len(s.building) == 0 )
             return {
                 'domain' : {
-                    'driver': [('id', 'in', drivers_available.ids)]
-                    
+                    'driver': [('id', 'in', drivers_available.ids)],
+                    'passengers': [('id','in',drivers_available.ids)]
                 }
             }
 
@@ -456,7 +472,6 @@ class travel(models.Model):
             return {
                 'domain' : {
                     'vehicle': [('id', 'in', vehicles.ids)]
-                    
                 }
             }
     

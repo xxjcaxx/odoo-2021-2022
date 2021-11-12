@@ -17,6 +17,7 @@ class banner_city_controller(http.Controller):
         }
 # Podem resoldre el botó en un altre controller o amb una acció
 
+################## API REST  ######################
 
     @http.route('/negocity/api/<model>', auth="none", cors='*', methods=["POST","PUT","OPTIONS"], csrf=False, type='json')
     def api(self, **args):
@@ -50,9 +51,10 @@ class banner_city_controller(http.Controller):
         print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIGET')
         print(args, http.request.httprequest.method)
         model = args['model']
+       
         if (http.request.httprequest.method == 'GET'):
             record = http.request.env['negocity.' + model].sudo().search([])
-            #print(record.read())
+           # print(record.read())
             return http.Response(
             json.dumps(record.read(), default=tools.date_utils.json_default),
             status=200,
@@ -69,6 +71,77 @@ class banner_city_controller(http.Controller):
             )
 
         return http.request.env['ir.http'].session_info()
+
+
+
+##################### LOGIN
+
+
+
+    @http.route('/negocity/login', auth='public', cors='*', type='json')
+    def negocity_login(self, user, password, **kw):
+        passs = http.request.env['negocity.player'].sudo().search([('login', '=', user)])
+        if (passs):
+            if passs[0].password == password:
+                return {"login": "si", "id": passs[0].id, "name": passs[0].name}
+            else:
+                print('no pass')
+                return {"login": "no"}
+        else:
+            print('no user')
+            return {"login": "no"}
+
+
+###############################  API NEGOCITY  #############
+
+
+    @http.route('/negocity/api/survivors/<player>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
+    def survivors(self, **args):
+        print('Survivors')
+        print(args, http.request.httprequest.method)
+        player = args['player']
+       
+        if (http.request.httprequest.method == 'GET'):
+            record = http.request.env['negocity.survivor'].sudo().search([('player.id','=',player)])
+           # print(record.read())
+            return http.Response(
+            json.dumps(record.read(), default=tools.date_utils.json_default),
+            status=200,
+            mimetype='application/json'
+           )
+        if (http.request.httprequest.method == 'DELETE'):
+            record = http.request.env['negocity.survivor'].sudo().search([('id', '=', args['survivor']['id'])])[0]
+            print(record)
+            record.unlink()
+            return http.Response(
+                json.dumps(record.read()),
+                status=200,
+                mimetype='application/json'
+            )
+
+        return http.request.env['ir.http'].session_info()
+
+    @http.route('/negocity/api/cities/<player>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
+    def cities(self, **args):
+        print('Cities')
+        print(args, http.request.httprequest.method)
+        player = args['player']
+       
+        if (http.request.httprequest.method == 'GET'):
+            record = http.request.env['negocity.city'].sudo().search([]).filtered(lambda c: int(player) in c.players.ids)
+           # print(record.read())
+            return http.Response(
+            json.dumps(record.read(), default=tools.date_utils.json_default),
+            status=200,
+            mimetype='application/json'
+           )
+      
+        return http.request.env['ir.http'].session_info()
+
+
+
+
+
 
 #class Negocity(http.Controller):
 #     @http.route('/negocity/negocity/', auth='public')

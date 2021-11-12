@@ -91,5 +91,27 @@
             </field>
         </record>
 
+
+        <record model="ir.ui.view" id="negocity.survivor_search">
+            <field name="name">Negocity survivor search</field>
+            <field name="model">negocity.survivor</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="desperation"/>
+                    <field name="mutations"/>
+                    <field name="illnes"/>
+                    <field name="city"/>
+                    <field name="player"/>
+                    <field name="player" string="Name or player"
+                           filter_domain="['|',('name','ilike',self),('player.name','ilike',self)]"/>
+                    <filter name="with_player" string="With Player" domain="[('player', '!=', False)]"/>
+                    <filter name="without_player" string="Without Player" domain="[('player', '=', False)]"/>
+                    <filter name="group_by_player" string="Player" context="{'group_by': 'player'}"/>
+                    <filter name="group_by_city" string="City" context="{'group_by': 'city'}"/>
+                </search>
+            </field>
+        </record>
+
     </data>
 </odoo>
