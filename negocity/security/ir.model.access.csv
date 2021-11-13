@@ -9,3 +9,4 @@ access_negocity_road,negocity.road,model_negocity_road,base.group_user,1,1,1,1
 access_negocity_character_template,negocity.character_template,model_negocity_character_template,base.group_user,1,1,1,1
 access_negocity_vehicle_template,negocity.vehicle_template,model_negocity_vehicle_template,base.group_user,1,1,1,1
 access_negocity_travel,negocity.travel,model_negocity_travel,base.group_user,1,1,1,1
+access_negocity_event,negocity.event,model_negocity_event,base.group_user,1,1,1,1

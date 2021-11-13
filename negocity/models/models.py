@@ -248,6 +248,8 @@ class travel(models.Model):
     date_departure = fields.Datetime()
     date_end = fields.Datetime(compute='_get_progress')  # sera computat en funció de la distància
     progress = fields.Float(compute='_get_progress')
+    state = fields.Selection([('preparation','Preparation'),('inprogress','In Progress'),('finished','Finished')],default='preparation')
+
 
     player = fields.Many2one('negocity.player')
     passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
@@ -266,6 +268,7 @@ class travel(models.Model):
                 t.driver.travel = t.id
                 for p in t.passengers:
                     p.city = False
+                t.state = 'inprogress'
             else:
                 raise UserError('Not Sufficient Oil for the travel')
 
@@ -341,3 +344,49 @@ class travel(models.Model):
                 t.progress = 0
                 t.date_end = False
                 t.oil_required = 0 
+
+
+    @api.model
+    def update_travel(self):
+        travels_in_progress = self.search([('state','=','inprogress')])
+        print("Updating progress in: ",travels_in_progress)
+        for t in travels_in_progress:
+            if t.progress >= 100:
+                t.write({'state':'finished'})   
+
+################  FALTA ELS PROBLEMES EN EL TRAVEL
+
+
+                t.driver.write({'city':t.destiny.id})
+                t.vehicle.write({'city':t.destiny.id,'gas_tank_level':t.vehicle.gas_tank_level-t.oil_required})
+                for p in t.passengers:
+                    p.write({'city':t.destiny.id})
+                self.env['negocity.event'].create({'name':'Arrival travel '+t.name, 'player':t.player, 'event':'negocity.travel,'+str(t.id), 'description': 'Arrival travel... '})
+                print('Arribal')
+
+
+
+
+class event(models.Model):
+    _name = 'negocity.event'
+    _description = 'Events'
+
+    name = fields.Char()
+    player = fields.Many2many('negocity.player')
+    event = fields.Reference([('negocity.building','Building'),('negocity.travel','Travel')])
+    description = fields.Text()
+
+
+
+
+
+    ### TODO
+
+    ### Opció de reparar edificis o convertir-los en junk
+    ### Opció de donar gasolina a la ciutat
+    ### Veure en una cituat els viatges que estan vinguent
+    ### Les batalles es faran creuant dos viatges. Quan un player envia un viatge pot ser per anar a furtar a una ciutat o per a defendrer-la.
+    ###     Un player o molts poden enviar molts viatges, com que van per la carretera, els que vinguen en direcció contraria lluitaran.
+    ####    Les restes de la lluita (chatarra i gasolina) es queden en la carretera fins a que passe algú
+    ### Producció dels edificis
+    ### Salud i progressió dels supervivents
