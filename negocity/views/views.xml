@@ -50,6 +50,13 @@
       <field name="view_mode">tree,form</field>
     </record>
 
+    <record model="ir.actions.act_window" id="negocity.vehicle_template_action_window">
+      <field name="name">Negocity vehicle Templates</field>
+      <field name="res_model">negocity.vehicle_template</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
     <record model="ir.actions.act_window" id="negocity.travel_action_window">
       <field name="name">Negocity travel</field>
       <field name="res_model">negocity.travel</field>
@@ -95,5 +102,6 @@
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
   
 <menuitem name="Charater Templates" id="negocity.character_template" parent="negocity.aux" action="negocity.character_template_action_window" />
+<menuitem name="Vehicle Templates" id="negocity.vehicle_template" parent="negocity.aux" action="negocity.vehicle_template_action_window" />
   </data>
 </odoo>

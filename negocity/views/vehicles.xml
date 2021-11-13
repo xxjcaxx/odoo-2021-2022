@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data >
+    
+        <record id="negocity.vehicles_form" model="ir.ui.view">
+            <field name="name">Negocity vehicles form</field>
+            <field name="model">negocity.vehicle</field>
+            <field name="arch" type="xml">
+                <form string="vehicle">
+                    <header>
+                        <button name="fill_gas_tank" type="object" string="Fill Gas Tank" class="oe_highlight" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+
+                                <h2> <field name="name" /></h2>
+                                <field name="img_computed" widget="image"/>
+                                <field name="img" widget="image" class="oe_edit_only"/>
+
+                            </group>
+                         <group>
+
+                            <field name="oil_consumption" />
+                            <field name="gas_tank" />
+                            <field name="gas_tank_level" />
+                            <field name="speed" />
+                            <field name="passengers" />
+                            <field name="damage" />
+                            <field name="junk_level" />
+                            <field name="survivor" />
+                            <field name="city" />
+                            <field name="template" />
+                         </group>
+
+                           
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="negocity.vehicles_tree" model="ir.ui.view">
+            <field name="name">Negocity vehicles tree</field>
+            <field name="model">negocity.vehicle</field>
+            <field name="arch" type="xml">
+                <tree string="vehicle">
+                   
+                              <field name="name" />
+                                <field name="img_computed" widget="image"/>
+                               
+
+                        
+                            <field name="oil_consumption" />
+                            <field name="gas_tank" /> <field name="gas_tank_level" />
+                            <field name="speed" />
+                            <field name="passengers" />
+                            <field name="damage" />
+                            <field name="junk_level" />
+                            <field name="survivor" />
+                            <field name="city" />
+                       
+                 
+                </tree>
+            </field>
+        </record>
+        
+    
+
+        <record id="negocity.vehicles_templates_form" model="ir.ui.view">
+            <field name="name">Negocity vehicles form</field>
+            <field name="model">negocity.vehicle_template</field>
+            <field name="arch" type="xml">
+                <form string="vehicle">
+                    <sheet>
+                        <group>
+                            <group>
+
+                                <h2> <field name="name" /></h2>
+                                
+                                <field name="image" widget="image"/>
+
+                            </group>
+                         <group>
+
+                            <field name="oil_consumption" />
+                            <field name="gas_tank" />
+                            <field name="speed" />
+                            <field name="passengers" />
+                            <field name="damage" />
+                         </group>
+
+                           
+                        </group>
+                        <button name="get_random_vehicle" type="object" string="Random vehicle" class="oe_highlight" />
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="negocity.vehicles_templates_tree" model="ir.ui.view">
+            <field name="name">Negocity vehicles tree</field>
+            <field name="model">negocity.vehicle_template</field>
+            <field name="arch" type="xml">
+                <tree string="vehicle">
+                   
+                              <field name="name" />
+                                <field name="image" widget="image"/>
+                       
+                            <field name="oil_consumption" />
+                            <field name="gas_tank" />
+                            <field name="speed" />
+                            <field name="passengers" />
+                            <field name="damage" />
+                            <field name="score" invisible="1"/>
+                            <field name="score_stored" />
+                 
+                </tree>
+            </field>
+        </record>
+        
+
+
+    </data>
+    
+
+</odoo>

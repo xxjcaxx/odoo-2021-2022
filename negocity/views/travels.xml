@@ -34,6 +34,8 @@
                         <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
                         <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
                         <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
+                        <field name="oil_required" />
+                        <field name="oil_available" />
                     </group>
                     <group>
                         <field name="date_departure" />
@@ -49,6 +51,8 @@
                         <field name="passengers" />
                     </page>
                 </notebook>
+
+                <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
                     </sheet>
                    
                 </form>

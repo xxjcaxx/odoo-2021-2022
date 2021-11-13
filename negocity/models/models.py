@@ -1,204 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from operator import pos
+
 from odoo import models, fields, api
 import random
 import math
 from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError
-import pytz
-
-class player(models.Model):
-    _name = 'negocity.player'
-    _description = 'Players'
-
-    name = fields.Char()
-    avatar = fields.Image(max_width=200, max_height=200)
-    avatar_icon = fields.Image(related='avatar', max_width=50,
-                               max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html
-    survivors = fields.One2many('negocity.survivor', 'player')
-    quantity_survivors = fields.Integer(compute='_get_q_survivors')
-    registration_date = fields.Datetime()
-    cities = fields.Many2many('negocity.city',compute='_get_cities')
-    buildings = fields.Many2many('negocity.building',compute='_get_cities')
-    login = fields.Char()
-    password = fields.Char()
-
-    @api.depends('survivors')
-    def _get_q_survivors(self):
-        for p in self:
-            p.quantity_survivors = len(p.survivors)
-
-    def create_survivor(self):
-        for p in self:
-            template = random.choice(self.env['negocity.character_template'].search([]).mapped(lambda t: t.id))
-            city = random.choice(self.env['negocity.city'].search([]).mapped(lambda t: t.id))
-            survivor = self.env['negocity.survivor'].create({'player': p.id, 'template': template, 'city': city})
-            for i in range(0,random.randint(1,5)):
-                oil_factor =  random.random()*20
-                self.env['negocity.vehicle'].create({
-                    'oil_consumption': oil_factor,
-                    'gas_tank': oil_factor*5000 * random.random(),
-                    'passengers': random.randint(1,oil_factor),
-                    'junk_level': random.random()*100,
-                    'damage': oil_factor*random(),
-                    'survivor': survivor.id,
-                    'city': city.id,
-                })
-
-    @api.depends('survivors')
-    def _get_cities(self):
-        for p in self:
-            p.cities = p.survivors.city.ids   # Funciona perque son recordsets
-            p.buildings = p.cities.buildings.filtered(lambda b: b.progress < 100)
-
-class city(models.Model):
-    _name = 'negocity.city'
-    _description = 'Cities'
-
-    def _generate_name(self):
-        first = ["Uncanny", "Remote", "Eastern", "Dead", "Whispering", "Unfriendly", "Unpleasant", "Nasty"
-                                                                                                   "Darkest", "Broken",
-                 "Rotten", "Sunny", "Dead", "Wild", "Forgotten", "Distressing", "Unlikeable", "Rough",
-                 "Hard", "Sharp", "Thug", "Bully", "Disruptive", "Oily", "Burned", "Sunken", "Hollow"
-                                                                                             "Burning", "Frozen", "Sad",
-                 "Big", "Creepy", "Desolate", "Polluted", "Fecal", "Infected", "Tainted"]
-        second = ["Tundra", "Badlands", "Flatlands", "Desert", "Flat", "Paramo", "Desierto",
-                  "Dunghill", "Sands", "Rocks", "Dry Land", "Borderlands", "Frontier", "Ruins",
-                  "Cliff", "Junk", "Crater", "City", "Suburbs", "Underground", "Dump", "Graveyard", "Plain", "Debris"]
-        return random.choice(first) + " " + random.choice(second)
-
-    name = fields.Char(default=_generate_name)
-
-    energy = fields.Float()
-    oil = fields.Float()
-    food = fields.Float()
-    water = fields.Float()
-    despair = fields.Float(default=50)  # %
-    radiation = fields.Float(default=50)  # %
-    junk = fields.Float(default=1000)  # junk és la "moneda" del joc
-
-    buildings = fields.One2many('negocity.building', 'city')
-    unfinished_buildings = fields.Many2many('negocity.building', compute='_get_unfinished_buildings')
-    survivors = fields.One2many('negocity.survivor', 'city')
-    players = fields.Many2many('negocity.player', compute='_get_players', string='Players with survivors')
-    unemployed_survivors = fields.Many2many('negocity.survivor', compute='_get_unemployed')
-    survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
-    position_x = fields.Integer()
-    position_y = fields.Integer()
-    roads = fields.Many2many('negocity.road',compute='_get_roads')
-
-    @api.depends('buildings')
-    def _get_unfinished_buildings(self):
-        for c in self:
-            c.unfinished_buildings = c.buildings.filtered(lambda b: b.progress < 100)
-
-
-    @api.depends('survivors')
-    def _get_players(self):
-        for c in self:
-            players = []
-            for s in c.survivors:
-                if s.player:
-                    players.append(s.player.id)
-            print(players)
-            c.players = players
-
-    
-    @api.depends('survivors')
-    def _get_unemployed(self):
-        for c in self:
-            unemployed_survivors = c.survivors - c.buildings.workers
-            survivors_player = c.survivors 
-            if 'player' in self.env.context:
-                unemployed_survivors = unemployed_survivors.filtered(lambda s: s.player.id == self.env.context['player'])
-                survivors_player = survivors_player.filtered(lambda s: s.player.id == self.env.context['player'])
-            c.unemployed_survivors = unemployed_survivors
-            c.survivors_player = survivors_player
-            
-
-    @api.model
-    def action_generate_cities(self):
-        print('**************Generate')
-        existent_cities = self.search([])
-        existent_cities.unlink()
-        board = [[0 for x in range(50)] for y in range(50)]
-        new_cities = self
-
-        if len(existent_cities) != -1:
-            positions = [x for x in range(2500)]
-            random.shuffle(positions)
-            # print(positions)
-            for i in range(0, 50):
-                x = math.floor(positions[i] / 50)
-                y = positions[i] % 50
-                print(x, y)
-                board[x][y] = 1
-                new_city = self.create({
-                    "energy": random.random() * 100,
-                    "oil": random.random() * 100,
-                    "food": random.random() * 100,
-                    "water": random.random() * 100,
-                    "radiation": random.random() * 100,
-                    "position_x": x,
-                    "position_y": y})
-                new_cities = new_cities | new_city
-                # Els edificis de la ciutat
-                for i in range(0, random.randint(1, 10)):  # Pot crear fins a 10 edificis en ruines
-                    tipus = random.choice(self.env['negocity.building_type'].search([]).ids)
-                    self.env['negocity.building'].create({
-                        'type': tipus,
-                        'city': new_city.id,
-                        'ruined': 100
-                    })
-
-            # Les carreteres
-            all_roads = False
-            i = 1
-            while all_roads == False:
-                all_roads = True
-
-                for c in new_cities:
-                    distancias = new_cities.sorted(key=lambda r: math.sqrt(
-                        (r.position_x - c.position_x) ** 2
-                        + (r.position_y - c.position_y) ** 2)
-                                                   )
-                    # Si no exiteix previament una igual
-                    if len(distancias) > i:
-                        # print('i:',i)
-                        if (len(self.env['negocity.road'].search(
-                                [('city_1', '=', distancias[i].id), ('city_2', '=', c.id)])) == 0):
-                            # print(self.env['negocity.road'].search([('city_2','=', distancias[i].id),('city_1','=', c.id)]))
-                            if (len(self.env['negocity.road'].search(
-                                    [('city_2', '=', distancias[i].id), ('city_1', '=', c.id)])) == 0):
-                                # print('Mateixa',c.id)
-                                # Si no té colisió
-                                # https://stackoverflow.com/questions/3838329/how-can-i-check-if-two-segments-intersect
-                                def ccw(A, B, C):
-                                    return (C.position_y - A.position_y) * (B.position_x - A.position_x) > (
-                                                B.position_y - A.position_y) * (C.position_x - A.position_x)
-
-                                # Return true if line segments AB and CD intersect
-                                def intersect(A, B, C, D):
-                                    return ccw(A, C, D) != ccw(B, C, D) and ccw(A, B, C) != ccw(A, B, D)
-
-                                colisionen = self.env['negocity.road'].search([]).filtered(
-                                    lambda r: intersect(r.city_1, r.city_2, c, distancias[i]))
-                                if len(colisionen) == 0:
-                                    self.env['negocity.road'].create(
-                                        {'city_1': c.id, 'city_2': distancias[i].id})  # la primera és ella mateixa
-                                    all_roads = False
-                i = i + 1
-                print(all_roads, i)
-
-    def create_npc(self):
-        for c in self:
-            template = random.choice(self.env['negocity.character_template'].search([]).mapped(lambda t: t.id))
-            self.env['negocity.survivor'].create({'template': template, 'city': c.id})
-    
-    def _get_roads(self):
-        for c in self:
-            c.roads = self.env['negocity.road'].search(['|',('city_1','=', c.id),('city_2','=', c.id)]).ids
+## from odoo.exceptions import Warning   (Es considera obsolet en favor de UserError)
+from odoo.exceptions import UserError
 
 
 class building_type(models.Model):
@@ -241,7 +50,8 @@ class building(models.Model):
     time = fields.Float(compute='_get_time')
     date_start = fields.Datetime()
     date_end = fields.Datetime(compute='_get_time')
-    progress = fields.Float(compute='_get_time')
+    progress = fields.Float()
+
     state = fields.Selection([('unfinished','Unfinished'),('inprogress','In Progress'),('finished','Finished')])
 
     # Coses del tipus
@@ -280,62 +90,56 @@ class building(models.Model):
     def _get_time(self):  
         for b in self:
             if b.state != 'finished':
+                # Primer traguem el temps total en la quantitat de treballadors actuals
                 n_workers = len(b.workers)
                 if n_workers > 0:
                     mean_illness = 0
                     for w in b.workers:
                         mean_illness = mean_illness + w.illnes
                     mean_illness = mean_illness / n_workers
-                    b.time = b.type.time / math.log10(n_workers * (100 - mean_illness))
+                    b.time = b.type.time / math.log(n_workers * (100 - mean_illness),2)
                 else:
-                    b.time = b.type.time
-
+                    b.time = b.type.time   
+                remaining_percent = 100 - b.progress
+                remaining_time = remaining_percent * b.time /100
                 # treure data final
                 if b.date_start:
-                    b.date_end = fields.Datetime.to_string(
-                        fields.Datetime.from_string(b.date_start) + timedelta(hours=b.time))
-                    time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
-                   # time_remaining = pytz.utc.localize(fields.Datetime.from_string(b.date_end))-  fields.Datetime.context_timestamp(self, datetime.now())
-                  #  print(time_remaining.total_seconds()/60/60,'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy')
-                  #  print( fields.Datetime.context_timestamp(self, datetime.now()).replace(tzinfo=None))
-                  #  print( fields.Datetime.context_timestamp(self, datetime.now()))
-                  #  print( fields.Datetime.from_string(b.date_start))
-                    time_remaining = time_remaining.total_seconds()/60/60
-                    b.progress =  (1 - time_remaining / b.time)*100
-                    if b.progress >= 100:
-                        b.progress = 100
-                        b.state = 'finished'
-                    else:
-                        b.state = 'inprogress'
+                    b.date_end = fields.Datetime.to_string(fields.Datetime.from_string(fields.datetime.now()) + timedelta(hours=remaining_time))
+                   # time_remaining =  fields.Datetime.context_timestamp(self,b.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
                 else:
                     b.date_end = ''
-                    b.progress = 0
-                    b.state = 'unfinished'
+            
             else:
-                b.progress = 100
                 b.date_end = False
                 b.time = 0
-#fields.Datetime.context_timestamp(self, datetime.now()
 
-    # @api.onchange('junk_contributed')
-    # def _check_junk(self):
-    #     for s in self:
-    #         if s.junk_contributed >= s.type.junk:
-    #             s.write({'date_start': fields.datetime.now()})
 
     @api.model
     def create(self,values):
         record = super(building, self).create(values)
         if record.junk_contributed >= record.type.junk and record.date_start == False:
-          record.write({'date_start': fields.datetime.now()})
+          record.write({'date_start': fields.datetime.now(), 'state': 'inprogress'})
         return record
 
 
     def write(self,values):
          record = super(building, self).write(values)
          if self.junk_contributed >= self.type.junk and not self.date_start:
-             self.write({'date_start': fields.datetime.now()})
+             self.write({'date_start': fields.datetime.now(),'state':'inprogress'})
          return record
+
+
+    @api.model
+    def update_building(self):
+        buildings_in_progress = self.search([('state','=','inprogress')])
+        print("Updating progress in: ",buildings_in_progress)
+        for b in buildings_in_progress:
+            percent_in_a_minute = 100 / (b.time*60)
+            b.write({'progress':b.progress+percent_in_a_minute})
+            if b.progress >= 100:
+                b.write({'progress':100,'state':'finished','workers':[(5,0,0)],'ruined':0})   # Desvincule sense eliminar als treballadors
+                
+
 
 class survivor(models.Model):
     _name = 'negocity.survivor'
@@ -372,6 +176,8 @@ class survivor(models.Model):
     junk = fields.Integer(default=0)
     building = fields.Many2many('negocity.building')
 
+    travel = fields.Many2one('negocity.travel')
+
 
 class vehicle(models.Model):
     _name = 'negocity.vehicle'
@@ -380,12 +186,35 @@ class vehicle(models.Model):
    # type = fields.Selection([('truck','Truck'),('car','Car'),('bus','Bus')])
     oil_consumption = fields.Float()
     gas_tank = fields.Float()
+    gas_tank_level = fields.Float(default=0)
+    speed = fields.Float()
     passengers = fields.Integer()
     junk_level = fields.Float()
-    damage = fields.Float()
+    damage = fields.Float()     # Un turisme 10, un camió armat 10000 per fer-se una idea
     survivor = fields.Many2one('negocity.survivor')
     city = fields.Many2one('negocity.city')
+    template = fields.Many2one('negocity.vehicle_template')
+    img = fields.Image(max_width=400, max_height=200, string="Image")
+    img_computed = fields.Image(compute='_get_img')
 
+
+    def _get_img(self):
+        for v in self:
+            if v.img != False:
+                v.img_computed = v.img
+            else:
+                v.img_computed = v.template.image
+
+    def fill_gas_tank(self):
+        for v in self:
+            gas_available = v.city.oil
+            if gas_available > v.gas_tank:
+                v.gas_tank_level = v.gas_tank
+                v.city.oil = gas_available - v.gas_tank_level
+            else:
+                v.gas_tank_level = v.city.oil
+                v.city.oil = 0
+            
 
 class road(models.Model):
     _name = 'negocity.road'
@@ -408,18 +237,6 @@ class road(models.Model):
           #  print(r.distance)
 
 
-class character_template(models.Model):
-    _name = 'negocity.character_template'
-    _description = 'Templates to generate characters'
-    name = fields.Char()
-    image = fields.Image(max_width=200, max_height=400)
-
-class vehicle_template(models.Model):
-    _name = 'negocity.vehicle_template'
-    _description = 'Templates to generate vehicles'
-    name = fields.Char()
-    image = fields.Image(max_width=200, max_height=400)
-
 class travel(models.Model):
     _name = 'negocity.travel'
     _description = 'Travels'
@@ -428,10 +245,29 @@ class travel(models.Model):
     origin = fields.Many2one('negocity.city', ondelete='cascade')
     destiny = fields.Many2one('negocity.city', ondelete='cascade')  # filtrat
     road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
-    date_departure = fields.Datetime(default=lambda r: fields.datetime.now())
+    date_departure = fields.Datetime()
     date_end = fields.Datetime(compute='_get_progress')  # sera computat en funció de la distància
     progress = fields.Float(compute='_get_progress')
+
+    player = fields.Many2one('negocity.player')
+    passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
+    driver = fields.Many2one('negocity.survivor')
+    vehicle = fields.Many2one('negocity.vehicle')
+    oil_required = fields.Float(compute='_get_progress')
+    oil_available = fields.Float(related='vehicle.gas_tank_level')
+
     
+    def launch_travel(self):
+        for t in self:
+            if t.oil_available >= t.oil_required:
+                t.date_departure = fields.datetime.now()
+                t.vehicle.city = False
+                t.driver.city = False
+                t.driver.travel = t.id
+                for p in t.passengers:
+                    p.city = False
+            else:
+                raise UserError('Not Sufficient Oil for the travel')
 
     @api.onchange('origin')
     def _onchange_origin(self):
@@ -476,31 +312,32 @@ class travel(models.Model):
             }
     
     
-
-    @api.depends('date_departure','road')
+    @api.depends('date_departure','road','vehicle')
     def _get_progress(self):
         for t in self:
-            if t.road:
-                print(t.road.distance)
+            if t.road and t.vehicle:
+                time = t.road.distance  # En hores si va a 60k/h
+                distance = time * 60
+                time = distance / t.vehicle.speed  # 
+                if time <= 0:
+                    time = 0.01
+                t.oil_required = (distance/100) * t.vehicle.oil_consumption
+                print(distance,t.vehicle.speed,time,t.oil_required)
                 if t.date_departure:
                         d_dep = t.date_departure
                         data = fields.Datetime.from_string(d_dep)
-                        data = data + timedelta(hours=t.road.distance)
+                        data = data + timedelta(hours=time)
                         t.date_end = fields.Datetime.to_string(data)
-
                         time_remaining =  fields.Datetime.context_timestamp(self,t.date_end) -  fields.Datetime.context_timestamp(self, datetime.now())
                         time_remaining = time_remaining.total_seconds()/60/60
-                        t.progress =  (1 - time_remaining / t.road.distance)*100 
+                        t.progress =  (1 - time_remaining / time)*100 
                         if t.progress >= 100:
                             t.progress = 100
                 else:
                     t.progress = 0
                     t.date_end = False
+                
             else:
                 t.progress = 0
                 t.date_end = False
-
-    player = fields.Many2one('negocity.player')
-    passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
-    driver = fields.Many2one('negocity.survivor')
-    vehicle = fields.Many2one('negocity.vehicle')
+                t.oil_required = 0 

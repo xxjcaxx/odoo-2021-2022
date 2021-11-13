@@ -39,20 +39,50 @@
                                     <field name="quantity_survivors" />
                                 </group>
 
-                                <field name="survivors">
-                                    <tree>
+                                <field name="survivors" mode="kanban">
+                                    
+                                    <kanban>
+                                        <field name="id" />
                                         <field name="name" />
                                         <field name="desperation" />
                                         <field name="mutations" />
                                         <field name="illnes" />
                                         <field name="city" />
-
-                                        <field name="vehicles" widget="many2many_tags" />
-                                    </tree>
+                                        <field name="vehicles"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                    
+                                                <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                                                    <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block negocity_img_kanban"
+                                                         t-attf-style="background-image:url('#{kanban_image('negocity.survivor', 'avatar', record.id.value, placeholder)}')">
+                                                    </div>
+                    
+                                                  
+                                                        <div class="oe_kanban_details d-flex flex-column">
+                                                            <a type="open"><h4 class="o_kanban_record_title oe_partner_heading"><field name="name"/></h4></a>
+                                                            <ul>
+                                                                <li>Desperation: <field name="desperation"/></li>
+                                                                <li>Mutations: <field name="mutations"/></li>
+                                                                <li>Illnes: <field name="illnes"/></li>
+                                                                <li>City: <field name="city"/></li>
+                                                                
+                                                            </ul>
+                                                        </div>
+                                                        <div class="oe_kanban_details d-flex flex-column">
+                                                            <h5>Vehicles:</h5>
+                                                            <span t-foreach="record.vehicles.raw_value" t-as="i">
+                                                               
+                                                                <img t-attf-class="mini_vehicle" t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)" t-att-alt="i"/>
+                                                            </span>
+                                                        </div>
+                                                    
+                                                </div>
+                    
+                    
+                                            </t>
+                                        </templates>
+                                    </kanban>
                                 </field>
-
-
-
                             </page>
 
                             <page name="cities" string="Cities with survivors">
