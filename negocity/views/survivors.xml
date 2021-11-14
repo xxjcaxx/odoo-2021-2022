@@ -15,6 +15,9 @@
                     <field name="city"/>
                     <field name="player"/>
                     <field name="vehicles" widget="many2many_tags"/>
+                    <field name="junk" />
+                    <button name="donate_junk" type="object" string="Donate Junk" class="oe_highlight" />
+
                 </tree>
             </field>
         </record>
@@ -34,6 +37,8 @@
                             <field name="city" domain="[('radiation', '&lt;', 50)]"/>
                             <field name="player"/>
                             <field name="template"/>
+                            <field name="junk" />
+                            <button name="donate_junk" type="object" string="Donate Junk" class="oe_highlight" />
                         </group>
                         <notebook>
                             <page name="vehicles" string="Vehicles">

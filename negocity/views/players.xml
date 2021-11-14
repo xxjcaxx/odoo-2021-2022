@@ -124,7 +124,75 @@
                             </page>
 
                             <page name="vehicles" string="Vehicles">
-                                <field name="vehicles" />
+                                <field name="vehicles" mode="kanban">
+                                    <kanban>
+                                        <field name="id" />
+                                        <field name="name" />
+                                        <field name="oil_consumption" />
+                                        <field name="gas_tank" />
+                                        <field name="gas_tank_level" />
+                                        <field name="speed" />
+                                        <field name="passengers"/>
+                                        <field name="damage"/>
+                                        <field name="resistence"/>
+                                        <field name="survivor"/>
+                                        <field name="city"/>
+                                        <field name="junk_level"/>
+
+                                        <templates>
+                                            <t t-name="kanban-box">
+                    
+                                                <div t-attf-class="oe_kanban_card  ">
+                                                    <div class="o_kanban_image_fill_top o_kanban_image_full d-none d-md-block negocity_img_kanban"
+                                                         t-attf-style="background-image:url('#{kanban_image('negocity.vehicle', 'img_computed', record.id.value, placeholder)}')">
+                                                    </div>
+                    
+
+                                                    <div class=" d-flex">
+                                                  
+                                                        <div class="oe_kanban_details d-flex flex-column">
+                                                            <a type="open"><h4 class="o_kanban_record_title oe_partner_heading"><field name="name"/></h4></a>
+                                                            <ul>
+                                                                
+                                                                <li>Passengers: <field name="passengers"/></li>
+                                                                
+                                                                <li>Survivor: <field name="survivor"/></li>
+                                                                <li>City: <field name="city"/></li>
+                                                                <li>Junk Level: <field name="junk_level"/></li>
+                                                            </ul>
+                                                        </div>
+
+                                                        <div class="oe_kanban_details d-flex flex-column">
+                                                           
+                                                            <ul>
+                                                                <li>Oil Consumption: <field name="oil_consumption"/></li>
+                                                                <li>Gas Tank: <field name="gas_tank"/></li>
+                                                                <li>Gas Tank Level: <field name="gas_tank_level"/></li>
+                                                                <li>Speed: <field name="speed"/></li>
+                                                              
+                                                                <li>Damage: <field name="damage"/></li>
+                                                                <li>Resistence: <field name="resistence"/></li>
+                                                              
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                        <div class="oe_kanban_details d-flex flex-column">
+                                                           
+                                                            <button name="fill_gas_tank" type="object" string="fill" class="btn btn-primary" >Fill gas tank</button>
+                                                            <button name="donate_gas_tank" type="object" string="donate" class="btn btn-primary" >Donate gas tank</button>
+                                                        </div>
+                                                    
+                                                </div>
+                    
+                    
+                                            </t>
+                                        </templates>
+
+                                      
+                                    </kanban>
+
+                                </field>
+
                             </page>
 
                         </notebook>

@@ -29,7 +29,7 @@
     <record model="ir.actions.act_window" id="negocity.vehicles_action_window">
       <field name="name">Negocity Vehicles</field>
       <field name="res_model">negocity.vehicle</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">kanban,tree,form</field>
     </record>
 
 

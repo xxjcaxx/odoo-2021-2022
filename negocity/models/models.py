@@ -47,6 +47,25 @@ class survivor(models.Model):
 
     travel = fields.Many2one('negocity.travel')
 
+    
+    def donate_junk(self):
+        for s in self:
+            s.city.junk =  s.city.junk + s.junk
+            s.junk = 0
+
+    @api.model
+    def update_survivor(self):
+        alive_survivors = self.search([('illnes','<',100)])
+        print("Updating survivors in: ",alive_survivors)
+        for s in alive_survivors:
+            print(s)
+            # Tienen que comer 1
+            # Tiene que beber 1
+            # Actualizamos su felicidad en función de si come y bebe, de la desesperacion de la ciudad i sus edificios y de si está ocupado o no
+            # Actualizamos su enfermedad en función de lo anterior y de sus mutaciones
+            # Actualizamos sus mutaciones en función de la radiación
+
+
 
 class vehicle(models.Model):
     _name = 'negocity.vehicle'
@@ -68,6 +87,7 @@ class vehicle(models.Model):
     img_computed = fields.Image(compute='_get_img')
 
 
+
     def _get_img(self):
         for v in self:
             if v.img != False:
@@ -84,6 +104,11 @@ class vehicle(models.Model):
             else:
                 v.gas_tank_level = v.city.oil
                 v.city.oil = 0
+
+    def donate_gas_tank(self):
+        for v in self:
+            v.city.oil =   v.city.oil + v.gas_tank_level
+            v.gas_tank_level = 0
             
 
 class road(models.Model):
@@ -128,17 +153,38 @@ class travel(models.Model):
     oil_required = fields.Float(compute='_get_progress')
     oil_available = fields.Float(related='vehicle.gas_tank_level')
 
-    
+
+    @api.constrains('origin','destiny','road','player','passengers','driver','vehicle')
+    def check_things(self):
+        for t in self:
+            if t.origin.id != t.road.city_1.id and t.origin.id != t.road.city_2.id or  t.destiny.id != t.road.city_1.id and t.destiny.id != t.road.city_2.id  :
+                raise ValidationError('Incorrect Road')
+            if t.driver.city.id != t.origin.id:
+                raise ValidationError('Driver has to be in origin city')
+            for p in t.passengers:
+                if p.city.id != t.origin.id:
+                    raise ValidationError('Passengers has to be in origin city')
+            if t.vehicle.city != t.city.id:
+                raise ValidationError('Vehicle has to be in origin city')
+            if t.driver.player.id != t.player.id:
+                raise ValidationError('Driver has to be in player')
+            for p in t.passengers:
+                if p.player.id != t.player.id:
+                    raise ValidationError('Passengers has to be in player')
+
     def launch_travel(self):
         for t in self:
             if t.oil_available >= t.oil_required:
-                t.date_departure = fields.datetime.now()
-                t.vehicle.city = False
-                t.driver.city = False
-                t.driver.travel = t.id
-                for p in t.passengers:
-                    p.city = False
-                t.state = 'inprogress'
+                if t.vehicle.junk_level < 100:
+                    t.date_departure = fields.datetime.now()
+                    t.vehicle.city = False
+                    t.driver.city = False
+                    t.driver.travel = t.id
+                    for p in t.passengers:
+                        p.city = False
+                    t.state = 'inprogress'
+                else:
+                     raise UserError('Vehicle is not ready')
             else:
                 raise UserError('Not Sufficient Oil for the travel')
 
@@ -260,6 +306,7 @@ class event(models.Model):
     ####    Les restes de la lluita (chatarra i gasolina) es queden en la carretera fins a que passe algú
     ### Producció dels edificis
     ### Salud i progressió dels supervivents
+    ### Salud dels vehicles
 
 
     ### Wizards:  Create building , cReate travel, generate full game

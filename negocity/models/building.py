@@ -138,6 +138,7 @@ class building(models.Model):
             b.write({'progress':b.progress+percent_in_a_minute})
             if b.progress >= 100:
                 b.write({'progress':100,'state':'finished','workers':[(5,0,0)],'ruined':0})   # Desvincule sense eliminar als treballadors
+        ### Producció dels edificis
                 
     def dismantle(self):
         for b in self:
@@ -153,4 +154,3 @@ class building(models.Model):
             else:
                 b.write({'junk_contributed' : b.junk_contributed + b.city.junk})
                 b.city.write({'junk': 0})
-                
