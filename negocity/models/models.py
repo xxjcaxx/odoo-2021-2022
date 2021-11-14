@@ -253,7 +253,7 @@ class event(models.Model):
     ### TODO
 
     ### 
-    ### Opció de donar gasolina a la ciutat
+    ### Opció de donar gasolina i junk a la ciutat
     ### Veure en una cituat els viatges que estan vinguent
     ### Les batalles es faran creuant dos viatges. Quan un player envia un viatge pot ser per anar a furtar a una ciutat o per a defendrer-la.
     ###     Un player o molts poden enviar molts viatges, com que van per la carretera, els que vinguen en direcció contraria lluitaran.
