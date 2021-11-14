@@ -10,61 +10,6 @@ from odoo.exceptions import ValidationError
 from odoo.exceptions import UserError
 
 
-class survivor(models.Model):
-    _name = 'negocity.survivor'
-    _description = 'Survivors'
-
-    def _generate_name(self):
-        first = ["Commander", "Bullet", "Imperator", "Doof", "Duff", "Immortal", "Big", "Grease", "Junk", "Rusty"
-                                                                                                          "Gas", "War",
-                 "Feral", "Blood", "Lead", "Max", "Sprog", "Allan", "Smoke", "Wagon", "Baron", "Leather", "Rotten"
-                                                                                                          "Salt",
-                 "Slake", "Sick", "Sickly", "Nuke", "Oil", "Night", "Water", "Tank", "Rig", "People", "Nocturne",
-                 "Satanic"
-                 "Dead", "Wandering", "Suffering", "Unfit", "Deadly", "Mike", "Nomad", "Mad", "Jhonny", "Unpredictable",
-                 "Freakish", "Snake", "Praying"]
-        second = ["Killer", "Rider", "Cutter", "Guts", "Eater", "Warrior", "Colossus", "Blaster", "Gunner", "Smith",
-                  "Doe"
-                  "Farmer", "Rock", "Claw", "Boy", "Girl", "Driver", "Ace", "Quick", "Blitzer", "Fury", "Roadster",
-                  "Interceptor", "Bastich", "Dweller", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
-                  "Garcia", "Salamanca", "Goodman", "Sakura", "Bleding Gums", "Absent", "Hybrid", "Desire", "Bubblegum"
-            , "Serpente", "Petal", "Dust", "Mantis", "Preacher", "Harkonnen", "Heisenberg", "Vonn Newman"]
-        return random.choice(first) + " " + random.choice(second)
-
-    name = fields.Char(default=_generate_name)
-    desperation = fields.Float(default=50)
-    mutations = fields.Float(default=1)
-    illnes = fields.Float(default=1)
-    template = fields.Many2one('negocity.character_template', ondelete='restrict')
-    avatar = fields.Image(max_width=200, max_height=400, related='template.image')
-
-    city = fields.Many2one('negocity.city', ondelete='restrict')
-    player = fields.Many2one('negocity.player', ondelete='set null')
-    vehicles = fields.One2many('negocity.vehicle', 'survivor')
-
-    junk = fields.Integer(default=0)
-    building = fields.Many2many('negocity.building')
-
-    travel = fields.Many2one('negocity.travel')
-
-    
-    def donate_junk(self):
-        for s in self:
-            s.city.junk =  s.city.junk + s.junk
-            s.junk = 0
-
-    @api.model
-    def update_survivor(self):
-        alive_survivors = self.search([('illnes','<',100)])
-        print("Updating survivors in: ",alive_survivors)
-        for s in alive_survivors:
-            print(s)
-            # Tienen que comer 1
-            # Tiene que beber 1
-            # Actualizamos su felicidad en función de si come y bebe, de la desesperacion de la ciudad i sus edificios y de si está ocupado o no
-            # Actualizamos su enfermedad en función de lo anterior y de sus mutaciones
-            # Actualizamos sus mutaciones en función de la radiación
-
 
 
 class vehicle(models.Model):
