@@ -86,8 +86,6 @@
                             </page>
 
                             <page name="cities" string="Cities with survivors">
-
-
                                 <field name="cities" context="{'player':active_id}">
                                     <form string="City building workers">
                                         <group>
@@ -125,6 +123,9 @@
 
                             </page>
 
+                            <page name="vehicles" string="Vehicles">
+                                <field name="vehicles" />
+                            </page>
 
                         </notebook>
 

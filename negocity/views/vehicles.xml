@@ -60,7 +60,7 @@
                             <field name="damage" />
                             <field name="junk_level" />
                             <field name="survivor" />
-                            <field name="city" />
+                            <field name="city" />    <field name="resistence" />
                        
                  
                 </tree>
@@ -89,7 +89,7 @@
                             <field name="gas_tank" />
                             <field name="speed" />
                             <field name="passengers" />
-                            <field name="damage" />
+                            <field name="damage" />    <field name="resistence" />
                          </group>
 
                            
@@ -114,6 +114,8 @@
                             <field name="speed" />
                             <field name="passengers" />
                             <field name="damage" />
+                            <field name="resistence" />
+
                             <field name="score" invisible="1"/>
                             <field name="score_stored" />
                  

@@ -273,6 +273,7 @@ G24zOzOQBjAY8jg0AkatjaW1lZQWlujRwQR7I0/ygUFUMeQrHOCfnIpWI//Z</field>
 <field name="speed">120</field>
 <field name="passengers">4</field>
 <field name="damage">10</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_d2i0x0e-a8600392-1489-4518-a377-b70051916acdjpg" model="negocity.vehicle_template">
 <field name="name">Elephant Armored Truck</field>
@@ -1310,6 +1311,7 @@ AST1/9k=</field>
 <field name="speed">80</field>
 <field name="passengers">4</field>
 <field name="damage">9000</field>
+<field name="resistence">10000</field>
 </record>
 <record id="negocity.vehicle_template_d66kbv8-a8d5bcf3-71de-461c-b629-92994c135b7fjpg" model="negocity.vehicle_template">
 <field name="name">White Cross Oil Truck</field>
@@ -2577,6 +2579,7 @@ rk9Dro1Q4oa98nPn1oWmzplsHRtgY8ulTZqOs6NKV//Z</field>
 <field name="speed">20</field>
 <field name="passengers">3</field>
 <field name="damage">100</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_d8jqlrg-055ccc43-35a0-4391-8f1a-5b6f148040a7jpg" model="negocity.vehicle_template">
 <field name="name">Hummer</field>
@@ -3878,6 +3881,7 @@ RGiI0RGiI0RGiI0RGiI0RGiI0RGiI0RGiI0Rf//Z</field>
 <field name="speed">110</field>
 <field name="passengers">8</field>
 <field name="damage">1000</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_d8kczlq-0c7f0bd3-68ff-4c8a-b77c-d65f26ed691bjpg" model="negocity.vehicle_template">
 <field name="name">McLaren F1</field>
@@ -4716,6 +4720,7 @@ KiKR1CqA3vzrNZoBI+U9JKX8ICePGlZklRQCUfHAJ41ms00B/9k=</field>
 <field name="speed">300</field>
 <field name="passengers">2</field>
 <field name="damage">1000</field>
+<field name="resistence">200</field>
 </record>
 <record id="negocity.vehicle_template_d8zba37-a91f0b46-cfff-4a84-8c44-407879bbe7adjpg" model="negocity.vehicle_template">
 <field name="name">Patrol</field>
@@ -5299,6 +5304,7 @@ PLDgTqHgAuPAnrjdQwdHDp9GrXMlXE1K1s73H//Z</field>
 <field name="speed">120</field>
 <field name="passengers">5</field>
 <field name="damage">1000</field>
+<field name="resistence">500</field>
 </record>
 <record id="negocity.vehicle_template_daq35hx-e7d1b15b-7d86-4bca-b770-0ec08d2e3520jpg" model="negocity.vehicle_template">
 <field name="name">Mixed Classic Truck</field>
@@ -6708,6 +6714,7 @@ g66TogfUdz7ex1o7/wC3hxa5tCck2DW+fYRsEaGt7BUNDt79Pfeu52P9/BFqjj15QikgMP8AL70c
 <field name="speed">100</field>
 <field name="passengers">6</field>
 <field name="damage">9500</field>
+<field name="resistence">2000</field>
 </record>
 <record id="negocity.vehicle_template_davp76m-db3e41c4-7812-4403-a27e-04dbe922da27jpg" model="negocity.vehicle_template">
 <field name="name">Armored Tractor</field>
@@ -7355,6 +7362,7 @@ B1DW54JaDiM54E+W43S7UtaC4/mSv//Z</field>
 <field name="speed">50</field>
 <field name="passengers">1</field>
 <field name="damage">900</field>
+<field name="resistence">5000</field>
 </record>
 <record id="negocity.vehicle_template_dbigy29-832f02a4-e2aa-4d25-906d-f43f6a6452fbjpg" model="negocity.vehicle_template">
 <field name="name">Monovolumen</field>
@@ -9286,6 +9294,7 @@ IWMfkRHMj3FPJcRITMo0ySgOLvZfn3N/yHasfWv8KBlPzx//2Q==</field>
 <field name="speed">120</field>
 <field name="passengers">9</field>
 <field name="damage">20</field>
+<field name="resistence">10</field>
 </record>
 <record id="negocity.vehicle_template_dbu2k0b-4c64ad44-efdc-453b-b865-2ce759dbdf54jpg" model="negocity.vehicle_template">
 <field name="name">Low Rider</field>
@@ -11004,6 +11013,7 @@ Q64rlQWNxYnptvixpB3HXDrFl2rjo0tRST9z/Dt9/wDLgKooF9reu+EIAFiePjgrZhT5CNOKOtA9
 <field name="speed">100</field>
 <field name="passengers">5</field>
 <field name="damage">10</field>
+<field name="resistence">10</field>
 </record>
 <record id="negocity.vehicle_template_dcma7mq-117bc97a-bf91-480e-8f42-6f01fa9f0cb1jpg" model="negocity.vehicle_template">
 <field name="name">Mega Armored Submarine Truck</field>
@@ -12783,6 +12793,7 @@ MTCgY8UR9alg/CqTaaJKWQMfyAfnQIG9eSCPHj/Hz0qeYDog2rS4bEFuFIhQiv/Z</field>
 <field name="speed">50</field>
 <field name="passengers">20</field>
 <field name="damage">15000</field>
+<field name="resistence">15000</field>
 </record>
 <record id="negocity.vehicle_template_debku34-959bd234-c320-4565-9c67-1651f3710ebajpg" model="negocity.vehicle_template">
 <field name="name">Armored Hot Rod</field>
@@ -14315,6 +14326,7 @@ ncH5JJT4+Ntv6fjxxdS0IMwL4IkiQDBv79UCsA3H2Fu3MTjP9+v/2Q==</field>
 <field name="speed">100</field>
 <field name="passengers">1</field>
 <field name="damage">500</field>
+<field name="resistence">2000</field>
 </record>
 <record id="negocity.vehicle_template_extended_cover___sandy_news_1_by_vincenzoprattico_de7ltgy-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Armored Turism</field>
@@ -14619,6 +14631,7 @@ a1gjb0/qFooLJCOPH+L9KKCz/9k=</field>
 <field name="speed">150</field>
 <field name="passengers">2</field>
 <field name="damage">500</field>
+<field name="resistence">500</field>
 </record>
 <record id="negocity.vehicle_template_fugue_by_jflaxman_d74hclt-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Classic Truck</field>
@@ -14852,6 +14865,7 @@ kCE9Tvj0oATMsjFIwMYyGBzgn30ATGkkZ3OOvL4UBGTYKNPeFjgY86IgHvR+ScetahD/2Q==</field>
 <field name="speed">90</field>
 <field name="passengers">2</field>
 <field name="damage">500</field>
+<field name="resistence">200</field>
 </record>
 <record id="negocity.vehicle_template_improvised_assault_vehicle_concept_art_by_red__fox_db31wxv-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Armored 4x4</field>
@@ -15080,7 +15094,8 @@ G1A9QLaqFQKoP//Z</field>
 <field name="gas_tank">200</field>
 <field name="speed">120</field>
 <field name="passengers">3</field>
-<field name="damage">400</field>
+<field name="damage">700</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_kitbashed_blood_fuel_trike_racer_by_calebmprochnow_dbv5cxb-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Speed Tricycle</field>
@@ -15409,6 +15424,7 @@ ToapQs8+tQCHTGeaoFkA9evagG4PShRDJ6ge9QD5HQHn0oUWP+1ACODxnFQosEdvvQti+oqko//Z</fi
 <field name="speed">200</field>
 <field name="passengers">1</field>
 <field name="damage">20</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_mad_anritco_by_anritco_d8z8ktm-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Rusted Classic</field>
@@ -15667,7 +15683,8 @@ rTUQFJOIuwPIg1SiOxCW7ZSd+Y5+tWkTYhJcZJJNUkKxV5s5qqFYLvKYH//Z</field>
 <field name="gas_tank">90</field>
 <field name="speed">80</field>
 <field name="passengers">2</field>
-<field name="damage">100</field>
+<field name="damage">50</field>
+<field name="resistence">50</field>
 </record>
 <record id="negocity.vehicle_template_orange_crush_by_empireofghosts_delbtfj-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Orange Tank</field>
@@ -16031,6 +16048,7 @@ xBGOG3ZIGfvQApOY2Bxk0AIAfLzjimJASx3nAypoGPL7WHBzQATe3vQLB//Z</field>
 <field name="speed">50</field>
 <field name="passengers">4</field>
 <field name="damage">10000</field>
+<field name="resistence">15000</field>
 </record>
 <record id="negocity.vehicle_template_post_apocalyptic_car_2_by_mamut077_dadq0kk-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Classic regular car</field>
@@ -16282,6 +16300,7 @@ bSbdV/lQQlNu0ARgYGScfTJP50AINYRics1vHu2lQxQZ2njGfT2qRj1iqRYCxrxwBjgfagD/2Q==</fi
 <field name="speed">110</field>
 <field name="passengers">5</field>
 <field name="damage">10</field>
+<field name="resistence">10</field>
 </record>
 <record id="negocity.vehicle_template_postapocalyptic_car_by_beaver_skin_d4tz1ta-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Armored 6x6</field>
@@ -16495,6 +16514,7 @@ A31AFAKAUAoBQCgFAKAUAoBQCgFAKAUAoBQCgFAKAUAoBQH/2Q==</field>
 <field name="speed">90</field>
 <field name="passengers">1</field>
 <field name="damage">2000</field>
+<field name="resistence">3000</field>
 </record>
 <record id="negocity.vehicle_template_post_apocalyptic_vehicle_by_5ofnovember_dafp01f-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Mixed Hummer-Classic</field>
@@ -16790,6 +16810,7 @@ WktiZHlWExyq7anQBjoAxs23VvX2xmD/2Q==</field>
 <field name="speed">80</field>
 <field name="passengers">10</field>
 <field name="damage">20</field>
+<field name="resistence">50</field>
 </record>
 <record id="negocity.vehicle_template_rusty_rig___3_by_devilsreject493_d57wubu-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Truck Cab</field>
@@ -16956,6 +16977,7 @@ CxQDFAsUDWQEUHB7YN31BFk0mKX62KmhXXnC1lcxlWt1J/e76lxi7QYOCbZXBKk47mbI+VT1N1eW
 <field name="speed">150</field>
 <field name="passengers">2</field>
 <field name="damage">300</field>
+<field name="resistence">500</field>
 </record>
 <record id="negocity.vehicle_template_the_highwayman_by_mamut077_dcmu44w-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Chevy</field>
@@ -17268,6 +17290,7 @@ cF57CPUfaufY30P/2Q==</field>
 <field name="speed">100</field>
 <field name="passengers">5</field>
 <field name="damage">15</field>
+<field name="resistence">10</field>
 </record>
 <record id="negocity.vehicle_template_the_mad_judge_by_vladimirpetkovic_d9xeymt-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">V8 Interceptor</field>
@@ -17615,7 +17638,8 @@ plVg4R5GQsYHobgD9M8UyL+Gf//Z</field>
 <field name="gas_tank">200</field>
 <field name="speed">250</field>
 <field name="passengers">3</field>
-<field name="damage">100</field>
+<field name="damage">200</field>
+<field name="resistence">500</field>
 </record>
 <record id="negocity.vehicle_template_wasteland_truckjpg" model="negocity.vehicle_template">
 <field name="name">Wasteland Truck</field>
@@ -17984,6 +18008,7 @@ JpdDRrZCrZjRgQOrGhsCEkruyhAOGzxQh0LorgAedIQuMYxn88VX2SFggq+aGZmmkbPQYXj9KPtl
 <field name="speed">120</field>
 <field name="passengers">60</field>
 <field name="damage">5000</field>
+<field name="resistence">10000</field>
 </record>
 <record id="negocity.vehicle_template_zombie_car_by_mikemars_d2mxj0j-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Zombie Interceptor</field>
@@ -18159,6 +18184,7 @@ QKBQKBQKD//Z</field>
 <field name="speed">200</field>
 <field name="passengers">2</field>
 <field name="damage">300</field>
+<field name="resistence">600</field>
 </record>
 <record id="negocity.vehicle_template_bashqai_by_yasiddesign_d8tmfz3-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Armored Micra</field>
@@ -18458,6 +18484,7 @@ KwonyycdG96LCjjFIGwU+brgUWhYv0cEdSRtYfQUaGkxqxlcs6kKM8shwKm76LUa7LCAoNwIAIzx
 <field name="speed">180</field>
 <field name="passengers">4</field>
 <field name="damage">200</field>
+<field name="resistence">300</field>
 </record>
 <record id="negocity.vehicle_template_dbc2b68-573af492-bc09-46f3-8490-fbc1dd18a85cjpg" model="negocity.vehicle_template">
 <field name="name">Militar Grade Wheels Tank</field>
@@ -19414,6 +19441,7 @@ P32VBPQGM0tbaIGnTpqOvPmfvzGytbNPHSlqG+Y5adP0AJ2VjS5trTTkP8jw09P8bI/WlLkI+p8T
 <field name="speed">50</field>
 <field name="passengers">3</field>
 <field name="damage">12000</field>
+<field name="resistence">14000</field>
 </record>
 <record id="negocity.vehicle_template_dbctifw-e091db05-f96a-4a2b-8179-4dd499e160f7jpg" model="negocity.vehicle_template">
 <field name="name">Armored Harley</field>
@@ -19924,6 +19952,7 @@ XE51TERRSEyLnEb/AJceuM8du4+uPTUeWooNkRp5HkBTLYwm1snIwR9D99ZrNUxpNWyGZuOkf//Z</fi
 <field name="speed">150</field>
 <field name="passengers">1</field>
 <field name="damage">10</field>
+<field name="resistence">100</field>
 </record>
 <record id="negocity.vehicle_template_elephant_by_fightpunch_d5o8agb-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Riot Truck</field>
@@ -20140,6 +20169,7 @@ P3UfDYc9KEjNYSzeIOSffmkaTrwgGAeKeEf/2Q==</field>
 <field name="speed">150</field>
 <field name="passengers">6</field>
 <field name="damage">3000</field>
+<field name="resistence">7000</field>
 </record>
 <record id="negocity.vehicle_template_follow_me_by_neisbeis_d6slatm-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Dessert Punk Chopper</field>
@@ -20578,6 +20608,7 @@ zPTLwgk+i2szTySW9QrG33xfyMj4kdkoGojltL+r4Y4qQRjwo400Kq9gvTDuyFGgi/phWM//2Q==</fi
 <field name="speed">120</field>
 <field name="passengers">1</field>
 <field name="damage">15</field>
+<field name="resistence">100</field>
 </record>
 <record id="negocity.vehicle_template_raid_mach1_by_yasiddesign_d8tkr0q-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Muscle Car</field>
@@ -20819,6 +20850,7 @@ hE+/2oGzVDEnNMDHH0qobrQf/9k=</field>
 <field name="speed">170</field>
 <field name="passengers">2</field>
 <field name="damage">10</field>
+<field name="resistence">10</field>
 </record>
 <record id="negocity.vehicle_template_stratos_metal_mash_by_yasiddesign_d8tktbp-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Stratos Metal Mash</field>
@@ -21141,6 +21173,7 @@ Wn9KA2f/2Q==</field>
 <field name="speed">150</field>
 <field name="passengers">2</field>
 <field name="damage">200</field>
+<field name="resistence">300</field>
 </record>
 <record id="negocity.vehicle_template_priusjpg" model="negocity.vehicle_template">
 <field name="name">Modified Prius</field>
@@ -21474,6 +21507,7 @@ qI1rS06r6gMFwbtpqWxbJ2GG4zQbaTqpyTvySSckkneSduajdmWySoD/2Q==</field>
 <field name="speed">200</field>
 <field name="passengers">5</field>
 <field name="damage">200</field>
+<field name="resistence">200</field>
 </record>
 <record id="negocity.vehicle_template_lexusjpg" model="negocity.vehicle_template">
 <field name="name">Hibrid Lexus</field>
@@ -21803,6 +21837,7 @@ wz//2Q==</field>
 <field name="speed">300</field>
 <field name="passengers">2</field>
 <field name="damage">100</field>
+<field name="resistence">200</field>
 </record>
 <record id="negocity.vehicle_template_raging_mustang_by_enc86_d5vukky-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Rusted Racing Mustang</field>
@@ -21970,6 +22005,7 @@ vwul/EMe+dk3t9OCNeN8Y25rrjvU8vbxcvh9zL7f9O7r+3w//9k=</field>
 <field name="speed">100</field>
 <field name="passengers">2</field>
 <field name="damage">200</field>
+<field name="resistence">100</field>
 </record>
 <record id="negocity.vehicle_template_deathdozer_by_enc86_d8cbnni-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Deathdozer</field>
@@ -22170,6 +22206,7 @@ X9As7jTOntPsbybx7i3gSOSTJO5gME5PJrrxlkkrwOXLHLkyyxmpbX//2Q==</field>
 <field name="speed">20</field>
 <field name="passengers">3</field>
 <field name="damage">2000</field>
+<field name="resistence">11000</field>
 </record>
 <record id="negocity.vehicle_template_merc_2_black_by_yasiddesign_d8tks5c-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Mercedes</field>
@@ -22430,6 +22467,7 @@ N7jHU1QJLMGzzRYCkPPFWK//2Q==</field>
 <field name="speed">200</field>
 <field name="passengers">5</field>
 <field name="damage">20</field>
+<field name="resistence">20</field>
 </record>
 <record id="negocity.vehicle_template_post_apocalyptic_car_4_by_mamut077_dbald0c-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Lada</field>
@@ -22693,6 +22731,7 @@ cAeRIUn/AJceJpptBSZontfdLAYTFEy4HDDO5gVO4nqT7i55xgetO2Kkek7SzzqY57aKbCKqoxOF
 <field name="speed">80</field>
 <field name="passengers">2</field>
 <field name="damage">90</field>
+<field name="resistence">50</field>
 </record>
 <record id="negocity.vehicle_template_post_apocalyptic_car_3_by_mamut077_dauizvx-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Rusted Classic</field>
@@ -22968,6 +23007,7 @@ TjnOaKBHnsI51Zim0jjJHSlVjsCuh2rtvyEYLgPjGR6/SlihkfseL/BX8DWWH8HZ/9k=</field>
 <field name="speed">60</field>
 <field name="passengers">5</field>
 <field name="damage">10</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_the_chase_by_mamut077_dd8rjv9-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Fiat 500</field>
@@ -23230,6 +23270,7 @@ NSaLBgBVCtnjnrVai2K+fS/Lfbtf7YpajTP/2Q==</field>
 <field name="speed">70</field>
 <field name="passengers">2</field>
 <field name="damage">5</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_road_war_plymouth_by_danslider_d9if6av-fullviewjpg" model="negocity.vehicle_template">
 <field name="name">Broken Plymouth</field>
@@ -23448,6 +23489,7 @@ CAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg//9k=</field>
 <field name="speed">80</field>
 <field name="passengers">2</field>
 <field name="damage">10</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_oil_truckjpg" model="negocity.vehicle_template">
 <field name="name">Oil Truck</field>
@@ -24622,6 +24664,7 @@ X//Z</field>
 <field name="speed">110</field>
 <field name="passengers">2</field>
 <field name="damage">500</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_alber-silva-render-jeep-vjpg" model="negocity.vehicle_template">
 <field name="name">Jeep Willis</field>
@@ -25755,6 +25798,7 @@ aRtuDtqO/PnfDNSMFHZIkxPNg6803EQkEpE1toDYNvU6QVp+iiDYkebbYVtx5eoTOg0/BX//2Q==</fi
 <field name="speed">60</field>
 <field name="passengers">2</field>
 <field name="damage">200</field>
+<field name="resistence">300</field>
 </record>
 <record id="negocity.vehicle_template_eforb-studio-186899d9-219e-4611-b9f5-8001d4188147jpg" model="negocity.vehicle_template">
 <field name="name">Rust turism</field>
@@ -26135,6 +26179,7 @@ OKYSJwPEYbRnHPmeM558/hVIgRL80wP/2Q==</field>
 <field name="speed">90</field>
 <field name="passengers">2</field>
 <field name="damage">5</field>
+<field name="resistence">5</field>
 </record>
 <record id="negocity.vehicle_template_ilya-kovalenko-screenshot006jpg" model="negocity.vehicle_template">
 <field name="name">Broken Mix attempt</field>
@@ -26319,6 +26364,7 @@ AKAUAoBQCgFAKAUAoBQCgFAKAUAoBQCgFAKAUAoBQCgFAKAUAoBQCgFAf//Z</field>
 <field name="speed">20</field>
 <field name="passengers">2</field>
 <field name="damage">1</field>
+<field name="resistence">1</field>
 </record>
 <record id="negocity.vehicle_template_julio-ramon-final-1jpg" model="negocity.vehicle_template">
 <field name="name">Pirate Muscle Car</field>
@@ -27050,6 +27096,7 @@ woAqZ/hFAz//2Q==</field>
 <field name="speed">200</field>
 <field name="passengers">2</field>
 <field name="damage">500</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_khyzyl-saleem-r34finalsmalljpg" model="negocity.vehicle_template">
 <field name="name">Heavy Armored car</field>
@@ -27563,6 +27610,7 @@ rKNO2++HYqGKRily0Ii2eXcn2wpZdDWEL3ve2AQzoQI6cA7Me+BgWeKf4xhWOj//2Q==</field>
 <field name="speed">100</field>
 <field name="passengers">1</field>
 <field name="damage">1000</field>
+<field name="resistence">2000</field>
 </record>
 <record id="negocity.vehicle_template_marut-subba-black-death-1jpg" model="negocity.vehicle_template">
 <field name="name">Armored Muscle Car</field>
@@ -27819,6 +27867,7 @@ uslJ7o95UhB/6U4FdZhjPUTdRB15b61LcWpxau6lHJP3Nb9I4UCgUCgUCgUCgUH/2Q==</field>
 <field name="speed">150</field>
 <field name="passengers">2</field>
 <field name="damage">1000</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_nathaniel-pengson-nathanielpengson-brainstorm-zombievehiclejpg" model="negocity.vehicle_template">
 <field name="name">Hippie Ban</field>
@@ -28590,6 +28639,7 @@ QCgFAKAUAoBQCgFAKAUAoBQCgFAejpQH/9k=</field>
 <field name="speed">50</field>
 <field name="passengers">6</field>
 <field name="damage">2000</field>
+<field name="resistence">1000</field>
 </record>
 <record id="negocity.vehicle_template_sangeeth-pavithran-bikejpg" model="negocity.vehicle_template">
 <field name="name">MotoCross Bike</field>
@@ -28826,6 +28876,7 @@ UH3P2oMc1BgtQQOKA2UEUEDEN6CPkig+EQHag+CgdqD7OKD7mxnegiXoIl9j3oIF9jQQLbGgiW67
 <field name="speed">120</field>
 <field name="passengers">1</field>
 <field name="damage">300</field>
+<field name="resistence">300</field>
 </record>
 <record id="negocity.vehicle_template_sangeeth-pavithran-carjpg" model="negocity.vehicle_template">
 <field name="name">Armored Hilux</field>
@@ -29124,6 +29175,7 @@ hGwAoCSGAGwoD7xOu9AD4vrQA+J60APi9aAEyetAAX60AJfFAAXoAC+xoAS/WgALdaAEt60ABagB
 <field name="speed">100</field>
 <field name="passengers">2</field>
 <field name="damage">1500</field>
+<field name="resistence">2000</field>
 </record>
 <record id="negocity.vehicle_template_soren-zaragoza-brainstorm-3-lowjpg" model="negocity.vehicle_template">
 <field name="name">Fire Modern 4x4</field>
@@ -29544,6 +29596,7 @@ RaKmGQQrYO5e/Oc9/wDlpgBF2PdjoA//2Q==</field>
 <field name="speed">150</field>
 <field name="passengers">3</field>
 <field name="damage">2000</field>
+<field name="resistence">3000</field>
 </record>
 <record id="negocity.vehicle_template_vasiliy-ist-zbrush-documentjpg" model="negocity.vehicle_template">
 <field name="name">Broken Lada 4x4</field>
@@ -29865,6 +29918,7 @@ mrUrbFV77ngGa6cFAMbUAxQDFAKAUAoBQDFAKAUAoD//2Q==</field>
 <field name="speed">20</field>
 <field name="passengers">2</field>
 <field name="damage">5</field>
+<field name="resistence">1</field>
 </record>
 <record id="negocity.vehicle_template_wojciech-szwed-mobile-gunnery-station-aka-toddler-by-vakhu-d9bnibajpg" model="negocity.vehicle_template">
 <field name="name">Armored Fiat</field>
@@ -30332,5 +30386,6 @@ YeDlPmpzQ0tEH7WeAg4uTEfAGhT8EQaplx7ssco9RikDue57j/AT/XUDuf/Z</field>
 <field name="speed">80</field>
 <field name="passengers">2</field>
 <field name="damage">300</field>
+<field name="resistence">50</field>
 </record>
 </data></odoo>

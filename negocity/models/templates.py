@@ -25,13 +25,15 @@ class vehicle_template(models.Model):
     speed = fields.Float()
     passengers = fields.Integer()
     damage = fields.Float()     # Un turisme 10, un camió armat 10000 per fer-se una idea
+    resistence = fields.Float()
 
     score = fields.Float(compute='_get_score')
     score_stored = fields.Float()
 
     def _get_score(self):
         for v in self:
-            v.score = -v.oil_consumption + (v.gas_tank / 100 )+ (v.speed / 10 ) + (v.passengers /5 ) + v.damage / 100
+            v.score = -v.oil_consumption + (v.gas_tank / 200 )+ (v.speed / 10 ) + (v.passengers /5 ) + v.damage / 150 + v.resistence / 150
+           # print(v.score)
             if v.score >= 99:
                 v.score = 99
             v.score_stored = v.score

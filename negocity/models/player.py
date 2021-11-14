@@ -19,6 +19,7 @@ class player(models.Model):
     registration_date = fields.Datetime()
     cities = fields.Many2many('negocity.city',compute='_get_cities')
     buildings = fields.Many2many('negocity.building',compute='_get_cities')
+    vehicles = fields.Many2many('negocity.vehicle',compute='_get_cities')
     login = fields.Char()
     password = fields.Char()
 
@@ -53,5 +54,6 @@ class player(models.Model):
         for p in self:
             p.cities = p.survivors.city.ids   # Funciona perque son recordsets
             p.buildings = p.cities.buildings.filtered(lambda b: b.progress < 100)
+            p.vehicles = p.survivors.vehicles.ids
            #p.cities = []
           #  p.buildings = []

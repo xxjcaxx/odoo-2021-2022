@@ -36,6 +36,7 @@
                                 <field name="oil" />
                                 <field name="food" />
                                 <field name="water" />
+                                <field name="junk" />
                             </group>
 
                         </group>
@@ -81,6 +82,9 @@
                                         <field name="junk_progress" widget="progressbar" />
                                         <field name="workers" widget="many2many_tags" />
                                         <field name="progress" widget="progressbar" />
+                                        <button name="dismantle" type="object" string="Dismantle" class="oe_highlight" />
+                                        <button name="repair" type="object" string="Repair" class="oe_highlight" />
+
                                     </tree>
 
                                 </field>
