@@ -20,7 +20,7 @@ class banner_city_controller(http.Controller):
 ################## API REST  ######################
 
     @http.route('/negocity/api/<model>', auth="none", cors='*', methods=["POST","PUT","OPTIONS"], csrf=False, type='json')
-    def api(self, **args):
+    def apipost(self, **args):
        print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
        print(args, http.request.httprequest.method)
        model = args['model']
@@ -47,13 +47,16 @@ class banner_city_controller(http.Controller):
 
 
     @http.route('/negocity/api/<model>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
-    def api(self, **args):
+    def apiget(self, **args):
         print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIGET')
         print(args, http.request.httprequest.method)
         model = args['model']
+        id = []
+        if 'id' in args:
+           id = [('id','=',args['id'])]
        
         if (http.request.httprequest.method == 'GET'):
-            record = http.request.env['negocity.' + model].sudo().search([])
+            record = http.request.env['negocity.' + model].sudo().search(id)
            # print(record.read())
             return http.Response(
             json.dumps(record.read(), default=tools.date_utils.json_default),

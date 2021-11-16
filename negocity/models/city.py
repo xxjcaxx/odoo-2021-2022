@@ -44,6 +44,7 @@ class city(models.Model):
     players = fields.Many2many('negocity.player', compute='_get_players', string='Players with survivors')
     unemployed_survivors = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
+    vehicles_player = fields.Many2many('negocity.vehicle', compute='_get_unemployed')
     position_x = fields.Integer()
     position_y = fields.Integer()
     roads = fields.Many2many('negocity.road',compute='_get_roads')
@@ -70,11 +71,14 @@ class city(models.Model):
         for c in self:
             unemployed_survivors = c.survivors - c.buildings.workers
             survivors_player = c.survivors 
+            vehicles_player = c.survivors.vehicles
             if 'player' in self.env.context:
                 unemployed_survivors = unemployed_survivors.filtered(lambda s: s.player.id == self.env.context['player'])
                 survivors_player = survivors_player.filtered(lambda s: s.player.id == self.env.context['player'])
+                vehicles_player = survivors_player.vehicles
             c.unemployed_survivors = unemployed_survivors
             c.survivors_player = survivors_player
+            c.vehicles_player = vehicles_player
             
 
     @api.model
