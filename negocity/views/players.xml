@@ -39,7 +39,7 @@
                                     <field name="quantity_survivors" />
                                 </group>
 
-                                <field name="survivors" mode="kanban">
+                                <field name="survivors" mode="kanban"  >
                                     
                                     <kanban>
                                         <field name="id" />
@@ -193,6 +193,13 @@
 
                                 </field>
 
+                            </page>
+                            <page name="events" string="Events">
+                                <field name="events" >
+                                    <tree>
+                                        <field name="description"/>
+                                    </tree>
+                                </field>
                             </page>
 
                         </notebook>

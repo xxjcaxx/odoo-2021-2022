@@ -94,9 +94,32 @@
                                 <group>
                                     <field name="position_x" />
                                     <field name="position_y" />
-                                    <field name="roads">
-                                    </field>
                                 </group>
+                                <separator string="Roads"/>
+                                    <field name="roads">
+
+                                    </field>
+                                 <separator string="Travels Coming"/>
+                                    <field name="travels_coming">
+                                        <tree>
+                                            <field name="origin"/>
+                                             <field name="date_departure"/>
+                                             <field name="date_end"/>
+                                             <field name="progress" widget="progressbar"/>
+                                             <field name="player"/>
+                                        </tree>
+                                    </field>
+                                 <separator string="Travels Going"/>
+                                     <field name="travels_going">
+                                        <tree>
+                                            <field name="destiny"/>
+                                             <field name="date_departure"/>
+                                             <field name="date_end"/>
+                                             <field name="progress" widget="progressbar"/>
+                                             <field name="player"/>
+                                        </tree>
+                                    </field>
+
                                
 
                             </page>

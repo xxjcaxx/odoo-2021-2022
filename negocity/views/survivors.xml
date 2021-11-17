@@ -90,7 +90,6 @@
                                     <div class="oe_kanban_details d-flex flex-column">
                                         <h5>Vehicles:</h5>
                                         <span t-foreach="record.vehicles.raw_value" t-as="i">
-                                           
                                             <img t-attf-class="mini_vehicle" t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)" t-att-alt="i"/>
                                         </span>
                                     </div>

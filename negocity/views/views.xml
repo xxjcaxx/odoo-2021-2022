@@ -70,6 +70,12 @@
       <field name="res_model">negocity.event</field>
       <field name="view_mode">tree,form</field>
     </record>
+
+     <record model="ir.actions.act_window" id="negocity.collision_action_window">
+      <field name="name">Negocity collision</field>
+      <field name="res_model">negocity.collision</field>
+      <field name="view_mode">tree,form</field>
+    </record>
     <!-- server action to the one above -->
     <!--
     <record model="ir.actions.server" id="negocity.action_server">
@@ -106,11 +112,13 @@
     <menuitem name="Vehicles" id="negocity.vehicles_list" parent="negocity.cities" action="negocity.vehicles_action_window" />
 <menuitem name="Roads" id="negocity.roads_list" parent="negocity.cities" action="negocity.roads_action_window" />
 <menuitem name="Travels" id="negocity.travels_list" parent="negocity.cities" action="negocity.travel_action_window" />
+ <menuitem name="Collisions" id="negocity.collision_menu" parent="negocity.cities" action="negocity.collision_action_window" />
 
     <menuitem name="Players" id="negocity.playerss_list" parent="negocity.clients" action="negocity.players_action_window" />
     <menuitem name="Events" id="negocity.events_list" parent="negocity.clients" action="negocity.events_action_window" />
   
-<menuitem name="Charater Templates" id="negocity.character_template" parent="negocity.aux" action="negocity.character_template_action_window" />
-<menuitem name="Vehicle Templates" id="negocity.vehicle_template" parent="negocity.aux" action="negocity.vehicle_template_action_window" />
+<menuitem name="Charater Templates" id="negocity.character_template_menu" parent="negocity.aux" action="negocity.character_template_action_window" />
+<menuitem name="Vehicle Templates" id="negocity.vehicle_template_menu" parent="negocity.aux" action="negocity.vehicle_template_action_window" />
+
   </data>
 </odoo>

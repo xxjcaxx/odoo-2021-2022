@@ -28,6 +28,7 @@
                             <field name="speed" />
                             <field name="passengers" />
                             <field name="damage" />
+                            <field name="resistence" />
                             <field name="junk_level" />
                             <field name="survivor" />
                             <field name="city" />

@@ -8,10 +8,6 @@ from odoo.exceptions import ValidationError
 
 
 
-
-
-
-
 class city(models.Model):
     _name = 'negocity.city'
     _description = 'Cities'
@@ -48,6 +44,9 @@ class city(models.Model):
     position_x = fields.Integer()
     position_y = fields.Integer()
     roads = fields.Many2many('negocity.road',compute='_get_roads')
+    travels_going = fields.Many2many('negocity.travel', compute='_get_travels_coming')
+    travels_coming = fields.Many2many('negocity.travel',compute='_get_travels_coming')
+    #travel_collisions = fields.Many2many('negocity.collision', compute='_get_travels_coming')
 
     @api.depends('buildings')
     def _get_unfinished_buildings(self):
@@ -163,3 +162,10 @@ class city(models.Model):
     def _get_roads(self):
         for c in self:
             c.roads = self.env['negocity.road'].search(['|',('city_1','=', c.id),('city_2','=', c.id)]).ids
+
+
+    def _get_travels_coming(self):
+        for c in self:
+            c.travels_coming = self.env['negocity.travel'].search([('destiny','=',c.id),('date_end','>',fields.datetime.now())])
+            c.travels_going = self.env['negocity.travel'].search([('origin', '=', c.id), ('date_end', '>', fields.datetime.now())])
+            # treure les colisions

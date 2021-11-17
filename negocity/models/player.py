@@ -22,6 +22,7 @@ class player(models.Model):
     vehicles = fields.Many2many('negocity.vehicle',compute='_get_cities')
     login = fields.Char()
     password = fields.Char()
+    events = fields.One2many('negocity.event','player')
 
     @api.depends('survivors')
     def _get_q_survivors(self):
@@ -45,6 +46,7 @@ class player(models.Model):
                     'passengers': template.passengers,
                     'junk_level': random.randint(0,100),
                     'damage': template.damage,
+                    'resistence': template.resistence,
                     'survivor': survivor.id,
                     'city': city,
                 })
@@ -57,3 +59,5 @@ class player(models.Model):
             p.vehicles = p.survivors.vehicles.ids
            #p.cities = []
           #  p.buildings = []
+
+
