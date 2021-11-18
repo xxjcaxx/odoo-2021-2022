@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+from itertools import filterfalse
 from odoo import models, fields, api
 import random
 import math
@@ -53,26 +54,41 @@ class survivor(models.Model):
             s.city.junk =  s.city.junk + s.junk
             s.junk = 0
 
+    def kill(self):
+        for s in self:
+            s.illnes = 100
+            for v in s.vehicles:
+                v.survivor = False
+            self.env['negocity.event'].create(
+                    {'name': 'Survivor Killed ' + s.name, 'player': s.player, 'event': 'negocity.survivor,' + str(s.id),
+                     'description': 'Arrival travel... '})
+    def reanimate(self):
+        for s in self:
+            s.illnes = 0
+
+
     @api.model
     def update_survivor(self):
         alive_survivors = self.search([('illnes','<',100)])
         print("Updating survivors in: ",alive_survivors)
         for s in alive_survivors:
-            basic_needs = 2
-            # Tienen que comer 1
-            if s.city.food > 0:
-                s.city.food = s.city.food - 1
-                basic_needs -= 1
-            if s.city.water > 0:
-                s.city.water = s.city.water - 1
-                basic_needs -= 2
-            # Tiene que beber 1
-
-            # Actualizamos su enfermedad en función de lo anterior y de sus mutaciones      
-            illnes = s.illnes + basic_needs + s.mutations 
+            basic_needs = 1
+            if s.city:
+            # menja
+                if s.city.food > 0:
+                    s.city.food = s.city.food - 1
+                    basic_needs -= 0.5
+                if s.city.water > 0:
+                    s.city.water = s.city.water - 1
+                    basic_needs -= 1
+    
+    
+            illnes = s.illnes + basic_needs + (s.mutations/10) 
+           
             if illnes >= 100:
-                illnes = 100  # S'ha mort
-
+                s.kill()  # S'ha mort
+            if illnes < 0:
+                illnes = 0
 
             # Actualizamos su felicidad en función de si come y bebe, de la desesperacion de la ciudad i sus edificios y de si está ocupado o no
             desperation =  s.desperation + basic_needs  
@@ -84,10 +100,10 @@ class survivor(models.Model):
             if desperation >=100:
                 desperation = 100
                 if random.random() > 0.99:
-                    illnes = 100  # Es suicida
+                    s.kill()  # Es suicida
                 if random.random() > 0.99:
                     victim = random.choice(s.city.survivors.ids)
-                    self.env['negocity.survivor'].browse(victim).illnes = 100 # Mata a un altre supervivent aleatoriament en la ciutat
+                    self.browse(victim).kill() # Mata a un altre supervivent aleatoriament en la ciutat
             
             mutations = s.mutations
             if s.city.radiation > 50 and random.random() < s.city.radiation/5000 :

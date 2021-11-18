@@ -83,6 +83,24 @@
                                         </templates>
                                     </kanban>
                                 </field>
+                                <field name="survivors_tree" >
+                                    <tree decoration-danger="illnes &gt; 90">
+                                        <field name="name"/>
+                    
+                                        <field name="desperation"/>
+                                        <field name="mutations"/>
+                                        <field name="illnes"/>
+                                        <field name="city"/>
+                    
+                                        <field name="junk" />
+                                       
+                                        <button name="reanimate" type="object" string="Reanimate" class="oe_highlight" />
+                                    </tree>
+                                </field>
+                                <footer>
+                                   
+                                    <button name="update_survivors" type="object" string="Update Survivors" class="oe_highlight" />
+                                </footer>
                             </page>
 
                             <page name="cities" string="Cities with survivors">

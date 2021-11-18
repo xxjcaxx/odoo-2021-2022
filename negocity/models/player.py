@@ -15,6 +15,7 @@ class player(models.Model):
     avatar_icon = fields.Image(related='avatar', max_width=50,
                                max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html
     survivors = fields.One2many('negocity.survivor', 'player')
+    survivors_tree = fields.One2many('negocity.survivor', related = 'survivors')
     quantity_survivors = fields.Integer(compute='_get_q_survivors')
     registration_date = fields.Datetime()
     cities = fields.Many2many('negocity.city',compute='_get_cities')
@@ -60,4 +61,5 @@ class player(models.Model):
            #p.cities = []
           #  p.buildings = []
 
-
+    def update_survivors(self):
+            self.env['negocity.survivor'].update_survivor()

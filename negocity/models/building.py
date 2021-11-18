@@ -97,7 +97,9 @@ class building(models.Model):
                     for w in b.workers:
                         mean_illness = mean_illness + w.illnes
                     mean_illness = mean_illness / n_workers
-                    b.time = b.type.time / math.log(n_workers * (100 - mean_illness),2)
+                    print('nnnnnnnnnnnnnn',b.type.time,n_workers,mean_illness)
+                    b.time = b.type.time / math.log(n_workers * (101 - mean_illness),2)
+
                 else:
                     b.time = b.type.time   
                 remaining_percent = 100 - b.progress
@@ -139,6 +141,28 @@ class building(models.Model):
             if b.progress >= 100:
                 b.write({'progress':100,'state':'finished','workers':[(5,0,0)],'ruined':0})   # Desvincule sense eliminar als treballadors
         ### Producció dels edificis
+        buildings_in_production = self.search([('state','=','finished'),('ruined','<',100)])
+        print("Updating production in: ",buildings_in_production)
+        for b in buildings_in_production:
+            factor = 100 - b.ruined
+            energy = b.city.energy + b.energy
+            oil = b.city.oil + b.oil
+            water = b.city.water + b.water
+            despair =  b.city.despair + b.despair
+            if despair <=0:
+                despair = 0
+            if (energy > 0 or b.energy >= 0) and (oil > 0 or b.oil >= 0) and (water > 0 or b.water >= 0):
+                print(b.name,b.city.name,energy,oil,water,despair)
+                b.city.write({
+                    'energy': energy,
+                    'oil':  oil,
+                    'food':  b.city.food + b.food,
+                    'water':  water,
+                    'despair':  despair,
+                })
+
+                
+
                 
     def dismantle(self):
         for b in self:

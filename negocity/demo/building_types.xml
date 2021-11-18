@@ -5,7 +5,7 @@
 
         <record id="negocity.b_t_generator" model="negocity.building_type">
             <field name="name">Generator</field>
-            <field name="energy">100</field>
+            <field name="energy">5000</field>
             <field name="oil">-10</field>
             <field name="food">0</field>
             <field name="water">0</field>
@@ -222,7 +222,7 @@
 
         <record id="negocity.b_t_solar_panel" model="negocity.building_type">
             <field name="name">Solar Panel</field>
-            <field name="energy">10</field>
+            <field name="energy">400</field>
             <field name="oil">0</field>
             <field name="food">0</field>
             <field name="water">0</field>
@@ -999,7 +999,7 @@
 
         <record id="negocity.b_t_farm" model="negocity.building_type">
             <field name="name">Farm</field>
-            <field name="energy">0</field>
+            <field name="energy">1000</field>
             <field name="oil">0</field>
             <field name="food">200</field>
             <field name="water">-1000</field>
@@ -1200,8 +1200,8 @@
 
         <record id="negocity.b_t_oilwell" model="negocity.building_type">
             <field name="name">Oil Well</field>
-            <field name="energy">-1000</field>
-            <field name="oil">500</field>
+            <field name="energy">-10000</field>
+            <field name="oil">100</field>
             <field name="food">0</field>
             <field name="water">-10</field>
             <field name="despair">-4</field>

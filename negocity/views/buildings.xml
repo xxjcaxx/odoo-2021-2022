@@ -144,6 +144,22 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="negocity.building_search">
+            <field name="name">Negocity building</field>
+            <field name="model">negocity.building</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="city"/>
+                    <field name="type"/>
+                   
+                    <filter name="finished" string="Finished" domain="[('state', '=', 'finished')]" />
+                    <filter name="finished" string="In production" domain="[('state', '=', 'finished'),('ruined','&lt;',100)]" />
+                    <filter name="type" string="Type" context="{'group_by': 'type'}" />
+                    <filter name="city" string="City" context="{'group_by': 'city'}" />
+                </search>
+            </field>
+        </record>
 
 
     </data>
