@@ -13,7 +13,7 @@ class city(models.Model):
     _description = 'Cities'
 
     def _generate_name(self):
-        first = ["Uncanny", "Remote", "Eastern", "Dead", "Whispering", "Unfriendly", "Unpleasant", "Nasty"
+        first = ["Uncanny", "Remote", "Abandoned", "Neglected", "Eastern", "Dead", "Whispering", "Unfriendly", "Unpleasant", "Nasty"
                                                                                                    "Darkest", "Broken",
                  "Rotten", "Sunny", "Dead", "Wild", "Forgotten", "Distressing", "Unlikeable", "Rough",
                  "Hard", "Sharp", "Thug", "Bully", "Disruptive", "Oily", "Burned", "Sunken", "Hollow"
@@ -41,6 +41,8 @@ class city(models.Model):
     unemployed_survivors = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     vehicles_player = fields.Many2many('negocity.vehicle', compute='_get_unemployed')
+    all_vehicles =  fields.One2many('negocity.vehicle', 'city')
+    abandoned_vehicles = fields.Many2many('negocity.vehicle', compute='_get_vehicles')
     position_x = fields.Integer()
     position_y = fields.Integer()
     roads = fields.Many2many('negocity.road',compute='_get_roads')
@@ -63,6 +65,13 @@ class city(models.Model):
                     players.append(s.player.id)
             print(players)
             c.players = players
+
+    @api.depends('all_vehicles')
+    def _get_vehicles(self):
+        for c in self:
+            print(c.all_vehicles.mapped(lambda v: v.survivor.name))
+            c.abandoned_vehicles = c.all_vehicles.filtered(lambda v: v.survivor.id == False)
+
 
     
     @api.depends('survivors')
@@ -166,6 +175,8 @@ class city(models.Model):
 
     def _get_travels_coming(self):
         for c in self:
-            c.travels_coming = self.env['negocity.travel'].search([('destiny','=',c.id),('date_end','>',fields.datetime.now())])
-            c.travels_going = self.env['negocity.travel'].search([('origin', '=', c.id), ('date_end', '>', fields.datetime.now())])
+           # c.travels_coming = self.env['negocity.travel'].search([('destiny','=',c.id),('date_end','>',fields.datetime.now())])  # No funciona perquè date_end és computed
+            c.travels_coming = self.env['negocity.travel'].search([('destiny','=',c.id)]).filtered(lambda t: t.date_end >fields.datetime.now()) 
+            #c.travels_going = self.env['negocity.travel'].search([('origin', '=', c.id), ('date_end', '>', fields.datetime.now())])
+            c.travels_going = self.env['negocity.travel'].search([('origin', '=', c.id)]).filtered(lambda t: t.date_end >fields.datetime.now()) 
             # treure les colisions

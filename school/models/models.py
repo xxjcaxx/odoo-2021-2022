@@ -81,6 +81,13 @@ class classroom(models.Model):
 
      name = fields.Char()
      students = fields.Many2many('school.student')
+
+
+     def remove(self):
+         for c in self:
+             print(self.env.context['student'])
+             student = self.env['school.student'].browse(self.env.context['student'])
+             student.write({'classroom': [(3,c.id)]})
 #     value = fields.Integer(s)
 #     value2 = fields.Float(compute="_value_pc", store=True)
 #     description = fields.Text()

@@ -43,6 +43,8 @@
                         <notebook>
                             <page name="vehicles" string="Vehicles">
                                 <field name="vehicles"/>
+                                <button name="assign_random_car" type="object" string="Assign Random Car" class="oe_highlight" />
+
                             </page>
                             <page name="building" string="Building">
                                 <field name="building"/>
@@ -92,6 +94,7 @@
                                         <span t-foreach="record.vehicles.raw_value" t-as="i">
                                             <img t-attf-class="mini_vehicle" t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)" t-att-alt="i"/>
                                         </span>
+                                        <button name="assign_random_car" type="object" string="Random Car" class="btn btn-primary" >Random Car</button>
                                     </div>
                                 
                             </div>

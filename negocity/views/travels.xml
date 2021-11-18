@@ -42,6 +42,7 @@
                     </group>
                     <group>
                         <field name="date_departure" />
+                        <field name="time" />
                         <field name="date_end" />
                         <field name="progress" widget="progressbar"/>
                     </group>

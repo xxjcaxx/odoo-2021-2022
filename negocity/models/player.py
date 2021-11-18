@@ -36,21 +36,9 @@ class player(models.Model):
             city = random.choice(self.env['negocity.city'].search([]).mapped(lambda t: t.id))
             survivor = self.env['negocity.survivor'].create({'player': p.id, 'template': template, 'city': city})
             for i in range(0,random.randint(0,1)):
-                template = self.env['negocity.vehicle_template'].get_random_vehicle()
-                #template = self.env['negocity.vehicle_template'].browse(template)
-                self.env['negocity.vehicle'].create({
-                    'template': template.id,
-                    'name': template.name,
-                    'oil_consumption': template.oil_consumption,
-                    'gas_tank': template.gas_tank,
-                    'speed': template.speed,
-                    'passengers': template.passengers,
-                    'junk_level': random.randint(0,100),
-                    'damage': template.damage,
-                    'resistence': template.resistence,
-                    'survivor': survivor.id,
-                    'city': city,
-                })
+                survivor.assign_random_car()
+
+
 
     @api.depends('survivors')
     def _get_cities(self):

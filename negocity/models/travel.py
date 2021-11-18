@@ -41,6 +41,7 @@ class travel(models.Model):
     destiny = fields.Many2one('negocity.city', ondelete='cascade')  # filtrat
     road = fields.Many2one('negocity.road', ondelete='cascade')  # computat
     date_departure = fields.Datetime()
+    time = fields.Float(compute='_get_progress')
     date_end = fields.Datetime(compute='_get_progress')  # sera computat en funció de la distància
     progress = fields.Float(compute='_get_progress')
     state = fields.Selection([('preparation', 'Preparation'), ('inprogress', 'In Progress'), ('finished', 'Finished')],
@@ -96,7 +97,7 @@ class travel(models.Model):
                         p.city = False
                     t.state = 'inprogress'
                     ## Mirar les collisions
-                    current_travels = self.search([('destiny','=',t.origin.id),('road','=',t.road.id),('date_end', '>', fields.datetime.now())])
+                    current_travels = self.search([('destiny','=',t.origin.id),('road','=',t.road.id),('date_departure','!=',False)('date_end', '>', fields.datetime.now())])
                     for ct in current_travels:
                         self.env['negocity.collision'].create({
                             "name": ct.name + " " +t.name,
@@ -162,6 +163,7 @@ class travel(models.Model):
                 time = distance / t.vehicle.speed  #
                 if time <= 0:
                     time = 0.01
+                t.time = time
                 t.oil_required = (distance / 100) * t.vehicle.oil_consumption
                 print(distance, t.vehicle.speed, time, t.oil_required)
                 if t.date_departure:
@@ -184,6 +186,7 @@ class travel(models.Model):
                 t.progress = 0
                 t.date_end = False
                 t.oil_required = 0
+                t.time = 0
 
     @api.model
     def update_travel(self):
@@ -222,23 +225,26 @@ class collision(models.Model):
     def _get_name(self):
         for c in self:
             c.name = 'new collision'
-          #  if c.travel1 and c.travel2:
-          #      c.name = c.travel1.vehicle.name + " <--> " + c.travel2.vehicle.name
+            if c.travel1 and c.travel2:
+                c.name = c.travel1.vehicle.name + " <--> " + c.travel2.vehicle.name
 
     @api.depends('travel1', 'travel2')
     def _get_date(self):
         for c in self:
-            vel1 = c.travel1.vehicle.speed
-            vel2 = c.travel2.vehicle.speed
-            distance = c.travel1.road.distance
-            date1 = c.travel1.date_departure
-            date2 = c.travel2.date_departure
-            diference = fields.Datetime.from_string(date2) - fields.Datetime.from_string(date1)
-            diference = diference.total_seconds()/60/60
-            remaining_distance = distance - vel1*diference
-            relative_speed = vel1 + vel2
-            time = remaining_distance / relative_speed
-            c.date = fields.Datetime.to_string(fields.Datetime.from_string(date2)+timedelta(hours=time))
+            if c.travel1.date_departure and c.travel2.date_departure:
+                vel1 = c.travel1.vehicle.speed
+                vel2 = c.travel2.vehicle.speed
+                distance = c.travel1.road.distance * 60  # Ja que està en hores
+                date1 = c.travel1.date_departure
+                date2 = c.travel2.date_departure
+                diference = fields.Datetime.from_string(date2) - fields.Datetime.from_string(date1)
+                diference = diference.total_seconds()/60/60
+                remaining_distance = distance - vel1*diference
+                relative_speed = vel1 + vel2
+                time = remaining_distance / relative_speed
+                date = fields.Datetime.to_string(fields.Datetime.from_string(date2)+timedelta(hours=time))
+                print('\033[93m GET DATE COLLISION **********',vel1,vel2,distance,date1,date2,diference,remaining_distance,relative_speed,time,date,'\033[0m')
+                c.date = date
 
     @api.model
     def update_collisions(self):
@@ -272,16 +278,12 @@ class collision(models.Model):
                     {'name': 'Collision ' + c.name, 'player': c.travel2.player, 'event': 'negocity.collision,' + str(c.id),
                      'description': 'You win collision with: '+v2.name})
                 v2.junk_level = 100 -(100 * resistence2 / v2.resistence)  # el mal que li ha fet
-                v2.gas_tank_level = v2.gas_tank_level + v1.gas_tank_level  # Es queda en la gasolina
-                if v2.gas_tank_level > v2.gas_tank:
-                    v2.gas_tank_level = v2.gas_tank
+                v2.stole_gas(v1)
 
-                c.travel1.driver.unlink()
+                c.travel1.driver.kill()
                 for p in c.travel1.passengers:
-                    p.unlink()
-                v1.unlink()
-                c.travel1.unlink()
-
+                    p.kill()
+                v1.destroy()
 
             if resistence2 <= 0:
                 # Ha perdut en 1
@@ -298,15 +300,12 @@ class collision(models.Model):
                     {'name': 'Collision ' + c.name, 'player': c.travel1.player, 'event': 'negocity.collision,' + str(c.id),
                      'description': 'You win collision with: '+v1.name})
                 v1.junk_level = 100- (100 * resistence1 / v1.resistence)
-                v1.gas_tank_level = v1.gas_tank_level + v2.gas_tank_level  # Es queda en la gasolina
-                if v1.gas_tank_level > v1.gas_tank:
-                    v1.gas_tank_level = v1.gas_tank
+                v1.stole_gas(v2)
 
-                c.travel2.driver.unlink()
+                c.travel2.driver.kill()
                 for p in c.travel2.passengers:
-                    p.unlink()
-                v2.unlink()
-                c.travel2.unlink()
+                    p.kill()
+                v2.destroy()
 
             c.finished = True
 

@@ -107,6 +107,7 @@
                                              <field name="date_end"/>
                                              <field name="progress" widget="progressbar"/>
                                              <field name="player"/>
+                                               <field name="vehicle"/>
                                         </tree>
                                     </field>
                                  <separator string="Travels Going"/>
@@ -117,11 +118,16 @@
                                              <field name="date_end"/>
                                              <field name="progress" widget="progressbar"/>
                                              <field name="player"/>
+                                               <field name="vehicle"/>
                                         </tree>
                                     </field>
-
-                               
-
+                            </page>
+                            <page string="Vehicles">
+                                
+                                 <separator string="Abandoned Vehicles"></separator>
+ <field name="abandoned_vehicles"/>
+ <separator string="All Vehicles"></separator>
+ <field name="all_vehicles"/>
                             </page>
                         </notebook>
                     </sheet>

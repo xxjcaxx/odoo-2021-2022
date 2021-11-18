@@ -7,10 +7,10 @@
             <field name="model">negocity.player</field>
             <field name="arch" type="xml">
                 <tree>
-                    <field name="name" />
-                    <field name="avatar_icon" widget="image" />
-                    <field name="survivors" widget="many2many_tags" />
-                    <field name="quantity_survivors" />
+                    <field name="name"/>
+                    <field name="avatar_icon" widget="image"/>
+                    <field name="survivors" widget="many2many_tags"/>
+                    <field name="quantity_survivors"/>
                 </tree>
             </field>
         </record>
@@ -20,86 +20,97 @@
             <field name="model">negocity.player</field>
             <field name="arch" type="xml">
                 <form>
-                        <header>
-                             <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight" />
+                    <header>
+                        <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight"/>
 
-                        </header>
+                    </header>
                     <sheet>
 
                         <group>
-                            <field name="avatar" widget="image" />
-                            <field name="name" />
-                            <field name="login" />
-                            <field name="password" password="True" />
+                            <field name="avatar" widget="image"/>
+                            <field name="name"/>
+                            <field name="login"/>
+                            <field name="password" password="True"/>
 
                         </group>
                         <notebook>
                             <page name="survivors" string="Survivors">
                                 <group>
-                                    <field name="quantity_survivors" />
+                                    <field name="quantity_survivors"/>
                                 </group>
 
-                                <field name="survivors" mode="kanban"  >
-                                    
+                                <field name="survivors" mode="kanban">
+
                                     <kanban>
-                                        <field name="id" />
-                                        <field name="name" />
-                                        <field name="desperation" />
-                                        <field name="mutations" />
-                                        <field name="illnes" />
-                                        <field name="city" />
-                                        <field name="vehicles"/>
-                                        <templates>
-                                            <t t-name="kanban-box">
-                    
-                                                <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
-                                                    <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block negocity_img_kanban"
-                                                         t-attf-style="background-image:url('#{kanban_image('negocity.survivor', 'avatar', record.id.value, placeholder)}')">
-                                                    </div>
-                    
-                                                  
-                                                        <div class="oe_kanban_details d-flex flex-column">
-                                                            <a type="open"><h4 class="o_kanban_record_title oe_partner_heading"><field name="name"/></h4></a>
-                                                            <ul>
-                                                                <li>Desperation: <field name="desperation"/></li>
-                                                                <li>Mutations: <field name="mutations"/></li>
-                                                                <li>Illnes: <field name="illnes"/></li>
-                                                                <li>City: <field name="city"/></li>
-                                                                
-                                                            </ul>
-                                                        </div>
-                                                        <div class="oe_kanban_details d-flex flex-column">
-                                                            <h5>Vehicles:</h5>
-                                                            <span t-foreach="record.vehicles.raw_value" t-as="i">
-                                                               
-                                                                <img t-attf-class="mini_vehicle" t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)" t-att-alt="i"/>
-                                                            </span>
-                                                        </div>
-                                                    
-                                                </div>
-                    
-                    
-                                            </t>
-                                        </templates>
-                                    </kanban>
-                                </field>
-                                <field name="survivors_tree" >
-                                    <tree decoration-danger="illnes &gt; 90">
+                                        <field name="id"/>
                                         <field name="name"/>
-                    
                                         <field name="desperation"/>
                                         <field name="mutations"/>
                                         <field name="illnes"/>
                                         <field name="city"/>
-                    
-                                        <field name="junk" />
-                                       
-                                        <button name="reanimate" type="object" string="Reanimate" class="oe_highlight" />
+                                        <field name="vehicles"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+
+                                                <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                                                    <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block negocity_img_kanban"
+                                                         t-attf-style="background-image:url('#{kanban_image('negocity.survivor', 'avatar', record.id.value, placeholder)}')">
+                                                    </div>
+
+
+                                                    <div class="oe_kanban_details d-flex flex-column">
+                                                        <a type="open"><h4
+                                                                class="o_kanban_record_title oe_partner_heading"><field
+                                                                name="name"/></h4></a>
+                                                        <ul>
+                                                            <li>Desperation: <field name="desperation"/></li>
+                                                            <li>Mutations: <field name="mutations"/></li>
+                                                            <li>Illnes: <field name="illnes"/></li>
+                                                            <li>City: <field name="city"/></li>
+
+                                                        </ul>
+                                                    </div>
+                                                    <div class="oe_kanban_details d-flex flex-column">
+                                                        <h4 class="o_kanban_record_title oe_partner_heading">Vehicles:</h4>
+                                                        <div class="vehicles_images">
+                                                            <span t-foreach="record.vehicles.raw_value" t-as="i">
+
+                                                            <img t-attf-class="mini_vehicle"
+                                                                 t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)"
+                                                                 t-att-alt="i"/>
+                                                        </span>
+                                                        </div>
+
+                                                        <button name="assign_random_car" type="object"
+                                                                string="Random Car" class="btn btn-primary">Random
+                                                            Car</button>
+                                                    </div>
+
+                                                </div>
+
+
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                </field>
+                                <field name="survivors_tree">
+                                    <tree decoration-danger="illnes &gt; 90">
+                                        <field name="name"/>
+
+                                        <field name="desperation"/>
+                                        <field name="mutations"/>
+                                        <field name="illnes"/>
+                                        <field name="city"/>
+
+                                        <field name="junk"/>
+
+                                        <button name="reanimate" type="object" string="Reanimate" class="oe_highlight"/>
                                     </tree>
                                 </field>
                                 <footer>
-                                   
-                                    <button name="update_survivors" type="object" string="Update Survivors" class="oe_highlight" />
+
+                                    <button name="update_survivors" type="object" string="Update Survivors"
+                                            class="oe_highlight"/>
                                 </footer>
                             </page>
 
@@ -107,33 +118,33 @@
                                 <field name="cities" context="{'player':active_id}">
                                     <form string="City building workers">
                                         <group>
-                                            <field name="name" />
-                                            <field name="unfinished_buildings" />
-                                            <field name="survivors_player" />
-                                            <field name="unemployed_survivors" />
+                                            <field name="name"/>
+                                            <field name="unfinished_buildings"/>
+                                            <field name="survivors_player"/>
+                                            <field name="unemployed_survivors"/>
                                         </group>
                                     </form>
                                     <tree>
-                                        <field name="name" />
-                                        <field name="unfinished_buildings" widget="many2many_tags" />
-                                        <field name="survivors_player" widget="many2many_tags" />
-                                        <field name="unemployed_survivors" widget="many2many_tags" />
+                                        <field name="name"/>
+                                        <field name="unfinished_buildings" widget="many2many_tags"/>
+                                        <field name="survivors_player" widget="many2many_tags"/>
+                                        <field name="unemployed_survivors" widget="many2many_tags"/>
                                     </tree>
                                 </field>
 
                                 <field name="buildings" mode="tree">
 
                                     <tree>
-                                        <field name="name" />
-                                        <field name="type" />
-                                        <field name="level" />
-                                        <field name="ruined" />
-                                        <field name="city" />
+                                        <field name="name"/>
+                                        <field name="type"/>
+                                        <field name="level"/>
+                                        <field name="ruined"/>
+                                        <field name="city"/>
 
-                                        <field name="junk_progress" widget="progressbar" />
-                                        <field name="workers" widget="many2many_tags" />
-                                        <field name="time" />
-                                        <field name="progress" widget="progressbar" />
+                                        <field name="junk_progress" widget="progressbar"/>
+                                        <field name="workers" widget="many2many_tags"/>
+                                        <field name="time"/>
+                                        <field name="progress" widget="progressbar"/>
                                     </tree>
 
                                 </field>
@@ -144,12 +155,12 @@
                             <page name="vehicles" string="Vehicles">
                                 <field name="vehicles" mode="kanban">
                                     <kanban>
-                                        <field name="id" />
-                                        <field name="name" />
-                                        <field name="oil_consumption" />
-                                        <field name="gas_tank" />
-                                        <field name="gas_tank_level" />
-                                        <field name="speed" />
+                                        <field name="id"/>
+                                        <field name="name"/>
+                                        <field name="oil_consumption"/>
+                                        <field name="gas_tank"/>
+                                        <field name="gas_tank_level"/>
+                                        <field name="speed"/>
                                         <field name="passengers"/>
                                         <field name="damage"/>
                                         <field name="resistence"/>
@@ -159,21 +170,23 @@
 
                                         <templates>
                                             <t t-name="kanban-box">
-                    
+
                                                 <div t-attf-class="oe_kanban_card  ">
                                                     <div class="o_kanban_image_fill_top o_kanban_image_full d-none d-md-block negocity_img_kanban"
                                                          t-attf-style="background-image:url('#{kanban_image('negocity.vehicle', 'img_computed', record.id.value, placeholder)}')">
                                                     </div>
-                    
+
 
                                                     <div class=" d-flex">
-                                                  
+
                                                         <div class="oe_kanban_details d-flex flex-column">
-                                                            <a type="open"><h4 class="o_kanban_record_title oe_partner_heading"><field name="name"/></h4></a>
+                                                            <a type="open"><h4
+                                                                    class="o_kanban_record_title oe_partner_heading"><field
+                                                                    name="name"/></h4></a>
                                                             <ul>
-                                                                
+
                                                                 <li>Passengers: <field name="passengers"/></li>
-                                                                
+
                                                                 <li>Survivor: <field name="survivor"/></li>
                                                                 <li>City: <field name="city"/></li>
                                                                 <li>Junk Level: <field name="junk_level"/></li>
@@ -181,39 +194,42 @@
                                                         </div>
 
                                                         <div class="oe_kanban_details d-flex flex-column">
-                                                           
+
                                                             <ul>
-                                                                <li>Oil Consumption: <field name="oil_consumption"/></li>
+                                                                <li>Oil Consumption: <field
+                                                                        name="oil_consumption"/></li>
                                                                 <li>Gas Tank: <field name="gas_tank"/></li>
                                                                 <li>Gas Tank Level: <field name="gas_tank_level"/></li>
                                                                 <li>Speed: <field name="speed"/></li>
-                                                              
+
                                                                 <li>Damage: <field name="damage"/></li>
                                                                 <li>Resistence: <field name="resistence"/></li>
-                                                              
+
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                        <div class="oe_kanban_details d-flex flex-column">
-                                                           
-                                                            <button name="fill_gas_tank" type="object" string="fill" class="btn btn-primary" >Fill gas tank</button>
-                                                            <button name="donate_gas_tank" type="object" string="donate" class="btn btn-primary" >Donate gas tank</button>
-                                                        </div>
-                                                    
+                                                    <div class="oe_kanban_details d-flex flex-column">
+
+                                                        <button name="fill_gas_tank" type="object" string="fill"
+                                                                class="btn btn-primary">Fill gas tank</button>
+                                                        <button name="donate_gas_tank" type="object" string="donate"
+                                                                class="btn btn-primary">Donate gas tank</button>
+                                                    </div>
+
                                                 </div>
-                    
-                    
+
+
                                             </t>
                                         </templates>
 
-                                      
+
                                     </kanban>
 
                                 </field>
 
                             </page>
                             <page name="events" string="Events">
-                                <field name="events" >
+                                <field name="events">
                                     <tree>
                                         <field name="description"/>
                                     </tree>

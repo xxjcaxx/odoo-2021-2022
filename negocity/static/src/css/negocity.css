@@ -14,3 +14,8 @@
 @media (min-width: 576px){.o_kanban_view .o_kanban_record .o_kanban_image_fill_top{margin-top: -8px; margin-bottom: 16px; margin-left: -8px; margin-right: -8px;}}
 
 .o_kanban_view .o_kanban_record.o_kanban_image_fill_top.o_kanban_image_full{background-size: contain;}
+
+.vehicles_images {
+overflow: auto;
+max-height: 150px;
+}

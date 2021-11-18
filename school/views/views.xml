@@ -25,6 +25,18 @@
       </field>
     </record>
 
+
+    <record model="ir.ui.view" id="school.classroom_tree">
+      <field name="name">school list</field>
+      <field name="model">school.classroom</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <button name="remove" type="object" string="Remove" class="oe_highlight" context="{'student': parent.id}"/>
+        </tree>
+      </field>
+    </record>
+
     <!-- actions opening views on models -->
 
     <record model="ir.actions.act_window" id="school.action_window">

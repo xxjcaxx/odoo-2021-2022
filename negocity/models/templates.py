@@ -47,4 +47,18 @@ class vehicle_template(models.Model):
                 all_population.append(c.id)
        # print(all_population)
         print(self.browse(random.choice(all_population)).mapped(lambda c: c.name+" "+str(c.score)))
-        return self.browse(random.choice(all_population))
+        template =  self.browse(random.choice(all_population))
+        vehicle = self.env['negocity.vehicle'].create({
+                    'template': template.id,
+                    'name': template.name,
+                    'oil_consumption': template.oil_consumption,
+                    'gas_tank': template.gas_tank,
+                    'speed': template.speed,
+                    'passengers': template.passengers,
+                    'junk_level': random.randint(0,100),
+                    'damage': template.damage,
+                    'resistence': template.resistence,
+                })
+        return vehicle
+
+

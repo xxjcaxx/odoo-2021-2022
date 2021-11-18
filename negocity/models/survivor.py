@@ -61,11 +61,18 @@ class survivor(models.Model):
                 v.survivor = False
             self.env['negocity.event'].create(
                     {'name': 'Survivor Killed ' + s.name, 'player': s.player, 'event': 'negocity.survivor,' + str(s.id),
-                     'description': 'Arrival travel... '})
+                     'description': 'Survivor Killed '+str(s.name)})
     def reanimate(self):
         for s in self:
             s.illnes = 0
 
+    def assign_random_car(self):
+        for s in self:
+            vehicle = self.env['negocity.vehicle_template'].get_random_vehicle()
+            vehicle.write({
+                'survivor': s.id,
+                'city': s.city.id,
+            })
 
     @api.model
     def update_survivor(self):
