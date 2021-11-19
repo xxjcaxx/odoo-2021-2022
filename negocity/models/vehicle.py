@@ -56,6 +56,18 @@ class vehicle(models.Model):
             v.junk_level = 100
             v.gas_tank_level = 0
 
+    def repair(self):
+        for v in self:
+            if v.survivor:
+                needed_junk = v.resistence
+                junk_available = v.survivor.junk
+                if needed_junk <= junk_available:
+                    v.junk_level = 0
+                    v.survivor.junk -= needed_junk
+                else:
+                    v.survivor.junk = 0
+                    v.junk_level = 100 - (junk_available / needed_junk) * 100
+
     def stole_gas(self,v2):
         self.gas_tank_level = self.gas_tank_level + v2.gas_tank_level  # Es queda en la gasolina
         if self.gas_tank_level > self.gas_tank:

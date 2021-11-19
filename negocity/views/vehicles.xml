@@ -10,6 +10,8 @@
                 <form string="vehicle">
                     <header>
                         <button name="fill_gas_tank" type="object" string="Fill Gas Tank" class="oe_highlight" />
+                        <button name="donate_gas_tank" type="object" string="Donate Gas Tank" class="oe_highlight" />
+                        <button name="repair" type="object" string="Repair" class="oe_highlight" />
                     </header>
                     <sheet>
                         <group>
@@ -124,10 +126,17 @@
                                         </ul>
                                     </div>
                                 </div>
-                                    <div class="oe_kanban_details d-flex flex-column">
-                                       
-                                        <button name="fill_gas_tank" type="object" string="fill" class="btn btn-primary" >Fill gas tank</button>
-                                        <button name="donate_gas_tank" type="object" string="donate" class="btn btn-primary" >Donate gas tank</button>
+                                    <div class="oe_kanban_details d-flex">
+                                        <div class=" d-flex flex-column">
+                                            <button name="fill_gas_tank" type="object" string="fill" class="btn btn-primary" >Fill gas tank</button>
+                                            <button name="donate_gas_tank" type="object" string="donate" class="btn btn-primary" >Donate gas tank</button>
+                                           
+                                        </div>
+                                        <div class=" d-flex flex-column">
+                                           
+                                            <button name="repair" type="object" string="repair" class="btn btn-primary" >Repair</button>
+                                        </div>
+                                        
                                     </div>
                                 
                             </div>
