@@ -126,7 +126,7 @@ class banner_city_controller(http.Controller):
 
     @http.route('/negocity/api/cities/<player>', auth="none", cors='*', methods=["GET","DELETE"], csrf=False, type='http')
     def cities(self, **args):
-        print('Cities')
+        print(' \033[93m API Cities \033[0m')
         print(args, http.request.httprequest.method)
         player = args['player']
        
