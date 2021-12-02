@@ -59,11 +59,13 @@ class city(models.Model):
     @api.depends('survivors')
     def _get_players(self):
         for c in self:
-            players = []
-            for s in c.survivors:
-                if s.player:
-                    players.append(s.player.id)
-            print(players)
+            players = c.survivors.filtered(lambda s: s.player.id != False).player.ids
+
+           # players = []
+           # for s in c.survivors:
+           #     if s.player:
+           #         players.append(s.player.id)
+            #print("Players",players)
             c.players = players
 
     @api.depends('all_vehicles')

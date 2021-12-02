@@ -51,11 +51,12 @@
 
                 <notebook>
                     <page name="passenger" string="Passengers">
-                        
                         <field name="passengers" />
                     </page>
+                    <page name="collisions" string="Collisions">
+                        <field name="collisions" />
+                    </page>
                 </notebook>
-
                 <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
                     </sheet>
                    

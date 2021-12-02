@@ -132,7 +132,7 @@ class banner_city_controller(http.Controller):
        
         if (http.request.httprequest.method == 'GET'):
             record = http.request.env['negocity.city'].sudo().search([]).filtered(lambda c: int(player) in c.players.ids)
-           # print(record.read())
+            print('RECORD: ',record.read())
             return http.Response(
             json.dumps(record.read(), default=tools.date_utils.json_default),
             status=200,

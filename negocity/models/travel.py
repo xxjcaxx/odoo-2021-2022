@@ -53,6 +53,7 @@ class travel(models.Model):
     vehicle = fields.Many2one('negocity.vehicle')
     oil_required = fields.Float(compute='_get_progress')
     oil_available = fields.Float(related='vehicle.gas_tank_level')
+    collisions = fields.Many2many('negocity.collision',compute='_get_collisions')
 
     @api.depends('origin', 'destiny', 'date_departure')
     def _get_name(self):
@@ -97,7 +98,11 @@ class travel(models.Model):
                         p.city = False
                     t.state = 'inprogress'
                     ## Mirar les collisions
-                    current_travels = self.search([('destiny','=',t.origin.id),('road','=',t.road.id),('date_departure','!=',False)('date_end', '>', fields.datetime.now())])
+                    current_travels = self.search([
+                        ('destiny','=',t.origin.id),
+                        ('road','=',t.road.id),
+                        ('date_departure','!=',False),
+                        ('date_end', '>', fields.datetime.now())])
                     for ct in current_travels:
                         self.env['negocity.collision'].create({
                             "name": ct.name + " " +t.name,
@@ -206,6 +211,11 @@ class travel(models.Model):
                     {'name': 'Arrival travel ' + t.name, 'player': t.player, 'event': 'negocity.travel,' + str(t.id),
                      'description': 'Arrival travel... '})
                 print('Arribal')
+
+    def _get_collisions(self):
+        for t in self:
+            t.collisions = self.env['negocity.collision'].search(['|',('travel1','=',t.id),('travel2','=',t.id)]).ids
+
 
 
 class collision(models.Model):
