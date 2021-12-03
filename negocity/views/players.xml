@@ -22,13 +22,13 @@
                 <form>
                     <header>
                         <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight"/>
-
+                        <button name="button_update_players_progress" type="object" string="Update Progress" class="oe_highlight"/>
                     </header>
                     <sheet>
 
                         <group>
                             <field name="avatar" widget="image"/>
-                            <field name="name"/>
+                            <field name="name"/><field name="level"/>
                             <field name="login"/>
                             <field name="password" password="True"/>
 
@@ -39,7 +39,7 @@
                                     <field name="quantity_survivors"/>
                                 </group>
 
-                                <field name="survivors" mode="kanban">
+                                <field name="survivors" mode="kanban" context="{'form_view_ref': 'negocity.survivor_form','default_junk': 100}">
 
                                     <kanban>
                                         <field name="id"/>
@@ -234,6 +234,10 @@
                                         <field name="description"/>
                                     </tree>
                                 </field>
+                                <separator string="Progress">
+                                   
+                                </separator>
+                                <field name="player_progress"/>
                             </page>
 
                         </notebook>
@@ -241,6 +245,24 @@
 
                     </sheet>
                 </form>
+            </field>
+        </record>
+
+
+        <!-- 
+                ...................   GRAPH ....................................................................
+        -->
+
+
+        <record model="ir.ui.view" id="negocity.player_progress_graph">
+            <field name="name">negocity.player_progress</field>
+            <field name="model">negocity.player_progress</field>
+            <field name="arch" type="xml">
+                <graph string="Player Progress" type="line">
+                    <field name="date_char" type="row"/>
+                    <field name="player" type="col"/>
+                    <field name="name" type="measure"/>
+                </graph>
             </field>
         </record>
 
