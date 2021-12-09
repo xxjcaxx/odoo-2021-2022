@@ -1,0 +1,89 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="paquets.furgo_form">
+      <field name="name">paquets furgo form</field>
+      <field name="model">paquets.furgoneta</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <field name="foto" widget="image" />
+            <group>
+              <field name="name" />
+              <field name="capacitat" />
+              <field name="viatges" />
+              <field name="paquets" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="paquets.viatge_tree">
+      <field name="name">paquets viatge tree</field>
+      <field name="model">paquets.viatge</field>
+      <field name="arch" type="xml">
+        <tree>
+              <field name="name" />
+              <field name="conductor" />
+              <field name="furgoneta" />
+              <field name="espai_aprofitat" />
+              <field name="capacitat" />
+              <field name="paquets" widget="many2many_tags" />
+        </tree>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="paquets.viatge_search">
+      <field name="name">paquets viatge search</field>
+      <field name="model">paquets.viatge</field>
+      <field name="arch" type="xml">
+        <search>
+              <field name="name" />
+              <field name="conductor" />
+              <field name="furgoneta" />
+              <field name="espai_aprofitat" />
+              <field name="capacitat" />
+              <filter name="group_by_furgo" string="Group by Furgoneta" context="{'group_by': 'furgoneta'}"/>
+        </search>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="paquets.action_furgoneta_window">
+      <field name="name">furgonetes window</field>
+      <field name="res_model">paquets.furgoneta</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <record model="ir.actions.act_window" id="paquets.action_viatge_window">
+      <field name="name">viatges window</field>
+      <field name="res_model">paquets.viatge</field>
+      <field name="view_mode">tree,form</field>
+      <field name="context">{'search_default_group_by_furgo':1}</field>
+    </record>
+    <record model="ir.actions.act_window" id="paquets.action_paquet_window">
+      <field name="name">paquets window</field>
+      <field name="res_model">paquets.paquet</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Paquets" id="paquets.menu_root" />
+    <!-- menu categories -->
+
+    <menuitem name="Gestió" id="paquets.menu_1" parent="paquets.menu_root" />
+
+    <!-- actions -->
+
+    <menuitem name="Furgonetes" id="paquets.menu_furgo" parent="paquets.menu_1" action="paquets.action_furgoneta_window" />
+    <menuitem name="Viatges" id="paquets.menu_viatge" parent="paquets.menu_1" action="paquets.action_viatge_window" />
+    <menuitem name="Paquets" id="paquets.menu_paquet" parent="paquets.menu_1" action="paquets.action_paquet_window" />
+
+  </data>
+</odoo>
