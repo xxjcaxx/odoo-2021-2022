@@ -31,12 +31,11 @@
       <field name="res_model">negocity.vehicle</field>
       <field name="view_mode">kanban,tree,form</field>
     </record>
-
-
     <record model="ir.actions.act_window" id="negocity.players_action_window">
       <field name="name">Negocity Players</field>
       <field name="res_model">negocity.player</field>
       <field name="view_mode">tree,form</field>
+      <field name="context">{'default_name': 'New Player'}</field>
     </record>
      <record model="ir.actions.act_window" id="negocity.roads_action_window">
       <field name="name">Negocity Roads</field>
@@ -75,6 +74,14 @@
       <field name="name">Negocity collision</field>
       <field name="res_model">negocity.collision</field>
       <field name="view_mode">tree,form</field>
+      <field name="context">{'search_default_future_collision': 1}</field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="negocity.player_progress_action_window">
+      <field name="name">Negocity player_progress</field>
+      <field name="res_model">negocity.player_progress</field>
+      <field name="view_mode">tree,form,graph</field>
     </record>
     <!-- server action to the one above -->
     <!--
@@ -119,6 +126,6 @@
   
 <menuitem name="Charater Templates" id="negocity.character_template_menu" parent="negocity.aux" action="negocity.character_template_action_window" />
 <menuitem name="Vehicle Templates" id="negocity.vehicle_template_menu" parent="negocity.aux" action="negocity.vehicle_template_action_window" />
-
+<menuitem name="Player Progress" id="negocity.player_progress_menu" parent="negocity.aux" action="negocity.player_progress_action_window" />
   </data>
 </odoo>

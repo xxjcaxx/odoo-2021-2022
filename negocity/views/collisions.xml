@@ -14,5 +14,20 @@
                 </tree>
             </field>
         </record>
+
+        <record model="ir.ui.view" id="negocity.collision_search">
+            <field name="name">negocity collision search</field>
+            <field name="model">negocity.collision</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name" />
+                   <field name="car1" />
+                      <field name="car2" />
+                     <field name="date" />
+                      <field name="finished" />
+                      <filter name="future_collision" string="Future Collision" domain="[('date', '&gt;=', datetime.datetime.now().strftime('%Y-%m-%d 00:00:00'))]"/>
+                </search>
+            </field>
+        </record>
     </data>
 </odoo>

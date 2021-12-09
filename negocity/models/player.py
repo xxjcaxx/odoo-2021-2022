@@ -24,6 +24,8 @@ class player(models.Model):
     login = fields.Char()
     password = fields.Char()
     events = fields.One2many('negocity.event','player')
+    level = fields.Integer()
+    player_progress = fields.One2many('negocity.player_progress','player')
 
     @api.depends('survivors')
     def _get_q_survivors(self):
@@ -51,3 +53,27 @@ class player(models.Model):
 
     def update_survivors(self):
             self.env['negocity.survivor'].update_survivor()
+
+    def button_update_players_progress(self):
+        self.update_players_progress()
+
+    @api.model
+    def update_players_progress(self):
+        players = self.search([])
+        date = fields.datetime.now()
+        for p in players:
+            last_level = p.level
+            p.level = len(p.survivors.filtered(lambda s: s.illnes < 100)) + len(p.survivors.vehicles)
+            print(p.level, last_level)
+          ##  if last_level != p.level:
+            self.env['negocity.player_progress'].create({'name': p.level, 'player': p.id, 'date_char': date})
+
+
+
+class player_progress(models.Model):
+    _name = 'negocity.player_progress'
+    _description = 'Players progress'
+
+    name = fields.Integer(string='level')
+    date_char = fields.Char(default= lambda d: fields.datetime.now())
+    player = fields.Many2one('negocity.player')

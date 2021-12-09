@@ -40,9 +40,16 @@ class survivor(models.Model):
     avatar = fields.Image(max_width=200, max_height=400, related='template.image')
 
     city = fields.Many2one('negocity.city', ondelete='restrict')
-    player = fields.Many2one('negocity.player', ondelete='set null')
-    vehicles = fields.One2many('negocity.vehicle', 'survivor')
 
+   
+    player = fields.Many2one('negocity.player',  ondelete='set null' )
+    vehicles = fields.One2many('negocity.vehicle', 'survivor')
+    def get_default_junk(self):
+        print(self.env.context)
+        if 'default_junk' in self.env.context:
+            return self.env.context['default_junk']
+        else:
+            return 0     
     junk = fields.Integer(default=0)
     building = fields.Many2many('negocity.building')
 

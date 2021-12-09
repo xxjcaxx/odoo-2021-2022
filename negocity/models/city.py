@@ -60,26 +60,17 @@ class city(models.Model):
     def _get_players(self):
         for c in self:
             players = c.survivors.filtered(lambda s: s.player.id != False).player.ids
-
-           # players = []
-           # for s in c.survivors:
-           #     if s.player:
-           #         players.append(s.player.id)
-            #print("Players",players)
             c.players = players
 
     @api.depends('all_vehicles')
     def _get_vehicles(self):
         for c in self:
-            print(c.all_vehicles.mapped(lambda v: v.survivor.name))
             c.abandoned_vehicles = c.all_vehicles.filtered(lambda v: v.survivor.id == False)
 
-
-    
     @api.depends('survivors')
     def _get_unemployed(self):
         for c in self:
-            unemployed_survivors = c.survivors - c.buildings.workers
+            unemployed_survivors = c.survivors - c.buildings.workers  # Operacions en recordsets
             survivors_player = c.survivors 
             vehicles_player = c.survivors.vehicles
             if 'player' in self.env.context:

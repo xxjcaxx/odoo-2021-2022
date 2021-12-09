@@ -46,7 +46,7 @@ class vehicle_template(models.Model):
             for i in range(0, round(population)):
                 all_population.append(c.id)
        # print(all_population)
-        print(self.browse(random.choice(all_population)).mapped(lambda c: c.name+" "+str(c.score)))
+       # print(self.browse(random.choice(all_population)).mapped(lambda c: c.name+" "+str(c.score)))
         template =  self.browse(random.choice(all_population))
         vehicle = self.env['negocity.vehicle'].create({
                     'template': template.id,
