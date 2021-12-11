@@ -12,6 +12,7 @@ class furgoneta(models.Model):
      viatges = fields.One2many('paquets.viatge','furgoneta')
      foto = fields.Image(max_width = 200, max_heigth=200)
      paquets = fields.Many2many('paquets.paquet',compute='_get_paquets')
+     paquets2 = fields.One2many('paquets.paquet',related='viatges.paquets')
 
      @api.depends('viatges')
      def _get_paquets(self):

@@ -1,0 +1,123 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="empresa.furgoneta_list">
+      <field name="name">Furgonetes</field>
+      <field name="model">empresa.furgoneta</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="matricula"/>
+          <field name="capacitat"/>
+          <field name="foto"/>
+          <field name="viatges"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empresa.viatge_list">
+      <field name="name">Viatges</field>
+      <field name="model">empresa.viatge</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="m3"/>
+          <field name="iden"/>
+          <field name="furgo"/>
+          <field name="paquets"/>
+          <field name="conductor"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empresa.paquet_list">
+      <field name="name">Paquets</field>
+      <field name="model">empresa.paquet</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="iden"/>
+          <field name="volum"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empresa.furgoneta_form">
+      <field name="name">furgoneta form</field>
+      <field name="model">empresa.furgoneta</field>
+      <field name="arch" type="xml">
+        <form>
+        <header>
+          </header>
+        <sheet>
+            <field name="foto" widget="image"/>
+            <separator string="Información"></separator>
+          <group>
+            <group>
+              <field name="matricula"/>
+              <field name="capacitat"/>
+            </group>
+            <group>
+              <field name="viatges"/>
+              <field name="paquets"/>
+            </group>
+          </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empresa.viatges_search">
+      <field name="name">furgoneta buscar</field>
+      <field name="model">empresa.viatges</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="Furgoneta"/>
+        </search>
+      </field>
+    </record>
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="empresa.furgoneta_action_window">
+      <field name="name">Furgonetes</field>
+      <field name="res_model">empresa.furgoneta</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empresa.viatge_action_window">
+      <field name="name">Viatges</field>
+      <field name="res_model">empresa.viatge</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empresa.paquet_action_window">
+      <field name="name">Paquets</field>
+      <field name="res_model">empresa.paquet</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="empresa.action_server">
+      <field name="name">empresa server</field>
+      <field name="model_id" ref="model_empresa_empresa"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="Empresa" id="empresa.menu_root"/>
+    <!-- menu categories -->
+    <menuitem name="Menu" id="empresa.menu_1" parent="empresa.menu_root"/>
+    <!-- actions -->
+    <menuitem name="Furgonetes" id="empresa.furgoneta_menu_1_list" parent="empresa.menu_1"
+              action="empresa.furgoneta_action_window"/>
+      <menuitem name="Viatges" id="empresa.viatge_menu_1_list" parent="empresa.menu_1"
+              action="empresa.viatge_action_window"/>
+      <menuitem name="Paquets" id="empresa.paquet_menu_1_list" parent="empresa.menu_1"
+              action="empresa.paquet_action_window"/>
+  </data>
+</odoo>
