@@ -31,7 +31,9 @@
         'demo/character_templates.xml','demo/vehicles_templates.xml',
         'demo/building_types.xml',
 
-        'crons/crons.xml'
+        'crons/crons.xml',
+
+        'views/assets.xml'
 
     ],
     # only loaded in demonstration mode

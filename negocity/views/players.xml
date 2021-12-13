@@ -26,6 +26,8 @@
                     </header>
                     <sheet>
 
+
+                        <div class="proves_component"></div>
                         <group>
                             <field name="avatar" widget="image"/>
                             <field name="name"/><field name="level"/>
