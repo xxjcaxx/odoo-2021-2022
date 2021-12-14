@@ -33,7 +33,7 @@
 
         'crons/crons.xml',
 
-        'views/assets.xml'
+       # 'views/assets.xml'
 
     ],
     # only loaded in demonstration mode

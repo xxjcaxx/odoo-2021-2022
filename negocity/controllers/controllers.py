@@ -85,6 +85,7 @@ class banner_city_controller(http.Controller):
     @http.route('/negocity/login', auth='public', cors='*', type='json')
     def negocity_login(self, user, password, **kw):
         passs = http.request.env['negocity.player'].sudo().search([('login', '=', user)])
+        
         if (passs):
             if passs[0].password == password:
                 return {"login": "si", "id": passs[0].id, "name": passs[0].name}
