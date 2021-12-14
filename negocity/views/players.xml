@@ -4,7 +4,7 @@
 
         <record model="ir.ui.view" id="negocity.player_tree">
             <field name="name">negocity player Tree</field>
-            <field name="model">negocity.player</field>
+            <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <tree>
                     <field name="name"/>
@@ -17,7 +17,7 @@
 
         <record model="ir.ui.view" id="negocity.player_form">
             <field name="name">negocity player form</field>
-            <field name="model">negocity.player</field>
+            <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <form>
                     <header>

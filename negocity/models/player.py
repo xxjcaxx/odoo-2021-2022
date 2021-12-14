@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError
 
 class player(models.Model):
-    _name = 'negocity.player'
-    _description = 'Players'
+    _name = 'res.partner'
+    _inherit = 'res.partner'
 
-    name = fields.Char()
+    #name = fields.Char()
     avatar = fields.Image(max_width=200, max_height=200)
     avatar_icon = fields.Image(related='avatar', max_width=50,
                                max_height=50)  ###https://learnopenerp.blogspot.com/2021/09/dynamically-image-resizing-save-write-odoo14.html
@@ -70,10 +70,13 @@ class player(models.Model):
 
 
 
+
 class player_progress(models.Model):
     _name = 'negocity.player_progress'
     _description = 'Players progress'
 
     name = fields.Integer(string='level')
     date_char = fields.Char(default= lambda d: fields.datetime.now())
-    player = fields.Many2one('negocity.player')
+    player = fields.Many2one('res.partner')
+
+

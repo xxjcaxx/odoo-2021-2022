@@ -37,7 +37,7 @@ class city(models.Model):
     buildings = fields.One2many('negocity.building', 'city')
     unfinished_buildings = fields.Many2many('negocity.building', compute='_get_unfinished_buildings')
     survivors = fields.One2many('negocity.survivor', 'city')
-    players = fields.Many2many('negocity.player', compute='_get_players', string='Players with survivors')
+    players = fields.Many2many('res.partner', compute='_get_players', string='Players with survivors')
     unemployed_survivors = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     survivors_player = fields.Many2many('negocity.survivor', compute='_get_unemployed')
     vehicles_player = fields.Many2many('negocity.vehicle', compute='_get_unemployed')

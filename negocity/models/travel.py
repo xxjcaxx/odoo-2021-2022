@@ -29,8 +29,8 @@ class road(models.Model):
         for r in self:
             r.distance = math.sqrt(
                 (r.city_2.position_x - r.city_1.position_x) ** 2 + (r.city_2.position_y - r.city_1.position_y) ** 2)
-        #  print(r.distance)
-
+            
+   
 
 class travel(models.Model):
     _name = 'negocity.travel'
@@ -47,13 +47,40 @@ class travel(models.Model):
     state = fields.Selection([('preparation', 'Preparation'), ('inprogress', 'In Progress'), ('finished', 'Finished')],
                              default='preparation')
 
-    player = fields.Many2one('negocity.player')
+    player = fields.Many2one('res.partner')
     passengers = fields.Many2many('negocity.survivor')  # filtrats sols els que són de la ciutat origin i del player
     driver = fields.Many2one('negocity.survivor')
     vehicle = fields.Many2one('negocity.vehicle')
     oil_required = fields.Float(compute='_get_progress')
     oil_available = fields.Float(related='vehicle.gas_tank_level')
     collisions = fields.Many2many('negocity.collision',compute='_get_collisions')
+
+    ######### Funcions utils ########
+    @api.model
+    def get_distance(self,road):
+        time = road.distance  # En hores si va a 60k/h
+        distance = time * 60
+        return distance
+
+    @api.model
+    def get_oil_required(self,vehicle_id,road_id):
+        vehicle = self.env['negocity.vehicle'].browse(vehicle_id)
+        road = self.env['negocity.road'].browse(road_id)
+        distance = self.get_distance(road)
+        oil_required = (distance / 100) * vehicle.oil_consumption
+        return oil_required
+
+    @api.model
+    def get_time(self,vehicle_id,road_id):
+        vehicle = self.env['negocity.vehicle'].browse(vehicle_id)
+        road = self.env['negocity.road'].browse(road_id)
+        distance = self.get_distance(road)
+        time = distance / vehicle.speed  #
+        if time <= 0:
+            time = 0.01
+
+        return time
+
 
     @api.depends('origin', 'destiny', 'date_departure')
     def _get_name(self):
@@ -163,14 +190,11 @@ class travel(models.Model):
     def _get_progress(self):
         for t in self:
             if t.road and t.vehicle:
-                time = t.road.distance  # En hores si va a 60k/h
-                distance = time * 60
-                time = distance / t.vehicle.speed  #
-                if time <= 0:
-                    time = 0.01
+                
+                time = self.get_time(t.vehicle.id,t.road.id)
                 t.time = time
-                t.oil_required = (distance / 100) * t.vehicle.oil_consumption
-                print(distance, t.vehicle.speed, time, t.oil_required)
+                t.oil_required = self.get_oil_required(t.vehicle.id,t.road.id)
+                #print(distance, t.vehicle.speed, time, t.oil_required)
                 if t.date_departure:
                     d_dep = t.date_departure
                     data = fields.Datetime.from_string(d_dep)

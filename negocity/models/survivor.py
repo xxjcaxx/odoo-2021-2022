@@ -42,7 +42,7 @@ class survivor(models.Model):
     city = fields.Many2one('negocity.city', ondelete='restrict')
 
    
-    player = fields.Many2one('negocity.player',  ondelete='set null' )
+    player = fields.Many2one('res.partner',  ondelete='set null' )
     vehicles = fields.One2many('negocity.vehicle', 'survivor')
     def get_default_junk(self):
         print(self.env.context)

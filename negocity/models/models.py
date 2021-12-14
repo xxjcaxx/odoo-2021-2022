@@ -15,7 +15,7 @@ class event(models.Model):
     _description = 'Events'
 
     name = fields.Char()
-    player = fields.Many2many('negocity.player')
+    player = fields.Many2many('res.partner')
     event = fields.Reference([('negocity.building','Building'),('negocity.travel','Travel'),('negocity.collision','Collision'),('negocity.player','Player'),('negocity.survivor','Survivor')])
     description = fields.Text()
 

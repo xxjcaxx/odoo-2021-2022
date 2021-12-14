@@ -1,5 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_negocity_player,negocity.player,model_negocity_player,base.group_user,1,1,1,1
 access_negocity_city,negocity.city,model_negocity_city,base.group_user,1,1,1,1
 access_negocity_building_type,negocity.building_type,model_negocity_building_type,base.group_user,1,1,1,1
 access_negocity_building,negocity.building,model_negocity_building,base.group_user,1,1,1,1

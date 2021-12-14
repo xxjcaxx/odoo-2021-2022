@@ -2,6 +2,7 @@
 from odoo import http
 import json
 from odoo import tools
+from odoo.fields import Integer
 
 class banner_city_controller(http.Controller):
     @http.route('/negocity/city_banner', auth='user', type='json')
@@ -142,7 +143,24 @@ class banner_city_controller(http.Controller):
         return http.request.env['ir.http'].session_info()
 
 
-
+    @http.route('/negocity/api/travel-query/', auth="none", cors='*', methods=["GET"], csrf=False, type='http')
+    def travel_query(self, **args):
+        print(' \033[93m API Travel Query \033[0m')
+        print(args, http.request.httprequest.method)
+        vehicle = int(args['vehicle'])
+        road = int(args['road'])
+       
+        if (http.request.httprequest.method == 'GET'):
+            oil = http.request.env['negocity.travel'].sudo().get_oil_required(vehicle,road)
+            time = http.request.env['negocity.travel'].sudo().get_time(vehicle,road)
+            print("OIL", oil, "Time" ,time)
+            return http.Response(
+             json.dumps({"oil_required": oil, "time": time, "vehicle": vehicle ,"road": road},  default=tools.date_utils.json_default),
+             status=200,
+             mimetype='application/json'
+            )
+      
+        return http.request.env['ir.http'].session_info()
 
 
 
