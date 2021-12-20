@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+ <t t-name="provesowl.slider_template" owl="1">
+
+
+ <div class="slidecontainer">
+  <div class="slidervalue">
+    <span t-esc="state.value" />
+    </div>
+    <div class="sliderrange">
+     <input type="range" min="1" max="100" t-model="state.value" class="slider" t-on-change="_onChange"/>
+  </div>
+ </div>
+
+ <!--  <button t-name="ClickCounter" t-on-click="increment">
+  Hola Mundo! [<t t-esc="state.value"/>]
+</button> -->
+    </t>
+</templates>

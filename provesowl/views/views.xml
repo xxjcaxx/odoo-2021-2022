@@ -1,0 +1,71 @@
+<odoo>
+  <data>
+
+    <record id="product_category_view_very_basic_view" model="ir.ui.view">
+        <field name="name">Product Categories Very Basic View</field>
+        <field name="model">product.category</field>
+        <field name="arch" type="xml">
+            <basic_view></basic_view>
+        </field>
+    </record>
+
+    <record id='product.product_category_action_form' model='ir.actions.act_window'>
+        <field name="name">Product Categories</field>
+        <field name="res_model">product.category</field>
+        <field name="view_mode">tree,basic_view,form</field>
+    </record>
+
+
+  <record model="ir.ui.view" id="provesowl.slider_form">
+      <field name="name">slider form</field>
+      <field name="model">provesowl.slider</field>
+      <field name="arch" type="xml">
+        <form>
+        <sheet>
+        <group>
+         <group>
+          <field name="name" widget="provesowl-slider"/>
+        </group>
+         <group>
+          <field name="name" widget="provesowl-slider"/>
+        </group>
+          
+        
+        </group>
+
+         </sheet>
+        </form>
+      </field>
+    </record>
+
+      <record model="ir.ui.view" id="provesowl.slider_basic_view">
+      <field name="name">slider basic</field>
+      <field name="model">provesowl.slider</field>
+      <field name="arch" type="xml">
+     <basic_view></basic_view>
+      </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="provesowl.action_window">
+      <field name="name">slider window</field>
+      <field name="res_model">provesowl.slider</field>
+      <field name="view_mode">tree,form,basic_view</field>
+    </record>
+
+  <!-- Top menu item -->
+
+    <menuitem name="ProvesOWL" id="provesowl.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Exemples" id="provesowl.menu_1" parent="provesowl.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="Widget Slider" id="provesowl.menu_1_list" parent="provesowl.menu_1"
+              action="provesowl.action_window"/>
+
+
+  </data>
+</odoo>
