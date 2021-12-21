@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+ <t t-name="provesowl.acordeon_template" owl="1">
+  <Layout viewType="'acordeon'">
+
+   <div class="acordeon">
+      <div class="acordeon-item" t-foreach="model.data" t-as="record" t-key="record.id">
+          <h2 class="acordeon-header"> <t t-esc="record.name"/> </h2>
+          <div class="acordeon-collapse">
+          <t t-esc="record.description"/>
+          </div>
+
+      </div>
+      </div>
+
+  </Layout>
+    </t>
+</templates>
