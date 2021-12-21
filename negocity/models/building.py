@@ -173,4 +173,3 @@ class building(models.Model):
             else:
                 b.write({'junk_contributed': b.junk_contributed + b.city.junk})
                 b.city.write({'junk': 0})
-

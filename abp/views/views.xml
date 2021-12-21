@@ -1,0 +1,59 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="abp.list">
+      <field name="name">abp list</field>
+      <field name="model">abp.abp</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="abp.action_rubrica_window">
+      <field name="name">abp rubrica window</field>
+      <field name="res_model">abp.rubrica</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+  <record model="ir.actions.act_window" id="abp.action_indicador_window">
+      <field name="name">abp indicador window</field>
+      <field name="res_model">abp.indicador</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+      <record model="ir.actions.act_window" id="abp.action_nivel_window">
+      <field name="name">abp nivel window</field>
+      <field name="res_model">abp.nivel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+      <record model="ir.actions.act_window" id="abp.action_puntuacion_window">
+      <field name="name">abp puntuacion window</field>
+      <field name="res_model">abp.puntuacion</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Abp" id="abp.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Gestion" id="abp.menu_1" parent="abp.menu_root"/>
+
+    <!-- actions -->
+
+    <menuitem name="Rubricas" id="abp.menu_rubricas" parent="abp.menu_1"
+              action="abp.action_rubrica_window"/>
+  <menuitem name="Indicadores" id="abp.menu_Indicadores" parent="abp.menu_1"
+              action="abp.action_indicador_window"/>
+      <menuitem name="Niveles" id="abp.menu_Niveles" parent="abp.menu_1"
+              action="abp.action_nivel_window"/>
+      <menuitem name="Puntuaciones" id="abp.menu_Puntuaciones" parent="abp.menu_1"
+              action="abp.action_puntuacion_window"/>
+  </data>
+</odoo>
