@@ -47,10 +47,19 @@
     </record>
 
 
+      <record model="ir.ui.view" id="provesowl.slide_acordeon">
+      <field name="name">slider acordeon</field>
+      <field name="model">provesowl.slider</field>
+      <field name="arch" type="xml">
+     <acordeon></acordeon>
+      </field>
+    </record>
+
+
     <record model="ir.actions.act_window" id="provesowl.action_window">
       <field name="name">slider window</field>
       <field name="res_model">provesowl.slider</field>
-      <field name="view_mode">tree,form,basic_view</field>
+      <field name="view_mode">tree,form,basic_view,acordeon</field>
     </record>
 
   <!-- Top menu item -->

@@ -40,6 +40,8 @@
         'provesowl/static/src/css/component.css',
 
         'provesowl/static/src/js/basicview.js',
+         'provesowl/static/src/js/acordeon.js',
+           'provesowl/static/src/css/acordeon.css',
         # 'provesowl/static/src/xml/widget.xml',
           'provesowl/static/src/js/widget.js',
           'provesowl/static/src/css/widget.css',

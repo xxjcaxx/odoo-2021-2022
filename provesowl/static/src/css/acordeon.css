@@ -1,0 +1,18 @@
+.acordeon {
+    
+}
+
+.acordeon-item{
+    
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.125);
+    padding: 10px;
+}
+
+.acordeon.header{
+
+}
+
+.acordeon-collapse {
+    display: none;
+}
