@@ -32,4 +32,14 @@
     'demo': [
         'demo/demo.xml',
     ],
+
+    'assets': {
+    'web.assets_backend': [
+        'abp/static/src/js/rubrica.js',
+    ],
+    'web.assets_qweb': [
+            'rubrica/static/src/xml/**/*',
+        ],
+
+},
 }

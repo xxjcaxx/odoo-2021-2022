@@ -62,3 +62,10 @@ class rubrica_alumno(models.Model):
                     'rubrica': r.id,
                     'logrado': False
                 })
+
+
+class View(models.Model):
+    _inherit = "ir.ui.view"
+    type = fields.Selection(
+        selection_add=[("rubrica","Rubrica")]
+    )

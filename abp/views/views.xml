@@ -196,6 +196,16 @@
       </field>
     </record>
 
+
+        <record model="ir.ui.view" id="abp.rubrica_alumno_rubrica">
+      <field name="name">abp abp.rubrica_alumno list</field>
+      <field name="model">abp.rubrica_alumno</field>
+      <field name="arch" type="xml">
+        <rubrica></rubrica>
+      </field>
+    </record>
+
+
     <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="abp.action_rubrica_window">
       <field name="name">abp rubrica window</field>
@@ -221,7 +231,7 @@
        <record model="ir.actions.act_window" id="abp.action_rubricas_alumnos_window">
       <field name="name">abp rubrica_alumno window</field>
       <field name="res_model">abp.rubrica_alumno</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,rubrica</field>
     </record>
 
     <!-- Top menu item -->

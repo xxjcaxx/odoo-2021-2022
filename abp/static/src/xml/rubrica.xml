@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+
+ <t t-name="abp.rubrica_template" owl="1">
+  <Layout viewType="'rubrica'">
+
+   <div class="rubrica">
+      <h1>Rubrica</h1>
+      </div>
+
+  </Layout>
+    </t>
+</templates>
