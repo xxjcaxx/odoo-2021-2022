@@ -1,19 +1,200 @@
 <odoo>
   <data>
     <!-- explicit list view definition -->
-<!--
-    <record model="ir.ui.view" id="abp.list">
-      <field name="name">abp list</field>
-      <field name="model">abp.abp</field>
+
+    <record model="ir.ui.view" id="abp.rubrica_tree">
+      <field name="name">abp abp.rubrica list</field>
+      <field name="model">abp.rubrica</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name"/>
-          <field name="value"/>
-          <field name="value2"/>
+          <field name="modulo"/>
+          <field name="curso"/>
         </tree>
       </field>
     </record>
--->
+
+    <record model="ir.ui.view" id="abp.rubrica_form">
+      <field name="name">abp abp.rubrica form</field>
+      <field name="model">abp.rubrica</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="modulo"/>
+              <field name="curso"/>
+            </group>
+              <notebook>
+                <page string="indicadores">
+                <group>
+                  <field name="indicadores"/>
+                </group>
+              </page>
+              </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.indicador_tree">
+      <field name="name">abp indicadorlist</field>
+      <field name="model">abp.indicador</field>
+      <field name="arch" type="xml">
+        <tree >
+          <field name="name"/>
+          <field name="descripcion"/>
+          <field name="puntos"/>
+          <field name="puntos" sum="Total puntos"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.indicador_form">
+      <field name="name">abp indicador form</field>
+      <field name="model">abp.indicador</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="descripcion"/>
+              <field name="puntos"/>
+            </group>
+            <notebook>
+              <page string="rubricas">
+                <group>
+                  <field name="rubricas"/>
+                </group>
+              </page>
+              <page string="niveles">
+                <group>
+                  <field name="niveles"/>
+                </group>
+              </page>
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.nivel_tree">
+      <field name="name">abp nivel list</field>
+      <field name="model">abp.nivel</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="descripcion"/>
+          <field name="ponderacion"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.nivel_form">
+      <field name="name">abp nivel form</field>
+      <field name="model">abp.nivel</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="descripcion"/>
+              <field name="ponderacion"/>
+            </group>
+            <notebook>
+              <page string="indicador">
+                <group>
+                  <field name="indicador"/>
+                </group>
+              </page>
+
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.puntuacion_tree">
+      <field name="name">abp puntuacion list</field>
+      <field name="model">abp.puntuacion</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="indicador"/>
+          <field name="nivel"/>
+          <field name="rubrica"/>
+
+          <field name="logrado"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.puntuacion_form">
+      <field name="name">abp puntuacion form</field>
+      <field name="model">abp.puntuacion</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name"/>
+              <field name="indicador"/>
+              <field name="nivel"/>
+              <field name="rubrica"/>
+
+              <field name="logrado"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="abp.rubrica_alumno_tree">
+      <field name="name">abp abp.rubrica_alumno list</field>
+      <field name="model">abp.rubrica_alumno</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="rubrica_id"/>
+          <field name="modulo"/>
+          <field name="curso"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="abp.rubrica_alumno_form">
+      <field name="name">abp abp.rubrica_alumno form</field>
+      <field name="model">abp.rubrica_alumno</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+               <field name="name"/>
+          <field name="rubrica_id"/>
+          <field name="modulo"/>
+          <field name="curso"/>
+              <field name="alumno"/>
+            </group>
+             <notebook>
+                <page string="indicadores">
+                <group>
+                  <field name="indicadores"/>
+                </group>
+              </page>
+              <page string="puntuaciones">
+                <group>
+                  <field name="puntuaciones"/>
+                </group>
+                <footer>
+                   <button name="rellenar_puntuaciones" type="object" string="Rellenar Puntuaciones" class="oe_highlight" />
+                </footer>
+              </page>
+
+            </notebook>
+          </sheet>
+        </form>
+      </field>
+    </record>
 
     <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="abp.action_rubrica_window">
@@ -21,19 +202,25 @@
       <field name="res_model">abp.rubrica</field>
       <field name="view_mode">tree,form</field>
     </record>
-  <record model="ir.actions.act_window" id="abp.action_indicador_window">
+    <record model="ir.actions.act_window" id="abp.action_indicador_window">
       <field name="name">abp indicador window</field>
       <field name="res_model">abp.indicador</field>
       <field name="view_mode">tree,form</field>
     </record>
-      <record model="ir.actions.act_window" id="abp.action_nivel_window">
+    <record model="ir.actions.act_window" id="abp.action_nivel_window">
       <field name="name">abp nivel window</field>
       <field name="res_model">abp.nivel</field>
       <field name="view_mode">tree,form</field>
     </record>
-      <record model="ir.actions.act_window" id="abp.action_puntuacion_window">
+    <record model="ir.actions.act_window" id="abp.action_puntuacion_window">
       <field name="name">abp puntuacion window</field>
       <field name="res_model">abp.puntuacion</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+       <record model="ir.actions.act_window" id="abp.action_rubricas_alumnos_window">
+      <field name="name">abp rubrica_alumno window</field>
+      <field name="res_model">abp.rubrica_alumno</field>
       <field name="view_mode">tree,form</field>
     </record>
 
@@ -49,11 +236,13 @@
 
     <menuitem name="Rubricas" id="abp.menu_rubricas" parent="abp.menu_1"
               action="abp.action_rubrica_window"/>
-  <menuitem name="Indicadores" id="abp.menu_Indicadores" parent="abp.menu_1"
+    <menuitem name="Indicadores" id="abp.menu_Indicadores" parent="abp.menu_1"
               action="abp.action_indicador_window"/>
-      <menuitem name="Niveles" id="abp.menu_Niveles" parent="abp.menu_1"
+    <menuitem name="Niveles" id="abp.menu_Niveles" parent="abp.menu_1"
               action="abp.action_nivel_window"/>
-      <menuitem name="Puntuaciones" id="abp.menu_Puntuaciones" parent="abp.menu_1"
+    <menuitem name="Puntuaciones" id="abp.menu_Puntuaciones" parent="abp.menu_1"
               action="abp.action_puntuacion_window"/>
+        <menuitem name="Rubricas Alumnos" id="abp.menu_rubricas_alumnos" parent="abp.menu_1"
+              action="abp.action_rubricas_alumnos_window"/>
   </data>
 </odoo>

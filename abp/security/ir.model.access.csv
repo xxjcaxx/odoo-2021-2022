@@ -3,3 +3,4 @@ access_abp_rubrica,abp.rubrica,model_abp_rubrica,base.group_user,1,1,1,1
 access_abp_indicador,abp.indicador,model_abp_indicador,base.group_user,1,1,1,1
 access_abp_nivel,abp.nivel,model_abp_nivel,base.group_user,1,1,1,1
 access_abp_puntuacion,abp.puntuacion,model_abp_puntuacion,base.group_user,1,1,1,1
+access_abp_rubrica_alumno,abp.rubrica_alumno,model_abp_rubrica_alumno,base.group_user,1,1,1,1

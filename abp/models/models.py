@@ -10,6 +10,7 @@ class rubrica(models.Model):
     name = fields.Char()
     modulo = fields.Char()
     curso = fields.Char()
+    indicadores = fields.Many2many('abp.indicador')
 
 class indicador(models.Model):
     _name = 'abp.indicador'
@@ -19,7 +20,7 @@ class indicador(models.Model):
     descripcion = fields.Text()
     puntos = fields.Float()
     rubricas = fields.Many2many('abp.rubrica')
-    niveles = fields.Many2many('abp.nivel')
+    niveles = fields.One2many('abp.nivel', 'indicador')
 
 class nivel(models.Model):
     _name = 'abp.nivel'
@@ -28,15 +29,36 @@ class nivel(models.Model):
     name = fields.Char()
     descripcion = fields.Text()
     ponderacion = fields.Float()
-    indicadores = fields.Many2many('abp.indicador')
+    indicador = fields.Many2one('abp.indicador')
 
 class puntuacion(models.Model):
     _name = 'abp.puntuacion'
     _description = 'abp.puntuacion'
 
     name = fields.Char()
-    indicador = fields.Many2one('abp.indicador')
+    indicador = fields.Many2one(related='nivel.indicador')
     nivel = fields.Many2one('abp.nivel')
-    rubrica = fields.Many2one('abp.rubrica')
-    alumno = fields.Many2one('res.partner')
+    rubrica = fields.Many2one('abp.rubrica_alumno')
+
     logrado = fields.Boolean()
+
+class rubrica_alumno(models.Model):
+    _name = 'abp.rubrica_alumno'
+    _description = 'abp.rubrica_alumno'
+    _inherits = {'abp.rubrica':'rubrica_id'}
+
+    name = fields.Char()
+    alumno = fields.Many2one('res.partner')
+    puntuaciones = fields.One2many('abp.puntuacion', 'rubrica')
+    rubrica_id = fields.Many2one('abp.rubrica')
+
+    def rellenar_puntuaciones(self):
+        for r in self:
+            niveles = r.indicadores.niveles
+            for n in niveles:
+                self.env['abp.puntuacion'].create({
+                    'name': str(r.name)+" "+str(n.indicador.name)+" "+str(n.name),
+                    'nivel': n.id,
+                    'rubrica': r.id,
+                    'logrado': False
+                })
