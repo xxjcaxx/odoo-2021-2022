@@ -31,6 +31,11 @@
                   <field name="indicadores"/>
                 </group>
               </page>
+                <page string="niveles">
+                <group>
+                  <field name="niveles"/>
+                </group>
+              </page>
               </notebook>
           </sheet>
         </form>
@@ -141,7 +146,7 @@
               <field name="nivel"/>
               <field name="rubrica"/>
 
-              <field name="logrado"/>
+              <field name="logrado" widget="abp_switch"/>
             </group>
           </sheet>
         </form>
@@ -179,6 +184,11 @@
                 <page string="indicadores">
                 <group>
                   <field name="indicadores"/>
+                </group>
+              </page>
+                <page string="niveles">
+                <group>
+                  <field name="niveles"/>
                 </group>
               </page>
               <page string="puntuaciones">
@@ -231,7 +241,7 @@
        <record model="ir.actions.act_window" id="abp.action_rubricas_alumnos_window">
       <field name="name">abp rubrica_alumno window</field>
       <field name="res_model">abp.rubrica_alumno</field>
-      <field name="view_mode">tree,rubrica</field>
+      <field name="view_mode">tree,form,rubrica</field>
     </record>
 
     <!-- Top menu item -->

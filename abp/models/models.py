@@ -11,6 +11,12 @@ class rubrica(models.Model):
     modulo = fields.Char()
     curso = fields.Char()
     indicadores = fields.Many2many('abp.indicador')
+    niveles = fields.Many2many('abp.nivel', compute='_get_niveles')
+
+    @api.depends('indicadores')
+    def _get_niveles(self):
+        for r in self:
+            r.niveles = r.indicadores.niveles
 
 class indicador(models.Model):
     _name = 'abp.indicador'

@@ -23,12 +23,11 @@
         <form>
         <sheet>
         <group>
-         <group>
+         
           <field name="name" widget="provesowl-slider"/>
-        </group>
-         <group>
+        
           <field name="name" widget="provesowl-slider"/>
-        </group>
+        
           
         
         </group>

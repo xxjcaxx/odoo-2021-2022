@@ -43,6 +43,7 @@
          'provesowl/static/src/js/acordeon.js',
            'provesowl/static/src/css/acordeon.css',
         # 'provesowl/static/src/xml/widget.xml',
+         'provesowl/static/src/js/servicios.js',
           'provesowl/static/src/js/widget.js',
           'provesowl/static/src/css/widget.css',
     ],

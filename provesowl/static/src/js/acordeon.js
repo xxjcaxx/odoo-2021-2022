@@ -3,7 +3,7 @@ import { registry } from "@web/core/registry";
 import { Layout } from "@web/views/layout";
 import { KeepLast } from "@web/core/utils/concurrency";
 import { Model, useModel } from "@web/views/helpers/model";
-
+import { useService } from "@web/core/utils/hooks";
 const { useSubEnv, useContext } = owl.hooks;
 const { xml } = owl.tags;
 const { Context } = owl;
@@ -24,11 +24,12 @@ class Acordeon extends owl.Component {
         resModel: this.props.resModel,  // Obtenemos datos del componente paddre
         domain: this.props.domain,  // por propagación con "props"
       });
-
+      this.compartido = useService("contador");
+      console.log(this.env.services);
       // Para el banner
       let config = this.env.config;
       let searchModel = this.env.searchModel;
-      console.log(config,searchModel);
+     // console.log(config,searchModel);
 
 
       const abiertosContext = new Context({ abiertos: 0 });

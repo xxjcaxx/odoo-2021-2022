@@ -36,9 +36,10 @@
     'assets': {
     'web.assets_backend': [
         'abp/static/src/js/rubrica.js',
+         'abp/static/src/css/rubrica.css',
     ],
     'web.assets_qweb': [
-            'rubrica/static/src/xml/**/*',
+            'abp/static/src/xml/rubrica.xml',
         ],
 
 },

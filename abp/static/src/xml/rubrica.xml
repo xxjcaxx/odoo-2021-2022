@@ -1,12 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
 
+ <t t-name="abp.switch_template" owl="1">
+ <label class="switch">
+          <input type="checkbox" t-model="state.value" t-on-change="_onChange()"/>
+              <span class="slider"></span>
+          </label>
+ </t>
+
+
+ <t t-name="abp.rubrica_nivel_template" owl="1">
+
+<td t-attf-class="{{'color'+Math.round(nivel.ponderacion)}}" >
+ <h4> <t t-esc="nivel.name"/>   </h4> 
+      <div class="descripcion">
+      <p><t t-esc="nivel.descripcion"/></p>
+        </div>
+        <Switch t-if="nivel.puntuacion" 
+        record="record" 
+        options="{mode: 'edit'}" 
+        fieldName="'logrado'" 
+      
+        />
+          Ponderación: <t t-esc="nivel.ponderacion"/>
+</td>
+ </t>
+
+
+
+
  <t t-name="abp.rubrica_template" owl="1">
   <Layout viewType="'rubrica'">
-
+<div class="table-responsive">
    <div class="rubrica">
-      <h1>Rubrica</h1>
+      <h1>Rubrica <t t-esc="model.data[0].name"/></h1>
+
+     <!-- <t t-esc="model.dataJSON"/> -->
+
+      <table style="table-layout: fixed;" class="table-rubrica o_list_table table table-sm table-hover table-striped o_list_table_ungrouped">
+      <thead>
+        <tr><th rowspan="2">Indicador</th><th  t-att-colspan="model.colspan" >Niveles</th>
+        <th>Puntuación</th>
+        </tr>
+        
+      </thead>
+      <tbody>
+      <tr  t-foreach="model.data[0].indicadores"  t-as="indicador" t-key="indicador.id">
+      <td> 
+      <h3> <t t-esc="indicador.name"/> </h3>
+      <div class="descripcion">
+       <p> <t t-esc="indicador.descripcion"/></p>  
+       </div>
+       <p> <t t-esc="indicador.puntos"/></p>  
+        </td>
+       <RubricaNivel 
+       t-foreach="indicador.niveles"  
+       t-as="nivel" t-key="nivel.id" 
+       nivel="nivel" 
+       t-on-field-changed="_onFieldChanged"/> 
+       <td t-foreach="Array.from(Array((model.colspan - indicador.niveles.length)).keys())" >
+       <!-- Relleno -->
+       </td>
+       <td><span class="puntuacion">7</span></td>
+      </tr>
+      
+      </tbody>
+      </table>
+
       </div>
+      </div>
+
 
   </Layout>
     </t>
