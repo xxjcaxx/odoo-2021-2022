@@ -10,6 +10,7 @@ class player(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 
+    is_player = fields.Boolean(default=False)
     #name = fields.Char()
     avatar = fields.Image(max_width=200, max_height=200)
     avatar_icon = fields.Image(related='avatar', max_width=50,

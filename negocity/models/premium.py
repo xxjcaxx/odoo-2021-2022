@@ -11,6 +11,7 @@ class player(models.Model):
     _inherit = 'res.partner'
 
     is_premium = fields.Boolean()
+    date_end = fields.Datetime()
 
 
 class travel_premium(models.Model):
@@ -26,3 +27,34 @@ class travel_premium(models.Model):
         else:
             print(time,self.env['negocity.vehicle'].browse(vehicle_id).survivor.player.name)
         return time
+
+class product_premium(models.Model):
+    _name = 'product.template'
+    _inherit = 'product.template'
+
+    is_premium = fields.Boolean(default=False)
+    days_premium = fields.Integer()
+
+class sale_premium(models.Model):
+    _name = 'sale.order'
+    _inherit = 'sale.order'
+
+
+    def apply_premium(self):
+
+        premium_products = self.order_lines
+
+        sale_date = self.date_order
+        now = fields.Datetime.now()
+
+
+        print(self)
+
+    def write(self,values):
+        super(sale_premium,self).write(values)
+        self.apply_premium()
+
+    @api.model
+    def create(self,values):
+        record = super(sale_premium,self).create(values)
+        record.apply_premium()

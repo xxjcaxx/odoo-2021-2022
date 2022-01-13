@@ -15,6 +15,39 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="negocity.player_search">
+            <field name="name">negocity player search</field>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <filter name="player_partner" string="Is Player" domain="[('is_player','=',True)]" />
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="negocity.player_inherit_form">
+            <field name="name">negocity player inherit form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"></field>
+            <field name="arch" type="xml">
+                <field name="vat" position="before">
+                    <field name="is_player"/>
+                </field>
+                <notebook position="inside">
+                    <page string="Player">
+                        <field name="avatar" widget="image"/>
+                        <group>
+                            <field name="level"/>
+                            <field name="login"/>
+                            <field name="password" password="True"/>
+                        </group>
+
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="negocity.player_form">
             <field name="name">negocity player form</field>
             <field name="model">res.partner</field>
@@ -31,6 +64,7 @@
                         <group>
                             <field name="avatar" widget="image"/>
                             <field name="name"/><field name="level"/>
+                            <field name="is_player"/>
                             <field name="login"/>
                             <field name="password" password="True"/>
 
@@ -77,10 +111,10 @@
                                                         <div class="vehicles_images">
                                                             <span t-foreach="record.vehicles.raw_value" t-as="i">
 
-                                                            <img t-attf-class="mini_vehicle"
-                                                                 t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)"
-                                                                 t-att-alt="i"/>
-                                                        </span>
+                                                                <img t-attf-class="mini_vehicle"
+                                                                     t-att-src="kanban_image('negocity.vehicle', 'img_computed',i)"
+                                                                     t-att-alt="i"/>
+                                                            </span>
                                                         </div>
 
                                                         <button name="assign_random_car" type="object"
@@ -237,7 +271,7 @@
                                     </tree>
                                 </field>
                                 <separator string="Progress">
-                                   
+
                                 </separator>
                                 <field name="player_progress"/>
                             </page>
