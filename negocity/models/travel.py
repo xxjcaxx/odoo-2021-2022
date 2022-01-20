@@ -345,4 +345,66 @@ class collision(models.Model):
 
 
 
+class travel_wizard(models.TransientModel):
+    _name = 'negocity.travel_wizard'
+    _description = 'Wizard of travels'
 
+    def _get_origin(self):
+        city = self.env.context.get('city_context')
+        return city
+
+    def _get_player(self):
+        player = self.env.context.get('player_context')
+        return player
+
+    name = fields.Char()
+    origin = fields.Many2one('negocity.city', default = _get_origin)
+    destiny = fields.Many2one('negocity.city')  # filtrat
+    road = fields.Many2one('negocity.road')  # computat
+    date_departure = fields.Datetime()
+    time = fields.Float()
+    date_end = fields.Datetime()  # sera computat en funció de la distància
+    player = fields.Many2one('res.partner', default = _get_player )
+    passengers = fields.Many2many('negocity.survivor')
+    driver = fields.Many2one('negocity.survivor')
+    vehicle = fields.Many2one('negocity.vehicle')
+    oil_required = fields.Float()
+    oil_available = fields.Float(related='vehicle.gas_tank_level')
+
+    state = fields.Selection([('origin','Origin'),('destiny','Destiny'),('driver','Driver'),('dates','Dates')], default = 'origin')
+
+    def next(self):
+        state = self.state
+        if state == 'origin':
+            self.state = 'destiny'
+        elif state == 'destiny':
+            self.state = 'driver'
+        elif state == 'driver':
+            self.state = 'dates'
+
+        return {
+            'name': 'Negocity travel wizard action',
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new'
+        }
+
+    def previous(self):
+        state = self.state
+        if state == 'destiny':
+            self.state = 'origin'
+        elif state == 'driver':
+            self.state = 'destiny'
+        elif state == 'dates':
+            self.state = 'driver'
+
+        return {
+            'name': 'Negocity travel wizard action',
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new'
+        }

@@ -165,6 +165,10 @@
                                         <field name="unfinished_buildings" widget="many2many_tags"/>
                                         <field name="survivors_player" widget="many2many_tags"/>
                                         <field name="unemployed_survivors" widget="many2many_tags"/>
+                                        <button name="%(negocity.travel_wizard_action)d" type="action" string="Create Travel"
+                                                context="{'player_context': parent.id, 'city_context': active_id}"
+                                                class="oe_highlight"/>
+
                                     </tree>
                                 </field>
 

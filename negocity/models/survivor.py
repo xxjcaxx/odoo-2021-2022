@@ -30,6 +30,7 @@ class survivor(models.Model):
                   "Interceptor", "Bastich", "Dweller", "Thief", "Bleeder", "Face", "Mutant", "Anomaly", "Risk",
                   "Garcia", "Salamanca", "Goodman", "Sakura", "Bleding Gums", "Absent", "Hybrid", "Desire", "Bubblegum"
             , "Serpente", "Petal", "Dust", "Mantis", "Preacher", "Harkonnen", "Heisenberg", "Vonn Newman"]
+        print('****************************GENERATE')
         return random.choice(first) + " " + random.choice(second)
 
     name = fields.Char(default=_generate_name)

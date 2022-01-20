@@ -7,12 +7,12 @@
             <field name="arch" type="xml">
                 <tree>
                     <field name="name" />
-                   <field name="origin" />
-                   <field name="destiny" />
-                   <field name="road" />
-                   <field name="date_departure" />
-                   <field name="date_end" />
-                   <field name="progress" widget="progressbar"/>
+                    <field name="origin" />
+                    <field name="destiny" />
+                    <field name="road" />
+                    <field name="date_departure" />
+                    <field name="date_end" />
+                    <field name="progress" widget="progressbar"/>
                 </tree>
             </field>
         </record>
@@ -25,41 +25,41 @@
                 <form>
                     <header>
                         <field name="state" widget="statusbar"/>
-                   </header>
+                    </header>
                     <sheet>
                         <group>
-                        <group>
-                        <field name="name" />
-                      
-                        <field name="origin" />
-                        <field name="destiny" attrs="{'readonly': [('origin', '=', False)]}"/>
-                        <field name="road" />
-                        <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
-                        <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
-                        <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
-                        <field name="oil_required" />
-                        <field name="oil_available" />
-                    </group>
-                    <group>
-                        <field name="date_departure" />
-                        <field name="time" />
-                        <field name="date_end" />
-                        <field name="progress" widget="progressbar"/>
-                    </group>
-                 
-                </group>
+                            <group>
+                                <field name="name" />
 
-                <notebook>
-                    <page name="passenger" string="Passengers">
-                        <field name="passengers" />
-                    </page>
-                    <page name="collisions" string="Collisions">
-                        <field name="collisions" />
-                    </page>
-                </notebook>
-                <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
+                                <field name="origin" />
+                                <field name="destiny" attrs="{'readonly': [('origin', '=', False)]}"/>
+                                <field name="road" />
+                                <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
+                                <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
+                                <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
+                                <field name="oil_required" />
+                                <field name="oil_available" />
+                            </group>
+                            <group>
+                                <field name="date_departure" />
+                                <field name="time" />
+                                <field name="date_end" />
+                                <field name="progress" widget="progressbar"/>
+                            </group>
+
+                        </group>
+
+                        <notebook>
+                            <page name="passenger" string="Passengers">
+                                <field name="passengers" />
+                            </page>
+                            <page name="collisions" string="Collisions">
+                                <field name="collisions" />
+                            </page>
+                        </notebook>
+                        <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
                     </sheet>
-                   
+
                 </form>
             </field>
         </record>
@@ -70,14 +70,78 @@
             <field name="arch" type="xml">
                 <calendar date_start="date_departure" date_stop="date_end" color="road">
                     <field name="name" />
-                   <field name="origin" />
-                   <field name="destiny" />
-                   <field name="road" />
-                   <field name="progress" widget="progressbar"/>
+                    <field name="origin" />
+                    <field name="destiny" />
+                    <field name="road" />
+                    <field name="progress" widget="progressbar"/>
                 </calendar>
             </field>
         </record>
 
 
-        </data>
-        </odoo>
+        <record model="ir.actions.act_window" id="negocity.travel_wizard_action">
+            <field name="name">Negocity travel wizard action</field>
+            <field name="res_model">negocity.travel_wizard</field>
+            <field name="binding_model_id" ref="model_negocity_travel"></field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+
+        </record>
+
+
+
+
+        <record model="ir.ui.view" id="negocity.travel_wizard_form">
+            <field name="name">negocity travel Form</field>
+            <field name="model">negocity.travel_wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <field name="state" widget="statusbar"></field>
+                    </header>
+                    <sheet>
+                        <group states="origin">
+                            <field name="origin" />
+                            <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
+                        </group>
+                        <group states="destiny">
+
+                            <field name="destiny" attrs="{'readonly': [('origin', '=', False)]}"/>
+                            <field name="road" />
+
+                        </group>
+                        <group states="driver">
+                            <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
+                            <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
+                            <field name="oil_required" />
+                            <field name="oil_available" />
+                            <notebook states="">
+                                <page name="passenger" string="Passengers">
+                                    <field name="passengers" />
+                                </page>
+                            </notebook>
+                        </group>
+                        <group states="dates">
+                            <field name="date_departure" />
+                            <field name="time" />
+                            <field name="date_end" />
+
+                        </group>
+
+
+                        <!--   <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
+                          -->
+                        <footer>
+                                <button name="previous" type="object" string="Previous" class="oe_highlight" states="destiny,driver,dates" />
+
+                            <button name="next" type="object" string="Next" class="oe_highlight" states="origin,destiny,driver" />
+
+                        </footer>
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

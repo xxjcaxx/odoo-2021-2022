@@ -11,3 +11,4 @@ access_negocity_travel,negocity.travel,model_negocity_travel,base.group_user,1,1
 access_negocity_event,negocity.event,model_negocity_event,base.group_user,1,1,1,1
 access_negocity_collision,negocity.collision,model_negocity_collision,base.group_user,1,1,1,1
 access_negocity_player_progress,negocity.player_progress,model_negocity_player_progress,base.group_user,1,1,1,1
+access_negocity_travel_wizard,negocity.travel_wizard,model_negocity_travel_wizard,base.group_user,1,1,1,1
