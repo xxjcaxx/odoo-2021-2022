@@ -343,7 +343,11 @@ class collision(models.Model):
 
             c.finished = True
 
+class city_transient(models.TransientModel):
+    _name = 'negocity.city_transient'
 
+    city = fields.Many2one('negocity.city')
+    wizard = fields.Many2one('negocity.travel_wizard')
 
 class travel_wizard(models.TransientModel):
     _name = 'negocity.travel_wizard'
@@ -359,6 +363,8 @@ class travel_wizard(models.TransientModel):
 
     name = fields.Char()
     origin = fields.Many2one('negocity.city', default = _get_origin)
+    cities_available = fields.One2many('negocity.city_transient','wizard')
+
     destiny = fields.Many2one('negocity.city')  # filtrat
     road = fields.Many2one('negocity.road')  # computat
     date_departure = fields.Datetime()
@@ -371,12 +377,41 @@ class travel_wizard(models.TransientModel):
     oil_required = fields.Float()
     oil_available = fields.Float(related='vehicle.gas_tank_level')
 
+    @api.onchange('origin')
+    def _onchange_origin(self):
+        if self.origin != False:
+            roads_available = self.origin.roads
+            cities_available = roads_available.city_1 + roads_available.city_2 - self.origin
+            print('********************** ONCHANGE ORIGiN *************')
+            self.cities_available.unlink()
+
+            for city in cities_available:
+                self.env['negocity.city_transient'].create({'city': city.id, 'wizard': self.id})
+
+            return {
+                'domain': {
+                    'destiny': [('id', 'in', (self.cities_available.city).ids)],
+                }
+            }
+
+    @api.onchange('cities_available')
+    def _onchange_cities(self):
+        if self.cities_available != False:
+            print('********************** ONCHANGE CITIES *************')
+            return {
+                'domain': {
+                    'destiny': [('id', 'in', (self.cities_available.city).ids)],
+                }
+            }
+
     state = fields.Selection([('origin','Origin'),('destiny','Destiny'),('driver','Driver'),('dates','Dates')], default = 'origin')
 
     def next(self):
+
         state = self.state
         if state == 'origin':
             self.state = 'destiny'
+
         elif state == 'destiny':
             self.state = 'driver'
         elif state == 'driver':
@@ -388,7 +423,9 @@ class travel_wizard(models.TransientModel):
             'res_model': self._name,
             'res_id': self.id,
             'view_mode': 'form',
-            'target': 'new'
+            'target': 'new',
+            'context': dict(self._context, cities_available_context= (self.cities_available.city).ids),
+            #'domain': {'destiny': [('id', 'in', (self.cities_available.city).ids)]}
         }
 
     def previous(self):
@@ -406,5 +443,27 @@ class travel_wizard(models.TransientModel):
             'res_model': self._name,
             'res_id': self.id,
             'view_mode': 'form',
-            'target': 'new'
+            'target': 'new',
+            'context': self._context
+        }
+
+    def create_travel(self):
+        travel = self.env['negocity.travel'].create({
+           'origin': self.origin.id,
+            'destiny': self.destiny.id,
+            'road' : self.road.id,
+            'date_departure': self.date_departure,
+            'state': 'preparation',
+            'player': self.player.id,
+            'passengers': self.passengers.ids,
+            'driver' : self.driver.id,
+            'vehicle' : self.vehicle.id
+        })
+        return {
+            'name': 'Negocity travel',
+            'type': 'ir.actions.act_window',
+            'res_model': 'negocity.travel',
+            'res_id': travel.id,
+            'view_mode': 'form',
+            'target': 'current'
         }
