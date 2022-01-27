@@ -349,6 +349,18 @@ class city_transient(models.TransientModel):
     city = fields.Many2one('negocity.city')
     wizard = fields.Many2one('negocity.travel_wizard')
 
+    def select(self):
+        self.wizard.write({'destiny': self.city.id})
+        return {
+            'name': 'Negocity travel wizard action',
+            'type': 'ir.actions.act_window',
+            'res_model': self.wizard._name,
+            'res_id': self.wizard.id,
+            'view_mode': 'form',
+            'target': 'new',
+            'context': self.wizard._context
+        }
+
 class travel_wizard(models.TransientModel):
     _name = 'negocity.travel_wizard'
     _description = 'Wizard of travels'
@@ -389,20 +401,17 @@ class travel_wizard(models.TransientModel):
                 self.env['negocity.city_transient'].create({'city': city.id, 'wizard': self.id})
 
             return {
-                'domain': {
-                    'destiny': [('id', 'in', (self.cities_available.city).ids)],
-                }
+                # 'domain': {
+                #     'destiny': [('id', 'in', (self.cities_available.city).ids)],
+                # }
             }
 
-    @api.onchange('cities_available')
-    def _onchange_cities(self):
-        if self.cities_available != False:
-            print('********************** ONCHANGE CITIES *************')
-            return {
-                'domain': {
-                    'destiny': [('id', 'in', (self.cities_available.city).ids)],
-                }
-            }
+    @api.onchange('destiny')
+    def _onchange_destiny(self):
+        if self.destiny != False:
+            road_available = self.origin.roads & self.destiny.roads
+            self.road = road_available.id
+            return {}
 
     state = fields.Selection([('origin','Origin'),('destiny','Destiny'),('driver','Driver'),('dates','Dates')], default = 'origin')
 

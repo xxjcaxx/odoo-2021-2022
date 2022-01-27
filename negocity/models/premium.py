@@ -6,7 +6,7 @@ import math
 from datetime import datetime, timedelta
 from odoo.exceptions import ValidationError
 
-class player(models.Model):
+class player_premium(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
 

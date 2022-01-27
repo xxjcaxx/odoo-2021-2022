@@ -105,12 +105,16 @@
                             <field name="player"  attrs="{'readonly': [('origin', '=', False)]}"/>
                         </group>
                         <group states="destiny">
-                                 <field name="cities_available" />
-
+                            <field name="cities_available">
+                                <tree>
+                                    <field name="city"/>
+                                    <button name="select" type="object" string="Select" class="oe_highlight" />
+                                </tree>
+                            </field>
                             <field name="destiny"
-                                    domain = "[('id','in',context.get('cities_available_context',[]))]"
+                                   domain = "[('id','in',context.get('cities_available_context',[]))]"
                                    attrs="{'readonly': [('origin', '=', False)]}"/>
-                            <field name="road" />
+                            <field name="road" readonly="1" />
 
                         </group>
                         <group states="driver">
@@ -135,10 +139,9 @@
                         <!--   <button name="launch_travel" type="object" string="Launch travel" class="oe_highlight" />
                           -->
                         <footer>
-                                <button name="previous" type="object" string="Previous" class="oe_highlight" states="destiny,driver,dates" />
-
-                            <button name="next" type="object" string="Next" class="oe_highlight" states="origin,destiny,driver" />
-<button name="create_travel" type="object" string="Create Travel" class="oe_highlight" states="dates" />
+                            <button name="previous" type="object" string="Previous" class="oe_highlight" states="destiny,driver,dates" />
+                            <button name="next"  type="object" string="Next" class="oe_highlight" states="origin,destiny,driver" />
+                            <button name="create_travel" type="object" string="Create Travel" class="oe_highlight" states="dates" />
                         </footer>
                     </sheet>
 
