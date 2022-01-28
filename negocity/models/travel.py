@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
+from email.policy import default
 from odoo import models, fields, api
 import random
 import math
@@ -379,8 +380,8 @@ class travel_wizard(models.TransientModel):
 
     destiny = fields.Many2one('negocity.city')  # filtrat
     road = fields.Many2one('negocity.road')  # computat
-    date_departure = fields.Datetime()
-    time = fields.Float()
+    date_departure = fields.Datetime(default = fields.Datetime.now, string='Date Departure (now)')
+    time = fields.Float(compute='_get_time')
     date_end = fields.Datetime()  # sera computat en funció de la distància
     player = fields.Many2one('res.partner', default = _get_player )
     passengers = fields.Many2many('negocity.survivor')
@@ -388,6 +389,20 @@ class travel_wizard(models.TransientModel):
     vehicle = fields.Many2one('negocity.vehicle')
     oil_required = fields.Float()
     oil_available = fields.Float(related='vehicle.gas_tank_level')
+
+    def _get_time(self):
+        for t in self:
+            t.time = 0
+            t.date_end = False
+            print('time0',t.vehicle,t.road)
+            if t.vehicle and t.road:
+                print('time')
+                t.time = self.env['negocity.travel'].get_time(t.vehicle.id,t.road.id)
+                if t.date_departure:
+                    d_dep = t.date_departure
+                    data = fields.Datetime.from_string(d_dep)
+                    data = data + timedelta(hours=t.time)
+                    t.date_end = fields.Datetime.to_string(data)
 
     @api.onchange('origin')
     def _onchange_origin(self):
@@ -409,8 +424,12 @@ class travel_wizard(models.TransientModel):
     @api.onchange('destiny')
     def _onchange_destiny(self):
         if self.destiny != False:
+           
             road_available = self.origin.roads & self.destiny.roads
+            print(road_available)
+            self.search([('id','=',self._origin.id)]).write({'road': road_available.id})
             self.road = road_available.id
+            
             return {}
 
     state = fields.Selection([('origin','Origin'),('destiny','Destiny'),('driver','Driver'),('dates','Dates')], default = 'origin')

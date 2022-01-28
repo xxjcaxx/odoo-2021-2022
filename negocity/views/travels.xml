@@ -129,9 +129,9 @@
                             </notebook>
                         </group>
                         <group states="dates">
-                            <field name="date_departure" />
-                            <field name="time" />
-                            <field name="date_end" />
+                            <field name="date_departure" readonly="1"/>
+                            <field name="time" readonly="1"/>
+                            <field name="date_end" readonly="1"/>
 
                         </group>
 
