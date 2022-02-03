@@ -80,7 +80,7 @@
 
 
         <record model="ir.actions.act_window" id="negocity.travel_wizard_action">
-            <field name="name">Negocity travel wizard action</field>
+            <field name="name">Lets create a travel</field>
             <field name="res_model">negocity.travel_wizard</field>
             <field name="binding_model_id" ref="model_negocity_travel"></field>
             <field name="view_mode">form</field>
@@ -98,6 +98,7 @@
                 <form>
                     <header>
                         <field name="state" widget="statusbar"></field>
+                        <field name="ready" invisible="1"></field>
                     </header>
                     <sheet>
                         <group states="origin">
@@ -118,20 +119,76 @@
 
                         </group>
                         <group states="driver">
-                            <field name="driver"  attrs="{'readonly': [('player', '=', False)]}" />
-                            <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}" />
-                            <field name="oil_required" />
-                            <field name="oil_available" />
-                            <notebook states="">
+                            <group>
+                                <field name="driver"  attrs="{'readonly': [('player', '=', False)]}"  domain="[('player','=',player),('city','=',context.get('origin_context',[]))]" />
+                                <field name="vehicle"  attrs="{'readonly': [('driver', '=', False)]}"  domain="[('survivor','=',driver),('city','=',context.get('origin_context',[]))]" />
+                             
+                            </group>
+                            <group>
+                                <field name="oil_required" />
+                                <field name="not_oil" invisible="1" />
+                                <label colspan="2"
+                                for="oil_available"
+                                string="Not sufficient Oil"
+                                attrs="{'invisible': [('not_oil','=', False)]}"
+                                style="background-color:yellow;"/>
+                                <field name="oil_available" />
+                            </group>
+                           
+                         </group>
+                            <notebook states="driver">
                                 <page name="passenger" string="Passengers">
-                                    <field name="passengers" />
+                                    <group>
+                                        <group>
+                                    <field name="passenger_available">
+                                        <tree>
+                                             <field name="survivor" />
+                                             <button name="select" 
+                                             type="object" string="Select" 
+                                             class="oe_highlight" 
+                                             context="{'travel_wizard_context': parent.id}"
+                                             />
+                                        </tree>
+                                    </field>
+                                </group><group>
+                                    <field name="passengers" >
+                                        <tree>
+                                             <field name="name" />
+                                             <field name="illnes" />
+                                        </tree>
+                                    </field>
+                                </group>
+                                </group>
                                 </page>
                             </notebook>
-                        </group>
+
                         <group states="dates">
-                            <field name="date_departure" readonly="1"/>
-                            <field name="time" readonly="1"/>
-                            <field name="date_end" readonly="1"/>
+                            
+                            <group>
+                                <separator string="Resume:"></separator>
+                                <field name="origin_resume" readonly="1"  />
+                            <field name="destiny_resume" readonly="1" />
+                            <field name="road_resume" readonly="1" />
+                            <field name="driver_resume" readonly="1" />
+                            </group>
+                            <group>
+                                <field name="vehicle_resume" readonly="1" />
+                                <field name="oil_required_resume" readonly="1"  />
+                                <field name="oil_available_resume" readonly="1"  />
+                                <field name="date_departure" readonly="1"/>
+                                <field name="time" readonly="1"/>
+                                <field name="date_end" readonly="1"/>
+                            </group>
+                          <field name="passengers_resume" readonly="1" >
+                            <tree>
+                                 <field name="name" />
+                                 <field name="illnes" />
+                            </tree>
+                        </field>
+                         
+                     
+                        
+                          
 
                         </group>
 
@@ -140,7 +197,10 @@
                           -->
                         <footer>
                             <button name="previous" type="object" string="Previous" class="oe_highlight" states="destiny,driver,dates" />
-                            <button name="next"  type="object" string="Next" class="oe_highlight" states="origin,destiny,driver" />
+                            <button name="next"  
+                            
+                            type="object" string="Next" 
+                            class="oe_highlight" states="origin,destiny,driver" />
                             <button name="create_travel" type="object" string="Create Travel" class="oe_highlight" states="dates" />
                         </footer>
                     </sheet>

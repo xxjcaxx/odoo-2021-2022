@@ -27,6 +27,7 @@ class player(models.Model):
     events = fields.One2many('negocity.event','player')
     level = fields.Integer()
     player_progress = fields.One2many('negocity.player_progress','player')
+    travel_wizards = fields.One2many('negocity.travel_wizard','player')
 
     @api.depends('survivors')
     def _get_q_survivors(self):

@@ -107,7 +107,7 @@ class travel(models.Model):
             for p in t.passengers:
                 if p.player.id != t.player.id:
                     raise ValidationError('Passengers has to be in player')
-                if p.illnes.id >= 100:
+                if p.illnes >= 100:
                     raise ValidationError('Passenger dead')
             if t.driver.illnes >= 100:
                 raise ValidationError('Dead driver')
@@ -351,7 +351,10 @@ class city_transient(models.TransientModel):
     wizard = fields.Many2one('negocity.travel_wizard')
 
     def select(self):
-        self.wizard.write({'destiny': self.city.id})
+        road_available = self.wizard.origin.roads & self.city.roads
+
+        self.wizard.write({'destiny': self.city.id,'road': road_available.id})
+
         return {
             'name': 'Negocity travel wizard action',
             'type': 'ir.actions.act_window',
@@ -361,6 +364,28 @@ class city_transient(models.TransientModel):
             'target': 'new',
             'context': self.wizard._context
         }
+
+
+class survivor_transient(models.TransientModel):
+    _name = 'negocity.survivor_transient'
+
+    survivor = fields.Many2one('negocity.survivor')
+
+
+    def select(self):
+        wizard = self._context.get('travel_wizard_context')
+        wizard = self.env['negocity.travel_wizard'].browse(wizard)
+        print(wizard,'*************************')
+        wizard.write({'passengers': [(4,self.survivor.id,0)]})
+        return {
+            'name': 'Negocity travel wizard action',
+            'type': 'ir.actions.act_window',
+            'res_model': wizard._name,
+            'res_id': wizard.id,
+            'view_mode': 'form',
+            'target': 'new',
+            'context': wizard._context
+        } 
 
 class travel_wizard(models.TransientModel):
     _name = 'negocity.travel_wizard'
@@ -376,28 +401,42 @@ class travel_wizard(models.TransientModel):
 
     name = fields.Char()
     origin = fields.Many2one('negocity.city', default = _get_origin)
+    origin_resume = fields.Many2one('negocity.city', related='origin')
     cities_available = fields.One2many('negocity.city_transient','wizard')
 
     destiny = fields.Many2one('negocity.city')  # filtrat
+    destiny_resume = fields.Many2one('negocity.city', related='destiny')
     road = fields.Many2one('negocity.road')  # computat
+    road_resume = fields.Many2one('negocity.road', related='road')  # computat
     date_departure = fields.Datetime(default = fields.Datetime.now, string='Date Departure (now)')
     time = fields.Float(compute='_get_time')
     date_end = fields.Datetime()  # sera computat en funció de la distància
     player = fields.Many2one('res.partner', default = _get_player )
+    player_resume = fields.Many2one('res.partner', related='player' )
+    passenger_available = fields.Many2many('negocity.survivor_transient', compute="_get_passenger_available")
     passengers = fields.Many2many('negocity.survivor')
+    passengers_resume = fields.Many2many('negocity.survivor',related='passengers')
     driver = fields.Many2one('negocity.survivor')
+    driver_resume = fields.Many2one('negocity.survivor',related='driver')
     vehicle = fields.Many2one('negocity.vehicle')
-    oil_required = fields.Float()
+    vehicle_resume = fields.Many2one('negocity.vehicle',related='vehicle')
+    oil_required = fields.Float(compute='_get_time')
+    oil_required_resume = fields.Float(related='oil_required')
+    not_oil= fields.Boolean(compute='_get_oil')
     oil_available = fields.Float(related='vehicle.gas_tank_level')
+    oil_available_resume = fields.Float(related='vehicle.gas_tank_level')
 
+    @api.depends('road','vehicle')
     def _get_time(self):
         for t in self:
             t.time = 0
             t.date_end = False
+            t.oil_required = 0
             print('time0',t.vehicle,t.road)
             if t.vehicle and t.road:
                 print('time')
                 t.time = self.env['negocity.travel'].get_time(t.vehicle.id,t.road.id)
+                t.oil_required = self.env['negocity.travel'].get_oil_required(t.vehicle.id, t.road.id)
                 if t.date_departure:
                     d_dep = t.date_departure
                     data = fields.Datetime.from_string(d_dep)
@@ -406,53 +445,110 @@ class travel_wizard(models.TransientModel):
 
     @api.onchange('origin')
     def _onchange_origin(self):
-        if self.origin != False:
+        if len(self.origin)>0:
+            print('Onchange origin **************')
             roads_available = self.origin.roads
             cities_available = roads_available.city_1 + roads_available.city_2 - self.origin
-            print('********************** ONCHANGE ORIGiN *************')
             self.cities_available.unlink()
-
             for city in cities_available:
                 self.env['negocity.city_transient'].create({'city': city.id, 'wizard': self.id})
 
+        
             return {
                 # 'domain': {
                 #     'destiny': [('id', 'in', (self.cities_available.city).ids)],
                 # }
             }
 
+
     @api.onchange('destiny')
     def _onchange_destiny(self):
-        if self.destiny != False:
+        if len(self.destiny)>0:
            
             road_available = self.origin.roads & self.destiny.roads
-            print(road_available)
-            self.search([('id','=',self._origin.id)]).write({'road': road_available.id})
+            #self.search([('id','=',self._origin.id)]).write({'road': road_available.id})
+            self._origin.write({'road': road_available.id})
             self.road = road_available.id
             
             return {}
 
+    
+
+    @api.depends('driver')
+    def _get_passenger_available(self):
+        passengers = self.env['negocity.survivor_transient']
+        self.passenger_available = passengers
+
+        if len(self.driver)>0 and len(self.origin)>0:
+            passenger_available = self.origin.survivors.filtered(lambda s: s.player.id == self.player.id).filtered(lambda s: s.id != self.driver.id)
+            #self.passenger_available.unlink()
+            #for p in self.passenger_available:
+            #    p.unlink()
+            print(passenger_available,self.origin.survivors,self.driver)
+            
+            for s in passenger_available:
+                print(s)
+                passengers = passengers + self.env['negocity.survivor_transient'].create({'survivor': s.id})
+
+            print(passengers)
+            self.passenger_available = passengers
+
+
+
+    @api.onchange('driver')
+    def _onchange_driver(self):
+        if len(self.driver)>0 and len(self.origin)>0:
+            print("*********** ONchange driver", self.driver, self.origin)
+           
+
+
+            return {
+                'domain': {
+                     'vehicle': [('survivor','=',self.driver.id),('city','=',self._context.get('origin_context'))],
+                 }
+            }
+
+
+    @api.depends('vehicle')
+    def _get_oil(self):
+        print(self.oil_available , self.oil_required)
+        self.not_oil = self.oil_available < self.oil_required
+
     state = fields.Selection([('origin','Origin'),('destiny','Destiny'),('driver','Driver'),('dates','Dates')], default = 'origin')
+    ready = fields.Boolean(compute='_get_ready')
 
     def next(self):
-
+        title = ''
         state = self.state
-        if state == 'origin':
+        if state == 'origin' and self.ready:
             self.state = 'destiny'
-
-        elif state == 'destiny':
+            title = 'Choose the destiny'
+        elif state == 'destiny' and self.ready:
             self.state = 'driver'
-        elif state == 'driver':
+            title = 'Choose the driver, car and passengers'
+        elif state == 'driver' and self.ready:
             self.state = 'dates'
+            title = 'It is all rigth?'
+
+        if state == 'driver' and not self.ready:
+            return {
+               'type': 'ir.actions.client',
+                'tag': 'display_notification',
+            'params': {
+        'message': 'Not sufficient Oil, vehicle or driver',
+        'type': 'danger',  #types: success,warning,danger,info
+        'sticky': False,
+    }
+}
 
         return {
-            'name': 'Negocity travel wizard action',
+            'name': title,
             'type': 'ir.actions.act_window',
             'res_model': self._name,
             'res_id': self.id,
             'view_mode': 'form',
             'target': 'new',
-            'context': dict(self._context, cities_available_context= (self.cities_available.city).ids),
+            'context': dict(self._context, cities_available_context= (self.cities_available.city).ids, origin_context = self.origin.id),
             #'domain': {'destiny': [('id', 'in', (self.cities_available.city).ids)]}
         }
 
@@ -473,7 +569,22 @@ class travel_wizard(models.TransientModel):
             'view_mode': 'form',
             'target': 'new',
             'context': self._context
-        }
+        } 
+
+       
+
+        
+
+    @api.depends('origin','player')
+    def _get_ready(self):
+        self.ready = False
+        if (self.state == 'origin' and len(self.origin)==1 and len(self.player)==1):
+            self.ready = True
+        if (self.state == 'destiny' and len(self.destiny)==1):
+            self.ready = True
+        if (self.state == 'driver' and len(self.driver)==1 and len(self.vehicle)==1) and self.not_oil == False:
+            self.ready = True
+        
 
     def create_travel(self):
         travel = self.env['negocity.travel'].create({

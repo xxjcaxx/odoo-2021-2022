@@ -13,3 +13,4 @@ access_negocity_collision,negocity.collision,model_negocity_collision,base.group
 access_negocity_player_progress,negocity.player_progress,model_negocity_player_progress,base.group_user,1,1,1,1
 access_negocity_travel_wizard,negocity.travel_wizard,model_negocity_travel_wizard,base.group_user,1,1,1,1
 access_negocity_city_transient,negocity.city_transient,model_negocity_city_transient,base.group_user,1,1,1,1
+access_negocity_survivor_transient,negocity.survivor_transient,model_negocity_survivor_transient,base.group_user,1,1,1,1

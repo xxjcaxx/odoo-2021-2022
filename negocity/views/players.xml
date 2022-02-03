@@ -279,6 +279,18 @@
                                 </separator>
                                 <field name="player_progress"/>
                             </page>
+                            <page name="Wizards" string="Wizards">
+                                <field name="travel_wizards">
+                                    <tree>
+                                        <field name="player"/>
+                                        <field name="origin"/>
+                                        <field name="destiny"/>
+                                        <field name="driver"/>
+                                        <field name="vehicle"/>
+                                    </tree>
+                                </field>
+                                    
+                            </page>
 
                         </notebook>
 
