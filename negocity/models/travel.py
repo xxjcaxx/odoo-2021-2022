@@ -370,6 +370,7 @@ class survivor_transient(models.TransientModel):
     _name = 'negocity.survivor_transient'
 
     survivor = fields.Many2one('negocity.survivor')
+    avatar = fields.Image(related='survivor.avatar')
 
 
     def select(self):
@@ -481,9 +482,7 @@ class travel_wizard(models.TransientModel):
 
         if len(self.driver)>0 and len(self.origin)>0:
             passenger_available = self.origin.survivors.filtered(lambda s: s.player.id == self.player.id).filtered(lambda s: s.id != self.driver.id)
-            #self.passenger_available.unlink()
-            #for p in self.passenger_available:
-            #    p.unlink()
+
             print(passenger_available,self.origin.survivors,self.driver)
             
             for s in passenger_available:
@@ -534,10 +533,10 @@ class travel_wizard(models.TransientModel):
             return {
                'type': 'ir.actions.client',
                 'tag': 'display_notification',
-            'params': {
-        'message': 'Not sufficient Oil, vehicle or driver',
-        'type': 'danger',  #types: success,warning,danger,info
-        'sticky': False,
+               'params': {
+            'message': 'Not sufficient Oil, vehicle or driver',
+           'type': 'danger',  #types: success,warning,danger,info
+            'sticky': False,
     }
 }
 
