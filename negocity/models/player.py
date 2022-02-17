@@ -70,6 +70,16 @@ class player(models.Model):
           ##  if last_level != p.level:
             self.env['negocity.player_progress'].create({'name': p.level, 'player': p.id, 'date_char': date})
 
+    def show_player_progress(self):
+        return {
+            'name': 'Player progress',
+            'type': 'ir.actions.act_window',
+            'res_model': 'negocity.player_progress',
+            'view_mode': 'graph',
+            'target': 'new',
+            'context':  self._context,
+            'domain': [('player', '=', self.id)]
+        }
 
 
 

@@ -402,6 +402,7 @@ class travel_wizard(models.TransientModel):
 
     name = fields.Char()
     origin = fields.Many2one('negocity.city', default = _get_origin)
+    oil = fields.Float(related='origin.oil')
     origin_resume = fields.Many2one('negocity.city', related='origin')
     cities_available = fields.One2many('negocity.city_transient','wizard')
 
@@ -504,6 +505,7 @@ class travel_wizard(models.TransientModel):
             return {
                 'domain': {
                      'vehicle': [('survivor','=',self.driver.id),('city','=',self._context.get('origin_context'))],
+                    'passengers': [('id','in',self.passenger_available.survivor.ids)],
                  }
             }
 

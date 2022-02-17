@@ -56,6 +56,7 @@
                     <header>
                         <button name="create_survivor" type="object" string="Create Survivor" class="oe_highlight"/>
                         <button name="button_update_players_progress" type="object" string="Update Progress" class="oe_highlight"/>
+                        <button name="show_player_progress" type="object" string="Show Progress" class="oe_highlight"/>
                     </header>
                     <sheet>
 
@@ -304,6 +305,9 @@
         <!-- 
                 ...................   GRAPH ....................................................................
         -->
+
+
+
 
 
         <record model="ir.ui.view" id="negocity.player_progress_graph">

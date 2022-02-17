@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-import random
-import math
+
 from datetime import datetime, timedelta
-from odoo.exceptions import ValidationError
+
 
 class player_premium(models.Model):
     _name = 'res.partner'
@@ -65,7 +64,7 @@ class sale_premium(models.Model):
         premium_products = self.order_line.filtered(lambda p: p.product_id.is_premium == True and self.premium_applied == False)
         for p in premium_products:
             self.partner_id.apply_premium(p.product_id.days_premium)
-        self.premium_applied = True
+       # self.premium_applied = True
 
     def write(self,values):
         super(sale_premium,self).write(values)
