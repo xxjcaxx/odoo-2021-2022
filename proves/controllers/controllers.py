@@ -17,6 +17,19 @@ class Proves_controller(http.Controller):
             mimetype='application/json'
            )
 
+     @http.route('/proves/comandes/', auth="none", cors='*', methods=["POST"], csrf=False,
+                 type='json')
+     def comandespost(self, **args):
+         print('APIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII')
+         print(args, http.request.httprequest.method)
+
+         if (http.request.httprequest.method == 'POST'):
+             print('POST')
+             record = http.request.env['pos.order'].sudo().create_from_ui([args], True)
+
+
+         return http.request.env['ir.http'].session_info()
+
 #     @http.route('/proves/proves/objects/', auth='public')
 #     def list(self, **kw):
 #         return http.request.render('proves.listing', {

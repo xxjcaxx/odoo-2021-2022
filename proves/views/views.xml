@@ -8,7 +8,7 @@
       <field name="arch" type="xml">
         <form>
           <field name="name"/>
-           <button name="create_pos_order" string="Create pos line" type="object"/>
+           <button name="create_pos_order" string="Create pos order" type="object"/>
           <button name="create_pos_line" string="Create pos line" type="object"/>
         </form>
       </field>

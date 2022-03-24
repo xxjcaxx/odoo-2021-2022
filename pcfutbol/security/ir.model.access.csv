@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pcfutbol_player,pcfutbol.player,model_pcfutbol_player,base.group_user,1,1,1,1
+access_pcfutbol_league,pcfutbol.league,model_pcfutbol_league,base.group_user,1,1,1,1
+access_pcfutbol_match,pcfutbol.match,model_pcfutbol_match,base.group_user,1,1,1,1

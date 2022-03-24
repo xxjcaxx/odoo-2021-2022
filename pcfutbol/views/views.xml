@@ -1,0 +1,71 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="pcfutbol.league_form">
+      <field name="name">pcfutbol league</field>
+      <field name="model">pcfutbol.league</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet><group>
+               <field name="name"/>
+          <field name="teams"/>
+             <button name="view_journeys" type="object" string="View Journeys" class="oe_highlight"/>
+          <field name="matches" widget="many2many_tags"/>
+             <button name="create_calendar" type="object" string="Create Calendar" class="oe_highlight"/>
+          </group>
+
+          </sheet>
+
+        </form>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="pcfutbol.action_team_window">
+      <field name="name">pcfutbol Teams</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+        <record model="ir.actions.act_window" id="pcfutbol.action_player_window">
+      <field name="name">pcfutbol Players</field>
+      <field name="res_model">pcfutbol.player</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+        <record model="ir.actions.act_window" id="pcfutbol.action_league_window">
+      <field name="name">pcfutbol league</field>
+      <field name="res_model">pcfutbol.league</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+            <record model="ir.actions.act_window" id="pcfutbol.action_match_window">
+      <field name="name">pcfutbol match</field>
+      <field name="res_model">pcfutbol.match</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+
+    <menuitem name="Pcfutbol" id="pcfutbol.menu_root"/>
+
+    <!-- menu categories -->
+
+    <menuitem name="Team Management" id="pcfutbol.menu_team_management" parent="pcfutbol.menu_root"/>
+
+
+    <!-- actions -->
+
+    <menuitem name="Teams" id="pcfutbol.menu_teams" parent="pcfutbol.menu_team_management"
+              action="pcfutbol.action_team_window"/>
+    <menuitem name="Players" id="pcfutbol.menu_players" parent="pcfutbol.menu_team_management"
+              action="pcfutbol.action_player_window"/>
+        <menuitem name="Leagues" id="pcfutbol.menu_leagues" parent="pcfutbol.menu_team_management"
+              action="pcfutbol.action_league_window"/>
+
+    <menuitem name="Matches" id="pcfutbol.menu_matches" parent="pcfutbol.menu_team_management"
+              action="pcfutbol.action_match_window"/>
+
+  </data>
+</odoo>

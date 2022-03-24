@@ -16,7 +16,7 @@ class proves(models.Model):
                                                         'lines': [[0, 0,
                                                                    {'qty': 2, 'price_unit': 2.2, 'price_subtotal': 4.4,
                                                                     'price_subtotal_incl': 5.32, 'discount': 0,
-                                                                    'product_id': 69, 'tax_ids': [[6, False, [187]]],
+                                                                    'product_id': 69, #'tax_ids': [[6, False, [187]]],
                                                                     'id': 58, 'pack_lot_ids': [], 'description': '',
                                                                     'full_product_name': 'Agua', 'price_extra': 0,
                                                                     'mp_skip': False, 'note': ''}]],
