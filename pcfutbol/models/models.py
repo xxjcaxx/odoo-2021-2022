@@ -9,10 +9,10 @@ class team(models.Model):
     _inherit = 'res.partner'
     _description = 'Teams'
 
-    name = fields.Char()
     players = fields.One2many('pcfutbol.player','team')
     money = fields.Float()
     leagues = fields.Many2many('pcfutbol.league')
+    shield = fields.Image(max_width = 200)
 
 class player(models.Model):
     _name = 'pcfutbol.player'
@@ -24,6 +24,9 @@ class player(models.Model):
     position = fields.Selection([('1','Portero'),('2','Defensa'),('3','Centrocampista'),('4','Delantero')])
     price = fields.Float()
     state = fields.Selection([('ok','Ok'),('doubtful','Dudoso'),('injured','Lesionado'),('suspended','Suspendido')])
+    image = fields.Image(max_width = 200)
+    team_shield = fields.Image(related = 'team.shield', max_width = 100)
+
 
 class league(models.Model):
     _name = 'pcfutbol.league'
