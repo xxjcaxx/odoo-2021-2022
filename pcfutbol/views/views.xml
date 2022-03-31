@@ -22,11 +22,40 @@
     </record>
 
 
+    <record model="ir.ui.view" id="pcfutbol.player_form">
+      <field name="name">pcfutbol player</field>
+      <field name="model">pcfutbol.player</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet><group>
+               <field name="name"/>
+               <field name="image" widget="image"/><field name="team_shield" widget="image"/>
+          <field name="team"/>
+          <field name="points"/>
+          <field name="price"/>
+          <field name="team"/>
+          <field name="position"/>
+          <field name="state"/>
+
+                  </group>
+
+          </sheet>
+
+        </form>
+      </field>
+    </record>
+
     <!-- actions opening views on models -->
 
     <record model="ir.actions.act_window" id="pcfutbol.action_team_window">
       <field name="name">pcfutbol Teams</field>
       <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="pcfutbol.action_team_template_window">
+      <field name="name">pcfutbol Teams</field>
+      <field name="res_model">pcfutbol.team</field>
       <field name="view_mode">tree,form</field>
     </record>
 
@@ -59,6 +88,8 @@
 
     <menuitem name="Teams" id="pcfutbol.menu_teams" parent="pcfutbol.menu_team_management"
               action="pcfutbol.action_team_window"/>
+    <menuitem name="Team Templates" id="pcfutbol.menu_team_templates" parent="pcfutbol.menu_team_management"
+              action="pcfutbol.action_team_template_window"/>
     <menuitem name="Players" id="pcfutbol.menu_players" parent="pcfutbol.menu_team_management"
               action="pcfutbol.action_player_window"/>
         <menuitem name="Leagues" id="pcfutbol.menu_leagues" parent="pcfutbol.menu_team_management"

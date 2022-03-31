@@ -4,12 +4,22 @@ from odoo import models, fields, api
 from odoo.exceptions import ValidationError
 import random
 
+
+class teamTemplate(models.Model):
+    _name = 'pcfutbol.team'
+
+    _description = 'Team teamplates'
+
+    name = fields.Char()
+    shield = fields.Image(max_width = 200)   
+
 class team(models.Model):
     _name = 'res.partner'
     _inherit = 'res.partner'
     _description = 'Teams'
 
-    players = fields.One2many('pcfutbol.player','team')
+    team_template = fields.Many2one('pcfutbol.team')
+    #players = fields.One2many('pcfutbol.player','team')
     money = fields.Float()
     leagues = fields.Many2many('pcfutbol.league')
     shield = fields.Image(max_width = 200)
@@ -19,7 +29,7 @@ class player(models.Model):
     _description = 'Players'
 
     name = fields.Char()
-    team = fields.Many2one('res.partner',ondelete='set null')
+    team = fields.Many2one('pcfutbol.team',ondelete='set null')
     points = fields.Integer()
     position = fields.Selection([('1','Portero'),('2','Defensa'),('3','Centrocampista'),('4','Delantero')])
     price = fields.Float()
