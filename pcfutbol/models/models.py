@@ -23,7 +23,12 @@ class team(models.Model):
     money = fields.Float()
     leagues = fields.Many2many('pcfutbol.league')
     shield = fields.Image(max_width = 200)
+    matches = fields.Many2many('pcfutbol.match', compute='_get_matches')
 
+    def _get_matches(self):
+        for player in self:
+            #player.matches = self.env['pcfutbol.match'].search(['|',('local','=',player.id),('visitor','=',player.id)])
+            player.matches = self.env['pcfutbol.match'].search([]).filtered(lambda match: match.local == player.id or match.visitor == player.id)
 class player(models.Model):
     _name = 'pcfutbol.player'
     _description = 'Players'
@@ -56,6 +61,17 @@ class league(models.Model):
             'type': 'ir.actions.act_window',
             'target': 'new',
         }
+
+    def create_match_wizard(self):
+        return self.env.ref('pcfutbol.launch_match_wizard').read()[0]
+        return {
+            "type": "ir.actions.act_window",
+            "name": "Create Match",
+            "res_model": "pcfutbol.match_wizard",
+            'view_mode': 'form',
+            "target": "new"
+        }
+
 
     def create_calendar(self):
         for league in self:
@@ -140,3 +156,74 @@ class match(models.Model):
             }
 
 
+
+class match_wizard(models.TransientModel):
+    _name = 'pcfutbol.match_wizard'
+    _description = 'Match Wizard'
+
+    name = fields.Char()
+    journey = fields.Integer(required=True)
+    local = fields.Many2one('res.partner', ondelete='cascade')
+    visitor = fields.Many2one('res.partner', ondelete='cascade')
+
+    def get_league(self):
+        return self.env['pcfutbol.league'].browse(self._context.get('active_id'))
+
+    league = fields.Many2one('pcfutbol.league', ondelete='cascade', default = get_league)
+    winner = fields.Many2one('res.partner',ondelete='set null')
+    goals = fields.Char()
+    state = fields.Selection([('1','League'),('2','Teams'),('3','Results')],default='1')
+
+    def create_match(self):
+        self.env['pcfutbol.match'].create({
+            'name': self.name,
+            'local': self.local,
+        })
+
+    def next(self):
+        if self.state == '1':
+            if len(self.league) > 0:
+                self.state = '2'
+            else:
+                return {
+                    'type': 'ir.actions.client',
+                    'tag': 'display_notification',
+                    'params': {
+                        'message': 'Select League',
+                        'type': 'danger',  # types: success,warning,danger,info
+                        'sticky': False
+                    }
+                }
+        elif self.state == '2':
+            self.state = '3'
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+            'context': dict(self._context, league_context=self.league.id)
+        }
+    def previous(self):
+        if self.state == '2':
+            self.state = '1'
+        elif self.state == '3':
+            self.state = '2'
+        print('prev')
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': self._name,
+            'res_id': self.id,
+            'view_mode': 'form',
+            'target': 'new',
+        }
+
+    @api.onchange('league')
+    def _onchangue_league(self):
+        if self.league != False:
+            return {
+                'domain': {
+                    'local': [('id','in',self.league.teams.ids)],
+                    'visitor': [('id', 'in', self.league.teams.ids)]
+                }
+            }

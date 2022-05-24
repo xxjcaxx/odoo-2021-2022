@@ -7,13 +7,18 @@
       <field name="model">pcfutbol.league</field>
       <field name="arch" type="xml">
         <form>
-          <sheet><group>
-               <field name="name"/>
-          <field name="teams"/>
-             <button name="view_journeys" type="object" string="View Journeys" class="oe_highlight"/>
-          <field name="matches" widget="many2many_tags"/>
-             <button name="create_calendar" type="object" string="Create Calendar" class="oe_highlight"/>
-          </group>
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="teams" />
+              <button name="view_journeys" type="object" string="View Journeys" class="oe_highlight" />
+              <field name="matches" widget="many2many_tags" />
+              <button name="create_calendar" type="object" string="Create Calendar" class="oe_highlight" />
+                <button name="%(pcfutbol.launch_match_wizard)d" type="action"
+                        string="Create Match" class="oe_highlight" />
+                 <button name="create_match_wizard" type="object" string="Create Match Python" class="oe_highlight" />
+
+            </group>
 
           </sheet>
 
@@ -21,27 +26,144 @@
       </field>
     </record>
 
+      <record model="ir.ui.view" id="pcfutbol.team_form_partner">
+      <field name="name">pcfutbol team</field>
+      <field name="model">res.partner</field>
+          <field name="inherit_id" ref="base.view_partner_form"/>
+
+      <field name="arch" type="xml">
+          <field name="vat" position="after">
+              <field name="money"></field>
+          </field>
+          <notebook position="inside">
+              <page string="PCFutbol">
+                  <field name="team_template"/>
+                  <field name="leagues"/>
+                  <field name="matches"/>
+                  <field name="shield"/>
+              </page>
+          </notebook>
+
+      </field>
+    </record>
+
+
+      <record model="ir.ui.view" id="pcfutbol.team_form_noinherit">
+      <field name="name">pcfutbol Team</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+                <field name="name"></field>
+                <field name="image_1920" widget="image"></field>
+                <field name="money"></field>
+               <field name="team_template"/>
+                  <field name="leagues"/>
+                  <field name="matches"/>
+                  <field name="shield" widget="image"/>
+
+            </group>
+
+          </sheet>
+
+        </form>
+      </field>
+    </record>
+
+      <record model="ir.ui.view" id="pcfutbol.team_tree_noinherit">
+      <field name="name">pcfutbol Team</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree>
+
+                <field name="name"></field>
+                <field name="image_1920" widget="image"></field>
+                <field name="money"></field>
+               <field name="team_template"/>
+                  <field name="leagues"/>
+                  <field name="matches"/>
+                  <field name="shield" widget="image"/>
+
+
+
+        </tree>
+      </field>
+    </record>
 
     <record model="ir.ui.view" id="pcfutbol.player_form">
       <field name="name">pcfutbol player</field>
       <field name="model">pcfutbol.player</field>
       <field name="arch" type="xml">
         <form>
-          <sheet><group>
-               <field name="name"/>
-               <field name="image" widget="image"/><field name="team_shield" widget="image"/>
-          <field name="team"/>
-          <field name="points"/>
-          <field name="price"/>
-          <field name="team"/>
-          <field name="position"/>
-          <field name="state"/>
-
-                  </group>
-
+          <sheet>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="image" widget="image" />
+                <field name="team_shield" widget="image" />
+                <field name="team" />
+                <field name="points" />
+              </group>
+              <group>
+                <field name="price" />
+                <field name="team" />
+                <field name="position" />
+                <field name="state" />
+              </group>
+            </group>
           </sheet>
-
         </form>
+      </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="pcfutbol.player_kanban">
+      <field name="name">pcfutbol player</field>
+      <field name="model">pcfutbol.player</field>
+      <field name="arch" type="xml">
+            <kanban>
+          <field name="name" />
+          <field name="id" />
+        
+          <field name="team" />
+          <field name="points" />
+          <field name="price" />
+                <field name="team" />
+                <field name="position" />
+                <field name="state" />
+          <templates>
+              <t t-name="kanban-box">
+
+                  <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                      <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block"
+                           t-attf-style="background-image:url('#{kanban_image('pcfutbol.player', 'image', record.id.value, placeholder)}')">
+                      </div>
+
+                    
+                          <div class="oe_kanban_details d-flex flex-column">
+                              <a type="open"><h4 class="o_kanban_record_title oe_partner_heading"><field name="name"/></h4></a>
+                              <ul>
+                                <field name="team" />
+                                <field name="points" />
+                                <field name="price" />
+                                      <field name="team" />
+                                      <field name="position" />
+                                      <field name="state" />
+                                  
+                              </ul>
+                          </div>
+                          <img class="oe_kanban_image"
+                          t-att-alt="record.name.value"
+                                        t-att-src="kanban_image('pcfutbol.player', 'team_shield', record.id.value)" />
+                      
+                  </div>
+
+
+              </t>
+          </templates>
+      </kanban>
       </field>
     </record>
 
@@ -51,6 +173,9 @@
       <field name="name">pcfutbol Teams</field>
       <field name="res_model">res.partner</field>
       <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('pcfutbol.team_tree_noinherit')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('pcfutbol.team_form_noinherit')}),]" />
     </record>
 
     <record model="ir.actions.act_window" id="pcfutbol.action_team_template_window">
@@ -59,44 +184,38 @@
       <field name="view_mode">tree,form</field>
     </record>
 
-        <record model="ir.actions.act_window" id="pcfutbol.action_player_window">
+    <record model="ir.actions.act_window" id="pcfutbol.action_player_window">
       <field name="name">pcfutbol Players</field>
       <field name="res_model">pcfutbol.player</field>
-      <field name="view_mode">tree,form</field>
+      <field name="view_mode">tree,form,kanban</field>
     </record>
-        <record model="ir.actions.act_window" id="pcfutbol.action_league_window">
+    <record model="ir.actions.act_window" id="pcfutbol.action_league_window">
       <field name="name">pcfutbol league</field>
       <field name="res_model">pcfutbol.league</field>
       <field name="view_mode">tree,form</field>
     </record>
-            <record model="ir.actions.act_window" id="pcfutbol.action_match_window">
+    <record model="ir.actions.act_window" id="pcfutbol.action_match_window">
       <field name="name">pcfutbol match</field>
       <field name="res_model">pcfutbol.match</field>
       <field name="view_mode">tree,form</field>
     </record>
 
 
-
-    <menuitem name="Pcfutbol" id="pcfutbol.menu_root"/>
+    <menuitem name="Pcfutbol" id="pcfutbol.menu_root" />
 
     <!-- menu categories -->
 
-    <menuitem name="Team Management" id="pcfutbol.menu_team_management" parent="pcfutbol.menu_root"/>
+    <menuitem name="Team Management" id="pcfutbol.menu_team_management" parent="pcfutbol.menu_root" />
 
 
     <!-- actions -->
 
-    <menuitem name="Teams" id="pcfutbol.menu_teams" parent="pcfutbol.menu_team_management"
-              action="pcfutbol.action_team_window"/>
-    <menuitem name="Team Templates" id="pcfutbol.menu_team_templates" parent="pcfutbol.menu_team_management"
-              action="pcfutbol.action_team_template_window"/>
-    <menuitem name="Players" id="pcfutbol.menu_players" parent="pcfutbol.menu_team_management"
-              action="pcfutbol.action_player_window"/>
-        <menuitem name="Leagues" id="pcfutbol.menu_leagues" parent="pcfutbol.menu_team_management"
-              action="pcfutbol.action_league_window"/>
+    <menuitem name="Teams" id="pcfutbol.menu_teams" parent="pcfutbol.menu_team_management" action="pcfutbol.action_team_window" />
+    <menuitem name="Team Templates" id="pcfutbol.menu_team_templates" parent="pcfutbol.menu_team_management" action="pcfutbol.action_team_template_window" />
+    <menuitem name="Players" id="pcfutbol.menu_players" parent="pcfutbol.menu_team_management" action="pcfutbol.action_player_window" />
+    <menuitem name="Leagues" id="pcfutbol.menu_leagues" parent="pcfutbol.menu_team_management" action="pcfutbol.action_league_window" />
 
-    <menuitem name="Matches" id="pcfutbol.menu_matches" parent="pcfutbol.menu_team_management"
-              action="pcfutbol.action_match_window"/>
+    <menuitem name="Matches" id="pcfutbol.menu_matches" parent="pcfutbol.menu_team_management" action="pcfutbol.action_match_window" />
 
   </data>
 </odoo>

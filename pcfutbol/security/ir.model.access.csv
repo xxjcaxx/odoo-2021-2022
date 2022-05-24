@@ -3,3 +3,4 @@ access_pcfutbol_player,pcfutbol.player,model_pcfutbol_player,base.group_user,1,1
 access_pcfutbol_league,pcfutbol.league,model_pcfutbol_league,base.group_user,1,1,1,1
 access_pcfutbol_match,pcfutbol.match,model_pcfutbol_match,base.group_user,1,1,1,1
 access_pcfutbol_team,pcfutbol.team,model_pcfutbol_team,base.group_user,1,1,1,1
+access_pcfutbol_match_wizard,pcfutbol.match_wizard,model_pcfutbol_match_wizard,base.group_user,1,1,1,1
